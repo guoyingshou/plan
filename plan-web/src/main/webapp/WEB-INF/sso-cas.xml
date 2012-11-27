@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <bean id="sso" class="org.springframework.security.web.FilterChainProxy">
+        <constructor-arg>
+            <util:list>
+                <sec:filter-chain pattern="/**" filters="
+                    securityContextPersistenceFilter, 
+                    casAuthenticationFilter, 
+                    anonymousAuthenticationFilter,
+                    requestCacheAwareFilter,
+                    securityContextHolderAwareRequestFilter,
+                    exceptionTranslationFilter, 
+                    filterSecurityInterceptor"/>
+            </util:list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="securityContextPersistenceFilter" class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
+
+    <bean id="casAuthenticationFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter" p:authenticationManager-ref="authenticationManager" p:filterProcessesUrl="/plan/jsc" />
+
+    <bean id="anonymousAuthenticationFilter" class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
+        <constructor-arg value="test1" />
+    </bean>
+
+    <bean id="requestCacheAwareFilter" class="org.springframework.security.web.savedrequest.RequestCacheAwareFilter" />
+
+    <bean id="securityContextHolderAwareRequestFilter" class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter" />
+
+    <bean id="exceptionTranslationFilter" class="org.springframework.security.web.access.ExceptionTranslationFilter">
+        <property name="authenticationEntryPoint">
+            <bean class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
+                <property name="loginUrl" value="https://auth.tissue.com:8443/sso/login" />
+                <property name="serviceProperties" ref="serviceProperties" />
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="accessDecisionManager">
+            <bean class="org.springframework.security.access.vote.AffirmativeBased">
+                <property name="allowIfAllAbstainDecisions" value="false" />
+                <property name="decisionVoters">
+                    <list>
+                        <bean class="org.springframework.security.access.vote.RoleVoter" />
+                    </list>
+                </property>
+            </bean>
+        </property>
+        <property name="securityMetadataSource">
+            <sec:filter-security-metadata-source>
+                <sec:intercept-url pattern="/**/topics/_new" access="ROLE_user" />
+                <sec:intercept-url pattern="/**/topics" access="ROLE_user" method="POST" />
+                <sec:intercept-url pattern="/**/plans/_new" access="ROLE_user" />
+                <sec:intercept-url pattern="/**/plans" access="ROLE_user" method="POST" />
+                <sec:intercept-url pattern="/**/_join" access="ROLE_user" />
+                <sec:intercept-url pattern="/**/posts/_new" access="ROLE_user" />
+                <sec:intercept-url pattern="/**/posts" access="ROLE_user" method="POST" />
+                <sec:intercept-url pattern="/**/explore*" access="ROLE_ANONYMOUS, ROLE_user" />
+                <sec:intercept-url pattern="/**/topics/**" access="ROLE_ANONYMOUS, ROLE_user" />
+                <sec:intercept-url pattern="/**/plans/**" access="ROLE_ANONYMOUS, ROLE_user" />
+                <sec:intercept-url pattern="/plan/t1" access="ROLE_user" />
+            </sec:filter-security-metadata-source>
+        </property>
+    </bean>
+
+    <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+        <property name="providers">
+            <list>
+                <ref bean="casAuthenticationProvider" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider" p:serviceProperties-ref="serviceProperties" p:userDetailsService-ref="userDetailsService" p:ticketValidator-ref="casTicketValidator" p:key="my_password_for_this" />
+
+    <bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
+        <property name="service" value="http://www.tissue.com/u2/plan/jsc" />
+    </bean>
+    
+    <bean id="casTicketValidator" class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
+        <constructor-arg index="0" value="https://auth.tissue.com:8443/sso" />
+    </bean>
+
+    <bean id="userDetailsDao" class="com.tissue.security.core.userdetails.dao.UserDetailsDao">
+        <property name="mongo" ref="mongo" /> 
+        <property name="mapper" ref="mapper" /> 
+        <property name="dbName" value="test" /> 
+        <property name="collectionName" value="users" /> 
+    </bean>
+    <bean id="userDetailsService" class="com.tissue.security.core.userdetails.service.UserDetailsServiceImpl">
+        <property name="userDetailsDao" ref="userDetailsDao" />
+    </bean>
+
+</beans>
