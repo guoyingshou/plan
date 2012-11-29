@@ -3,11 +3,12 @@ package com.tissue.plan.dao.orient;
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
 
+import com.tissue.domain.social.Event;
+import com.tissue.domain.social.ActivityObject;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Post;
-//import com.tissue.domain.plan.PostMessage;
-//import com.tissue.domain.plan.PostMessageComment;
 
+import com.tissue.commons.dao.social.EventDao;
 import com.tissue.plan.dao.PostDao;
 import com.tissue.core.converter.PostConverter;
 
@@ -34,12 +35,29 @@ public class PostDaoImpl implements PostDao {
     @Autowired
     private OrientDataSource dataSource;
 
+    @Autowired
+    private EventDao eventDao;
+
     public Post create(Post post) {
         OGraphDatabase db = dataSource.getDB();
         try {
             ODocument doc = PostConverter.convert(post);
             doc.save();
             post.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
+
+            /**
+            //add event to activity stream
+            Event event = new Event();
+            event.setType("post");
+            event.setPublished(post.getCreateTime());
+            event.setActor(post.getUser());
+
+            ActivityObject object = new ActivityObject();
+            object.setId(post.getId());
+            event.setObject(object);
+
+            eventDao.addEvent(event);
+            */
         }
         catch(Exception exc) {
             exc.printStackTrace();

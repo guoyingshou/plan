@@ -1,19 +1,31 @@
 package com.tissue.plan.service;
 
+import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Plan;
+import com.tissue.domain.social.Event;
 import com.tissue.plan.dao.PlanDao;
+import com.tissue.plan.dao.TopicDao;
+import com.tissue.commons.dao.social.EventDao;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 @Component
 public class PlanService {
 
     @Autowired
     private PlanDao planDao;
+
+    @Autowired
+    private TopicDao topicDao;
+
+    @Autowired
+    private EventDao eventDao;
 
     /**
      * Save a plan.
@@ -22,7 +34,33 @@ public class PlanService {
      * @return the newly add plan
      */
     public Plan addPlan(Plan plan) {
-        return planDao.create(plan);
+        plan = planDao.create(plan);
+        topicDao.addPlan(plan);
+
+        //generate event
+        Event event = new Event();
+        event.setType("plan");
+        event.setPublished(plan.getCreateTime());
+
+        User actor = plan.getUser();
+        event.setActor(actor);
+
+        Map<String, String> object = new HashMap();
+        object.put("id", plan.getId());
+        event.setObject(object);
+
+        List<User> notifies = new ArrayList();
+
+        User topicOwner = plan.getTopic().getUser();
+
+        if(!actor.getId().equals(topicOwner.getId())) {
+            notifies.add(topicOwner);
+        }
+        event.setNotifies(notifies);
+
+        eventDao.addEvent(event);
+
+        return plan;
     }
 
     public Plan getPlan(String planId) {

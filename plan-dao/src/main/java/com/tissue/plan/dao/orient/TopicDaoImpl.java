@@ -3,11 +3,14 @@ package com.tissue.plan.dao.orient;
 import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.util.OrientIdentityUtil;
 
+import com.tissue.domain.social.ActivityObject;
+import com.tissue.domain.social.Event;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Plan;
 import com.tissue.domain.plan.Topic;
 import com.tissue.domain.plan.Post;
 
+import com.tissue.commons.dao.social.EventDao;
 import com.tissue.plan.dao.TopicDao;
 import com.tissue.plan.dao.PostDao;
 import com.tissue.core.converter.TopicConverter;
@@ -17,7 +20,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
-//import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +43,9 @@ public class TopicDaoImpl implements TopicDao {
     @Autowired
     private PostDao postDao;
 
+    @Autowired
+    private EventDao eventDao;
+
     /**
      * Add a topic.
      */
@@ -52,15 +59,34 @@ public class TopicDaoImpl implements TopicDao {
             doc.field("createTime", topic.getCreateTime());
             doc.field("tags", topic.getTags());
 
-            ORecordId user = new ORecordId(OrientIdentityUtil.decode(topic.getUser().getId()));
-            doc.field("user", user);
-
+            ORecordId userRecord = new ORecordId(OrientIdentityUtil.decode(topic.getUser().getId()));
+            doc.field("user", userRecord);
             doc.save();
-
             topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
+
+            /**
+            // add event to activity stream
+            Event event = new Event();
+            event.setType("topic");
+            event.setPublished(topic.getCreateTime());
+            event.setActor(topic.getUser());
+
+            Map<String, String> object = new HashMap();
+            object.put("id", topic.getId());
+            event.setObject(object);
+            */
+
+            /**
+            ActivityObject object = new ActivityObject();
+            object.setId(topic.getId());
+            event.setObject(object);
+            eventDao.addEvent(event);
+            */
+
         }
         catch(Exception exc) {
             //to do
+            exc.printStackTrace();
         }
         finally {
             db.close();
@@ -176,62 +202,29 @@ public class TopicDaoImpl implements TopicDao {
         return topics;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-    public long getTopicsCount() {
-        long result = 0L;
+    public void addPlan(Plan plan) {
         OGraphDatabase db = dataSource.getDB();
         try {
-            result = db.countClass("Topic");
-        }
-        finally {
-            db.close();
-        }
-        return result;
-    }
 
-    public List<Topic> getTopics(Integer currentPage, Integer pageSize) {
+            ORecordId topicRecord = new ORecordId(OrientIdentityUtil.decode(plan.getTopic().getId()));
+            ORecordId planRecord = new ORecordId(OrientIdentityUtil.decode(plan.getId()));
 
-        String qstr = "select from topic order by createTime desc skip " + (currentPage - 1) * pageSize + " limit " + pageSize;
-
-        List<Topic> result = new ArrayList();
-
-        OGraphDatabase db = dataSource.getDB();
-        try {
-            OSQLSynchQuery query = new OSQLSynchQuery(qstr);
-            List<ODocument> docs = db.query(query);
-            for(ODocument doc : docs) {
-                Topic topic = new Topic();
-                topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
-                topic.setTitle(doc.field("title").toString());
-                result.add(topic);
+            ODocument topicDoc = db.load(topicRecord);
+            Set<ORecordId> plans = topicDoc.field("plans", Set.class);
+            if(plans == null) {
+                plans = new HashSet();
             }
+            plans.add(planRecord);
+            topicDoc.field("plans", plans);
+            topicDoc.save();
         }
         catch(Exception exc) {
             //to do
+            exc.printStackTrace();
         }
         finally {
             db.close();
         }
 
-        return result;
     }
-
-    public Topic updateTopic(Topic topic) {
-        return null;
-
-    }
-    */
 }

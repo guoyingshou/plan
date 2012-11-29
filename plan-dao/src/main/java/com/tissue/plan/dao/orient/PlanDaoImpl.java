@@ -2,11 +2,15 @@ package com.tissue.plan.dao.orient;
 
 import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.util.OrientIdentityUtil;
+import com.tissue.core.converter.PlanConverter;
 
+import com.tissue.domain.social.Event;
+import com.tissue.domain.social.ActivityObject;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Topic;
 import com.tissue.domain.plan.Plan;
 
+import com.tissue.commons.dao.social.EventDao;
 import com.tissue.plan.dao.PlanDao;
 
 import java.util.Date;
@@ -14,7 +18,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
-import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +38,9 @@ public class PlanDaoImpl implements PlanDao {
     @Autowired
     private OrientDataSource dataSource;
 
+    @Autowired
+    private EventDao eventDao;
+
     public Plan create(Plan plan) {
 
         OGraphDatabase db = dataSource.getDB();
@@ -41,29 +49,52 @@ public class PlanDaoImpl implements PlanDao {
             doc.field("duration", plan.getDuration());
             doc.field("createTime", plan.getCreateTime());
 
-            ORecordId topic = new ORecordId(OrientIdentityUtil.decode(plan.getTopic().getId()));
-            doc.field("topic", topic);
+            ORecordId topicRecord = new ORecordId(OrientIdentityUtil.decode(plan.getTopic().getId()));
+            doc.field("topic", topicRecord);
 
-            ORecordId user = new ORecordId(OrientIdentityUtil.decode(plan.getUser().getId()));
-            doc.field("user", user);
-
+            ORecordId userRecord = new ORecordId(OrientIdentityUtil.decode(plan.getUser().getId()));
+            doc.field("user", userRecord);
             doc.save();
             
+            plan = PlanConverter.buildPlan(doc);
+
+            /**
             //add this plan to related topic
-            ODocument topicDoc = db.load(topic);
+            ODocument topicDoc = db.load(topicRecord);
             Set<ODocument> plans = topicDoc.field("plans", Set.class);
             if(plans == null) {
                 plans = new HashSet();
             }
             plans.add(doc);
-
             topicDoc.field("plans", plans);
             topicDoc.save();
+            */
+
+            /**
+            //add event to activity stream
+            ODocument topicUserDoc = topicDoc.field("user");
+            String topicUserRid = topicUserDoc.getIdentity().toString();
+
+            Event event = new Event();
+            event.setType("plan");
+            event.setPublished(plan.getCreateTime());
+            event.setActor(plan.getUser());
+
+            Map<String, String> object = new HashMap();
+            object.put("id", plan.getId());
+            event.setObject(object);
+
+            List<String> notifies = new ArrayList();
+            notifies.add(topicUserRid);
+            event.setNotifies(notifies);
+
+            eventDao.addEvent(event);
+            */
             
-            plan.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
         }
         catch(Exception exc) {
             //to do
+            exc.printStackTrace();
         }
         finally {
             db.close();
@@ -76,39 +107,26 @@ public class PlanDaoImpl implements PlanDao {
 
         OGraphDatabase db = dataSource.getDB();
         try {
-
-             ORecordId orid = new ORecordId(OrientIdentityUtil.decode(planId));
-             ODocument doc = db.load(orid);
-             Integer duration = doc.field("duration", Integer.class);
-
-             plan = new Plan();
-             plan.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
-             plan.setDuration(duration);
-
-             ODocument userDoc = doc.field("user");
-             String username = userDoc.field("username", String.class);
-
-             User user = new User();
-             user.setUsername(username);
-
-             plan.setUser(user);
-
-             ODocument topicDoc = doc.field("topic");
-
-             Topic topic = new Topic();
-             topic.setId(OrientIdentityUtil.encode(topicDoc.getIdentity().toString()));
-
-             plan.setTopic(topic);
-
+            plan = getPlan(planId, db);
         }
         catch(Exception exc) {
              //to do
+             exc.printStackTrace();
         }
         finally {
             db.close();
         }
-
         return plan;
+    }
+
+    public Plan getPlan(String planId, OGraphDatabase db) {
+
+        ORecordId rid = new ORecordId(OrientIdentityUtil.decode(planId));
+        ODocument planDoc = db.load(rid);
+
+        Plan plan = PlanConverter.buildPlan(planDoc);
+        return plan;
+
     }
 
     public List<Plan> getPlans(String topicId) {

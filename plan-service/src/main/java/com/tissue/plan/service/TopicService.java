@@ -1,14 +1,19 @@
 package com.tissue.plan.service;
 
+import com.tissue.domain.social.Event;
+import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Topic;
 import com.tissue.domain.plan.Plan;
 import com.tissue.plan.dao.TopicDao;
 import com.tissue.plan.dao.PlanDao;
+import com.tissue.commons.dao.social.EventDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Component
 public class TopicService {
@@ -19,6 +24,9 @@ public class TopicService {
     @Autowired
     private PlanDao planDao;
 
+    @Autowired
+    private EventDao eventDao;
+
     /**
      * Save a topic.
      * The title, content, userId attributes must be not null.
@@ -26,7 +34,23 @@ public class TopicService {
      * @return the returned topic has id setup
      */
     public Topic addTopic(Topic topic) {
-        return topicDao.create(topic);
+        topic = topicDao.create(topic);
+
+        //generate event
+        Event event = new Event();
+        event.setType("topic");
+        event.setPublished(topic.getCreateTime());
+
+        User actor = topic.getUser();
+        event.setActor(actor);
+
+        Map<String, String> object = new HashMap();
+        object.put("id", topic.getId());
+        event.setObject(object);
+
+        eventDao.addEvent(event);
+
+        return topic;
     }
 
     public Topic getTopic(String topicId) {
