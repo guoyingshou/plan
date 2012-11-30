@@ -103,7 +103,6 @@ public class TopicController {
         */
 
         Topic topic = topicService.getTopic(topicId);
-       
         model.put("topic", topic);
         model.put("viewer", SecurityUtil.getUser());
 
@@ -125,5 +124,30 @@ public class TopicController {
  
         return "topic";
     }
+
+    /**
+     * Show specific post.
+     * Intended to by used by ajax.
+     */
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}")
+    public String getPost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, Map model, Locale locale) {
+
+        String lang = locale.toLanguageTag();
+        if(lang != null) 
+            model.put("lang", lang);
+
+        Topic topic = topicService.getTopic(topicId);
+        model.put("topic", topic);
+        model.put("viewer", SecurityUtil.getUser());
+        model.put("postId", postId);
+
+        /**
+        if("question".equals(post.getType())) {
+            return "questionDetail";
+        }
+        */
+        return "topicPostDetail";
+    }
+
 
 }

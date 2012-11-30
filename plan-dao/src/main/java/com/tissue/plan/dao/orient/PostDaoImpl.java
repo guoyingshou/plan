@@ -4,7 +4,6 @@ import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
 
 import com.tissue.domain.social.Event;
-import com.tissue.domain.social.ActivityObject;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Post;
 
@@ -43,21 +42,8 @@ public class PostDaoImpl implements PostDao {
         try {
             ODocument doc = PostConverter.convert(post);
             doc.save();
-            post.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
-
-            /**
-            //add event to activity stream
-            Event event = new Event();
-            event.setType("post");
-            event.setPublished(post.getCreateTime());
-            event.setActor(post.getUser());
-
-            ActivityObject object = new ActivityObject();
-            object.setId(post.getId());
-            event.setObject(object);
-
-            eventDao.addEvent(event);
-            */
+            //post.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
+            post = PostConverter.buildMiniumPost(doc);
         }
         catch(Exception exc) {
             exc.printStackTrace();

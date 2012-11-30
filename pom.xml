@@ -42,14 +42,10 @@
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.0-SNAPSHOT</version>
-
         <configuration>
-
             <port>8002</port>
             <path>/u2</path>
-
             <contextFile>conf/context.xml</contextFile>
-            
             <systemProperties>
               <systemProperty>
                 <name>log4j.configuration</name>
@@ -57,9 +53,16 @@
               </systemProperty>
             </systemProperties>
           <useTestClasspath>false</useTestClasspath>
-
         </configuration>
+      </plugin>
 
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+              <source>1.7</source>
+              <target>1.7</target>
+          </configuration>
       </plugin>
     </plugins>
   </build>

@@ -97,6 +97,10 @@ public class PostController {
         return "postDetail";
     }
 
+    /**
+     * Get specific post.
+     * Intended to by used by ajax.
+     */
     @RequestMapping(value="/posts/{postId}")
     public String getPost(@PathVariable("postId") String postId, Map model, Locale locale) {
 

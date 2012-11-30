@@ -5,6 +5,7 @@ import com.tissue.domain.plan.Plan;
 import com.tissue.domain.social.Event;
 import com.tissue.plan.dao.PlanDao;
 import com.tissue.plan.dao.TopicDao;
+import com.tissue.commons.util.EventFactory;
 import com.tissue.commons.dao.social.EventDao;
 
 import org.joda.time.DateTime;
@@ -38,26 +39,7 @@ public class PlanService {
         topicDao.addPlan(plan);
 
         //generate event
-        Event event = new Event();
-        event.setType("plan");
-        event.setPublished(plan.getCreateTime());
-
-        User actor = plan.getUser();
-        event.setActor(actor);
-
-        Map<String, String> object = new HashMap();
-        object.put("id", plan.getId());
-        event.setObject(object);
-
-        List<User> notifies = new ArrayList();
-
-        User topicOwner = plan.getTopic().getUser();
-
-        if(!actor.getId().equals(topicOwner.getId())) {
-            notifies.add(topicOwner);
-        }
-        event.setNotifies(notifies);
-
+        Event event = EventFactory.createEvent(plan);
         eventDao.addEvent(event);
 
         return plan;

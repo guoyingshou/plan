@@ -3,7 +3,6 @@ package com.tissue.plan.dao.orient;
 import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.util.OrientIdentityUtil;
 
-import com.tissue.domain.social.ActivityObject;
 import com.tissue.domain.social.Event;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Plan;
@@ -63,26 +62,6 @@ public class TopicDaoImpl implements TopicDao {
             doc.field("user", userRecord);
             doc.save();
             topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
-
-            /**
-            // add event to activity stream
-            Event event = new Event();
-            event.setType("topic");
-            event.setPublished(topic.getCreateTime());
-            event.setActor(topic.getUser());
-
-            Map<String, String> object = new HashMap();
-            object.put("id", topic.getId());
-            event.setObject(object);
-            */
-
-            /**
-            ActivityObject object = new ActivityObject();
-            object.setId(topic.getId());
-            event.setObject(object);
-            eventDao.addEvent(event);
-            */
-
         }
         catch(Exception exc) {
             //to do
@@ -134,9 +113,12 @@ public class TopicDaoImpl implements TopicDao {
             OSQLSynchQuery query = new OSQLSynchQuery(qstr);
             List<ODocument> docs = db.query(query);
             for(ODocument doc : docs) {
+                Topic topic = TopicConverter.buildMiniumTopic(doc);
+                /**
                 Topic topic = new Topic();
                 topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
                 topic.setTitle(doc.field("title").toString());
+                */
                 topics.add(topic);
             }
         }
@@ -186,9 +168,12 @@ public class TopicDaoImpl implements TopicDao {
             OCommandSQL cmd = new OCommandSQL(qstr);
             List<ODocument> docs = db.command(cmd).execute(tag);
             for(ODocument doc : docs) {
+                Topic topic = TopicConverter.buildMiniumTopic(doc);
+                /**
                 Topic topic = new Topic();
                 topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
                 topic.setTitle(doc.field("title").toString());
+                */
                 topics.add(topic);
             }
         }

@@ -5,7 +5,6 @@ import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.converter.PlanConverter;
 
 import com.tissue.domain.social.Event;
-import com.tissue.domain.social.ActivityObject;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Topic;
 import com.tissue.domain.plan.Plan;

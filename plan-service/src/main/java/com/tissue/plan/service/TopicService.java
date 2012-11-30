@@ -6,6 +6,7 @@ import com.tissue.domain.plan.Topic;
 import com.tissue.domain.plan.Plan;
 import com.tissue.plan.dao.TopicDao;
 import com.tissue.plan.dao.PlanDao;
+import com.tissue.commons.util.EventFactory;
 import com.tissue.commons.dao.social.EventDao;
 
 import org.springframework.stereotype.Component;
@@ -37,17 +38,7 @@ public class TopicService {
         topic = topicDao.create(topic);
 
         //generate event
-        Event event = new Event();
-        event.setType("topic");
-        event.setPublished(topic.getCreateTime());
-
-        User actor = topic.getUser();
-        event.setActor(actor);
-
-        Map<String, String> object = new HashMap();
-        object.put("id", topic.getId());
-        event.setObject(object);
-
+        Event event = EventFactory.createEvent(topic);
         eventDao.addEvent(event);
 
         return topic;
@@ -69,20 +60,4 @@ public class TopicService {
         return topicDao.getTopicsByTag(tag);
     }
 
-
-
-
-    /**
-    public long getTopicsCount() {
-        return topicDao.getTopicsCount();
-    }
-
-    public List<Topic> getTopics(Integer currentPage, Integer pageSize) {
-        return topicDao.getTopics(currentPage, pageSize);
-    }
-
-    public Topic updateTopic(Topic topic) {
-        return topicDao.updateTopic(topic);
-    }
-    */
 }
