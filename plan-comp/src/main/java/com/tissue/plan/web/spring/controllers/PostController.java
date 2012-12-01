@@ -157,7 +157,7 @@ public class PostController {
 
         PostMessage msg = new PostMessage();
         msg.setId(msgId);
-        comment.setMessage(msg);
+        comment.setPostMessage(msg);
 
         postMessageCommentService.addComment(comment);
 
@@ -212,7 +212,7 @@ public class PostController {
 
         Post post = new Post();
         post.setId(postId);
-        answer.setPost(post);
+        answer.setQuestion(post);
 
         answerService.addAnswer(answer);
 

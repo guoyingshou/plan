@@ -2,6 +2,7 @@ package com.tissue.plan.dao.orient;
 
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
+import com.tissue.core.converter.QuestionCommentConverter;
 
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Post;
@@ -30,16 +31,11 @@ public class QuestionCommentDaoImpl implements QuestionCommentDao {
     @Autowired
     private OrientDataSource dataSource;
 
-    public void create(QuestionComment comment) {
+    public QuestionComment create(QuestionComment comment) {
 
         OGraphDatabase db = dataSource.getDB();
         try {
-
-            //save the comment
-            ODocument commentDoc = new ODocument("QuestionComment");
-            commentDoc.field("content", comment.getContent());
-            commentDoc.field("createTime", comment.getCreateTime());
-            commentDoc.field("user", new ORecordId(OrientIdentityUtil.decode(comment.getUser().getId())));
+            ODocument commentDoc = QuestionCommentConverter.convertQuestionComment(comment);
             commentDoc.save();
 
             //update question adding this comment
@@ -54,10 +50,14 @@ public class QuestionCommentDaoImpl implements QuestionCommentDao {
             questionDoc.field("comments", commentsDoc);
             questionDoc.save();
 
+            comment = QuestionCommentConverter.buildQuestionCommentWithParent(commentDoc);
+
         }
         finally {
             db.close();
         }
+
+        return comment;
     }
 
 }

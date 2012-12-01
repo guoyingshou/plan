@@ -2,11 +2,11 @@ package com.tissue.plan.dao.orient;
 
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
+import com.tissue.core.converter.AnswerConverter;
 
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Post;
 import com.tissue.domain.plan.Answer;
-
 import com.tissue.plan.dao.AnswerDao;
 
 import java.util.Date;
@@ -33,20 +33,17 @@ public class AnswerDaoImpl implements AnswerDao {
     /**
      * It seems that sql command cann't be mixed with java api call.
      */
-    public void create(Answer answer) {
+    public Answer create(Answer answer) {
 
         OGraphDatabase db = dataSource.getDB();
         try {
+            String record = OrientIdentityUtil.decode(answer.getQuestion().getId());
+            ORecordId postRecordId = new ORecordId(record);
 
-            ODocument doc = new ODocument("Answer");
-            doc.field("content", answer.getContent());
-            doc.field("createTime", answer.getCreateTime());
-            doc.field("user", new ORecordId(OrientIdentityUtil.decode(answer.getUser().getId())));
+            ODocument doc = AnswerConverter.convertAnswer(answer);
+            doc.field("post", postRecordId);
             doc.save();
 
-            //update the question adding the answer to the answers linkset relationship
-            String record = OrientIdentityUtil.decode(answer.getPost().getId());
-            ORecordId postRecordId = new ORecordId(record);
             ODocument postDoc = db.load(postRecordId);
             Set<ODocument> answersDoc = postDoc.field("answers", Set.class);
             if(answersDoc == null) {
@@ -55,6 +52,9 @@ public class AnswerDaoImpl implements AnswerDao {
             answersDoc.add(doc);
             postDoc.field("answers", answersDoc);
             postDoc.save();
+
+            answer = AnswerConverter.buildAnswerWithoutChild(doc);
+            return answer;
         }
         finally {
             db.close();

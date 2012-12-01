@@ -8,6 +8,6 @@ public interface QuestionCommentDao {
     /**
      * Add a comment to the specific question.
      */
-    void create(QuestionComment comment);
+    QuestionComment create(QuestionComment comment);
 
 }

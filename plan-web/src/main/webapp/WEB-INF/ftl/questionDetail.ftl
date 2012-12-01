@@ -35,9 +35,9 @@
                             <div>${answer.content}</div>
 
                             <div>
-                                <#if answer.comments??>
+                                <#if answer.answerComments??>
                                     <ul>
-                                        <#list answer.comments as comment>
+                                        <#list answer.answerComments as comment>
                                             <li>${comment.content}</li>
                                         </#list>
                                     </ul>
@@ -78,9 +78,6 @@
                 });
 
                 $('form').submit(function() {
-                    console.log(this.action);
-                    console.log($(this).serialize());
-
                     $.post(this.action, $(this).serialize(), function(res, status) {
                         $('#content').html(res);
                     });

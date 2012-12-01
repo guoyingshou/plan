@@ -2,6 +2,7 @@ package com.tissue.plan.dao.orient;
 
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
+import com.tissue.core.converter.PostMessageCommentConverter;
 
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.PostMessage;
@@ -30,20 +31,15 @@ public class PostMessageCommentDaoImpl implements PostMessageCommentDao {
     @Autowired
     private OrientDataSource dataSource;
 
-    public void create(PostMessageComment comment) {
+    public PostMessageComment create(PostMessageComment comment) {
 
         OGraphDatabase db = dataSource.getDB();
         try {
-
-            //save the comment
-            ODocument commentDoc = new ODocument("PostMessageComment");
-            commentDoc.field("content", comment.getContent());
-            commentDoc.field("createTime", comment.getCreateTime());
-            commentDoc.field("user", new ORecordId(OrientIdentityUtil.decode(comment.getUser().getId())));
+            ODocument commentDoc = PostMessageCommentConverter.convertPostMessageComment(comment);
             commentDoc.save();
 
             //update message adding this comment
-            String record = OrientIdentityUtil.decode(comment.getMessage().getId());
+            String record = OrientIdentityUtil.decode(comment.getPostMessage().getId());
             ORecordId messageRecordId = new ORecordId(record);
             ODocument messageDoc = db.load(messageRecordId);
             Set<ODocument> commentsDoc = messageDoc.field("comments");
@@ -54,10 +50,13 @@ public class PostMessageCommentDaoImpl implements PostMessageCommentDao {
             messageDoc.field("comments", commentsDoc);
             messageDoc.save();
 
+            comment = PostMessageCommentConverter.buildPostMessageComment(commentDoc);
         }
         finally {
             db.close();
         }
+
+        return comment;
     }
 
 }

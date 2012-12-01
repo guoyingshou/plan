@@ -8,5 +8,5 @@ public interface AnswerCommentDao {
     /**
      * Add a comment to the specific post message.
      */
-    void create(AnswerComment comment);
+    AnswerComment create(AnswerComment comment);
 }

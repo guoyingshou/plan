@@ -2,6 +2,7 @@ package com.tissue.plan.dao.orient;
 
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
+import com.tissue.core.converter.PostMessageConverter;
 
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Post;
@@ -34,15 +35,12 @@ public class PostMessageDaoImpl implements PostMessageDao {
     /**
      * It seems that sql command cann't be mixed with java api call.
      */
-    public void create(PostMessage message) {
+    public PostMessage create(PostMessage message) {
 
         OGraphDatabase db = dataSource.getDB();
         try {
 
-            ODocument doc = new ODocument("PostMessage");
-            doc.field("content", message.getContent());
-            doc.field("createTime", message.getCreateTime());
-            doc.field("user", new ORecordId(OrientIdentityUtil.decode(message.getUser().getId())));
+            ODocument doc = PostMessageConverter.convertPostMessage(message);
             doc.save();
 
             String record = OrientIdentityUtil.decode(message.getPost().getId());
@@ -55,10 +53,14 @@ public class PostMessageDaoImpl implements PostMessageDao {
             postMessagesDoc.add(doc);
             postDoc.field("messages", postMessagesDoc);
             postDoc.save();
+
+            message = PostMessageConverter.buildPostMessageWithoutChild(doc);
         }
         finally {
             db.close();
         }
+
+        return message;
     }
 
 }

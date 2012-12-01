@@ -8,6 +8,6 @@ public interface AnswerDao {
     /**
      * Add an answer to the specific question.
      */
-    void create(Answer answer);
+    Answer create(Answer answer);
 
 }

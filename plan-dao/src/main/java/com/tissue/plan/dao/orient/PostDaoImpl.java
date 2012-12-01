@@ -2,6 +2,7 @@ package com.tissue.plan.dao.orient;
 
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
+import com.tissue.core.converter.PostConverter;
 
 import com.tissue.domain.social.Event;
 import com.tissue.domain.profile.User;
@@ -9,7 +10,6 @@ import com.tissue.domain.plan.Post;
 
 import com.tissue.commons.dao.social.EventDao;
 import com.tissue.plan.dao.PostDao;
-import com.tissue.core.converter.PostConverter;
 
 import java.util.Date;
 import java.util.List;
@@ -42,8 +42,7 @@ public class PostDaoImpl implements PostDao {
         try {
             ODocument doc = PostConverter.convert(post);
             doc.save();
-            //post.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
-            post = PostConverter.buildMiniumPost(doc);
+            post = PostConverter.buildPostWithoutChild(doc);
         }
         catch(Exception exc) {
             exc.printStackTrace();

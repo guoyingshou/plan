@@ -8,6 +8,6 @@ public interface PostMessageDao {
     /**
      * Add a message to the specific post.
      */
-    void create(PostMessage message);
+    PostMessage create(PostMessage message);
 
 }

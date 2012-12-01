@@ -2,6 +2,7 @@ package com.tissue.plan.dao.orient;
 
 import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.util.OrientIdentityUtil;
+import com.tissue.core.converter.TopicConverter;
 
 import com.tissue.domain.social.Event;
 import com.tissue.domain.profile.User;
@@ -12,7 +13,6 @@ import com.tissue.domain.plan.Post;
 import com.tissue.commons.dao.social.EventDao;
 import com.tissue.plan.dao.TopicDao;
 import com.tissue.plan.dao.PostDao;
-import com.tissue.core.converter.TopicConverter;
 
 import java.util.Date;
 import java.util.List;
@@ -50,9 +50,9 @@ public class TopicDaoImpl implements TopicDao {
      */
     public Topic create(Topic topic) {
         OGraphDatabase db = dataSource.getDB();
-        ODocument doc = new ODocument("Topic");
-        topic.setCreateTime(new Date());
         try {
+            /**
+            ODocument doc = new ODocument("Topic");
             doc.field("title", topic.getTitle());
             doc.field("content", topic.getContent());
             doc.field("createTime", topic.getCreateTime());
@@ -60,6 +60,9 @@ public class TopicDaoImpl implements TopicDao {
 
             ORecordId userRecord = new ORecordId(OrientIdentityUtil.decode(topic.getUser().getId()));
             doc.field("user", userRecord);
+            */
+
+            ODocument doc = TopicConverter.convertTopic(topic);
             doc.save();
             topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
         }
@@ -113,12 +116,7 @@ public class TopicDaoImpl implements TopicDao {
             OSQLSynchQuery query = new OSQLSynchQuery(qstr);
             List<ODocument> docs = db.query(query);
             for(ODocument doc : docs) {
-                Topic topic = TopicConverter.buildMiniumTopic(doc);
-                /**
-                Topic topic = new Topic();
-                topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
-                topic.setTitle(doc.field("title").toString());
-                */
+                Topic topic = TopicConverter.buildTopicWithoutChild(doc);
                 topics.add(topic);
             }
         }
@@ -168,7 +166,7 @@ public class TopicDaoImpl implements TopicDao {
             OCommandSQL cmd = new OCommandSQL(qstr);
             List<ODocument> docs = db.command(cmd).execute(tag);
             for(ODocument doc : docs) {
-                Topic topic = TopicConverter.buildMiniumTopic(doc);
+                Topic topic = TopicConverter.buildTopicWithoutChild(doc);
                 /**
                 Topic topic = new Topic();
                 topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
