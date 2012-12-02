@@ -50,7 +50,7 @@ public class PostMessageCommentDaoImpl implements PostMessageCommentDao {
             messageDoc.field("comments", commentsDoc);
             messageDoc.save();
 
-            comment = PostMessageCommentConverter.buildPostMessageComment(commentDoc);
+            comment = PostMessageCommentConverter.buildPostMessageCommentWithParent(commentDoc);
         }
         finally {
             db.close();

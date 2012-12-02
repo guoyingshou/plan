@@ -44,6 +44,7 @@ public class PlanDaoImpl implements PlanDao {
 
         OGraphDatabase db = dataSource.getDB();
         try {
+            /**
             ODocument doc = new ODocument("Plan");
             doc.field("duration", plan.getDuration());
             doc.field("createTime", plan.getCreateTime());
@@ -53,43 +54,12 @@ public class PlanDaoImpl implements PlanDao {
 
             ORecordId userRecord = new ORecordId(OrientIdentityUtil.decode(plan.getUser().getId()));
             doc.field("user", userRecord);
+            */
+
+            ODocument doc = PlanConverter.convertPlan(plan);
             doc.save();
             
             plan = PlanConverter.buildPlan(doc);
-
-            /**
-            //add this plan to related topic
-            ODocument topicDoc = db.load(topicRecord);
-            Set<ODocument> plans = topicDoc.field("plans", Set.class);
-            if(plans == null) {
-                plans = new HashSet();
-            }
-            plans.add(doc);
-            topicDoc.field("plans", plans);
-            topicDoc.save();
-            */
-
-            /**
-            //add event to activity stream
-            ODocument topicUserDoc = topicDoc.field("user");
-            String topicUserRid = topicUserDoc.getIdentity().toString();
-
-            Event event = new Event();
-            event.setType("plan");
-            event.setPublished(plan.getCreateTime());
-            event.setActor(plan.getUser());
-
-            Map<String, String> object = new HashMap();
-            object.put("id", plan.getId());
-            event.setObject(object);
-
-            List<String> notifies = new ArrayList();
-            notifies.add(topicUserRid);
-            event.setNotifies(notifies);
-
-            eventDao.addEvent(event);
-            */
-            
         }
         catch(Exception exc) {
             //to do
