@@ -44,18 +44,6 @@ public class PlanDaoImpl implements PlanDao {
 
         OGraphDatabase db = dataSource.getDB();
         try {
-            /**
-            ODocument doc = new ODocument("Plan");
-            doc.field("duration", plan.getDuration());
-            doc.field("createTime", plan.getCreateTime());
-
-            ORecordId topicRecord = new ORecordId(OrientIdentityUtil.decode(plan.getTopic().getId()));
-            doc.field("topic", topicRecord);
-
-            ORecordId userRecord = new ORecordId(OrientIdentityUtil.decode(plan.getUser().getId()));
-            doc.field("user", userRecord);
-            */
-
             ODocument doc = PlanConverter.convertPlan(plan);
             doc.save();
             
@@ -112,6 +100,7 @@ public class PlanDaoImpl implements PlanDao {
             List<ODocument> result = db.query(query);
 
             for(ODocument doc : result) {
+                /**
                 Plan plan = new Plan();
                 plan.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
 
@@ -131,11 +120,14 @@ public class PlanDaoImpl implements PlanDao {
 
                 plan.setUser(user);
                 plan.setTopic(topic);
+                */
 
+                Plan plan = PlanConverter.buildPlan(doc);
                 plans.add(plan);
             }
         }
         catch(Exception exc) {
+            exc.printStackTrace();
             //to do
         }
         finally {
@@ -147,14 +139,6 @@ public class PlanDaoImpl implements PlanDao {
     public void addMember(String planId, String userId) {
 
         String sql = "update " + OrientIdentityUtil.decode(planId) + " add members = " + OrientIdentityUtil.decode(userId);
-        /**
-        StringBuilder qstr = new StringBuilder("update ");
-        qstr.append(OrientIdentityUtil.decode(planId));
-        qstr.append(" add members = ");
-        qstr.append(OrientIdentityUtil.decode(userId));
-        OCommandSQL cmd = new OCommandSQL(qstr.toString());
-        */
-
         OGraphDatabase db = dataSource.getDB();
         try {
             OCommandSQL cmd = new OCommandSQL(sql);
