@@ -39,11 +39,13 @@ public class TopicDaoImpl implements TopicDao {
     @Autowired
     private OrientDataSource dataSource;
 
+    /**
     @Autowired
     private PostDao postDao;
 
     @Autowired
     private EventDao eventDao;
+    */
 
     /**
      * Add a topic.
@@ -51,17 +53,6 @@ public class TopicDaoImpl implements TopicDao {
     public Topic create(Topic topic) {
         OGraphDatabase db = dataSource.getDB();
         try {
-            /**
-            ODocument doc = new ODocument("Topic");
-            doc.field("title", topic.getTitle());
-            doc.field("content", topic.getContent());
-            doc.field("createTime", topic.getCreateTime());
-            doc.field("tags", topic.getTags());
-
-            ORecordId userRecord = new ORecordId(OrientIdentityUtil.decode(topic.getUser().getId()));
-            doc.field("user", userRecord);
-            */
-
             ODocument doc = TopicConverter.convertTopic(topic);
             doc.save();
             topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
@@ -102,6 +93,65 @@ public class TopicDaoImpl implements TopicDao {
         }
         return topic;
     }
+
+    /**
+     * Get topics with the largest members.
+     */
+    public List<Topic> getTrendingTopics() {
+        List<Topic> topics = new ArrayList();
+
+        String qstr = "select topic, count from plan order by count desc limit 2";
+        System.out.println(qstr);
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OSQLSynchQuery query = new OSQLSynchQuery(qstr);
+            List<ODocument> docs = db.query(query);
+            for(ODocument doc : docs) {
+                ODocument topicDoc = doc.field("topic");
+                System.out.println(topicDoc);
+                Topic topic = TopicConverter.buildTopicWithoutChild(topicDoc);
+                topics.add(topic);
+            }
+        }
+        catch(Exception exc) {
+            //to do
+            exc.printStackTrace();
+        }
+        finally {
+            db.close();
+        }
+        return topics;
+    }
+
+    /**
+     * Get featured topics.
+     */
+    public List<Topic> getFeaturedTopics() {
+        List<Topic> topics = new ArrayList();
+
+        String qstr = "select from topic where type = 'featured' order by createTime desc limit 15";
+        System.out.println(qstr);
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OSQLSynchQuery query = new OSQLSynchQuery(qstr);
+            List<ODocument> docs = db.query(query);
+            for(ODocument doc : docs) {
+                Topic topic = TopicConverter.buildTopicWithoutChild(doc);
+                topics.add(topic);
+            }
+        }
+        catch(Exception exc) {
+            //to do
+            exc.printStackTrace();
+        }
+        finally {
+            db.close();
+        }
+        return topics;
+    }
+
 
     /**
      * Get all topics reverse ordered by createTime.
@@ -167,11 +217,6 @@ public class TopicDaoImpl implements TopicDao {
             List<ODocument> docs = db.command(cmd).execute(tag);
             for(ODocument doc : docs) {
                 Topic topic = TopicConverter.buildTopicWithoutChild(doc);
-                /**
-                Topic topic = new Topic();
-                topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
-                topic.setTitle(doc.field("title").toString());
-                */
                 topics.add(topic);
             }
         }

@@ -48,6 +48,14 @@ public class TopicService {
         return topicDao.getTopic(topicId);
     }
 
+    public List<Topic> getTrendingTopics() {
+        return topicDao.getTrendingTopics();
+    }
+
+    public List<Topic> getFeaturedTopics() {
+        return topicDao.getFeaturedTopics();
+    }
+
     public List<Topic> getTopics() {
         return topicDao.getTopics();
     }

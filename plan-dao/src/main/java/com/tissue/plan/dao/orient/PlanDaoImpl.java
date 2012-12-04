@@ -139,10 +139,16 @@ public class PlanDaoImpl implements PlanDao {
     public void addMember(String planId, String userId) {
 
         String sql = "update " + OrientIdentityUtil.decode(planId) + " add members = " + OrientIdentityUtil.decode(userId);
+        String sqlUpdate = "update " + OrientIdentityUtil.decode(planId) + " increment count = 1";
+
         OGraphDatabase db = dataSource.getDB();
         try {
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute();
+
+            //workaround for not able to order by members.size()
+            OCommandSQL cmdUpdate = new OCommandSQL(sqlUpdate);
+            db.command(cmdUpdate).execute();
         }
         finally {
             db.close();

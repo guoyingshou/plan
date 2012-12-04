@@ -1,9 +1,11 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.commons.security.util.SecurityUtil;
-//import com.tissue.commons.util.PagedDataHolder;
+import com.tissue.domain.social.Event;
 import com.tissue.domain.plan.Topic;
 import com.tissue.plan.service.TopicService;
+import com.tissue.commons.service.EventService;
+import com.tissue.commons.security.util.SecurityUtil;
+//import com.tissue.commons.util.PagedDataHolder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,9 +32,18 @@ public class ExploreController {
     @Autowired
     private TopicService topicService;
 
+    @Autowired
+    private EventService eventService;
+
     @RequestMapping("/explore")
     public String explore(Map model) {
+
+        List<Topic> trendingTopics = topicService.getTrendingTopics();
+        List<Topic> featuredTopics = topicService.getFeaturedTopics();
+        model.put("trendingTopics", trendingTopics);
+        model.put("featuredTopics", featuredTopics);
         model.put("viewer", SecurityUtil.getUser());
+
         return "explore";
     }
 
@@ -79,6 +90,8 @@ public class ExploreController {
 
     @RequestMapping("/exploreTimeline")
     public String exploreTimeline(Map model) {
+        List<Event> events = eventService.getLatestEvents();
+        model.put("events", events);
         model.put("viewer", SecurityUtil.getUser());
         return "exploreTimeline";
     }

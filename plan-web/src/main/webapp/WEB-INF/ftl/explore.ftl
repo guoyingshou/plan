@@ -17,24 +17,20 @@
             <div>
                 <h2>Trending topics</h2>
                 <ul>
-                    <li>
-                        test
-                    </li>
-                    <li>
-                        topic2
-                    </li>
+                <#list trendingTopics as topic>
+                    <li><a href="/u2/plan/topics/${topic.id}">${topic.title}</a> Created By: <a href="http://www.tissue.com/u1/profile/users/${topic.user.id}">${topic.user.displayName}</a></li>
+                </#list>
                 </ul>
             </div>
+
             <div class="feature">
                 <h2>Featured topics</h2>
                 <ul>
-                    <li>
-                       topic 1
-                    </li>
-                    <li>
-                       topic 2
-                    </li>
+                <#list featuredTopics as topic>
+                    <li><a href="/u2/plan/topics/${topic.id}">${topic.title}</a> Created By: <a href="http://www.tissue.com/u1/profile/users/${topic.user.id}">${topic.user.displayName}</a></li>
+                </#list>
                 </ul>
+
             </div>
         </div>
     </div>

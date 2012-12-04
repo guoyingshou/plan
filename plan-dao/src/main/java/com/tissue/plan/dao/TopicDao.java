@@ -10,6 +10,10 @@ public interface TopicDao {
 
     Topic getTopic(String id);
 
+    List<Topic> getTrendingTopics();
+
+    List<Topic> getFeaturedTopics();
+
     List<Topic> getTopics();
 
     List<String> getTopicTags();
