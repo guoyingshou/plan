@@ -1,4 +1,4 @@
-<#import "spring.ftl" as spring />
+<#import "../spring.ftl" as spring />
 
             <form action="<@spring.url '/plan/topics/${topic.id}/plans' />" method="post">
                 <fieldset>

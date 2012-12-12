@@ -42,17 +42,8 @@ public class PlanController {
     @Autowired
     private PlanService planService;
 
-    /**
-     * Show form for new plan creation.
-     * Intended to by used by ajax.
-     */
-    @RequestMapping(value="/topics/{topicId}/plans")
-    public String showPlanCreateForm(@PathVariable("topicId") String topicId, Map model) {
-        Topic topic = topicService.getTopic(topicId);
-        model.put("topic", topic);
-        model.put("viewer", SecurityUtil.getUser());
-        return "planForm";
-    }
+    @Autowired
+    private PostService postService;
 
     /**
      * Add a plan to the specific topic.
@@ -77,7 +68,6 @@ public class PlanController {
         System.out.println("current plan: " + plan.getId());
 
         return "redirect:/plan/topics/" + topicId;
-        //return "postList";
     }
 
     /**
@@ -87,6 +77,27 @@ public class PlanController {
     public String joinPlan(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId, Map model) {
         planService.addMember(planId, SecurityUtil.getUserId());
         return "redirect:/plan/topics/" + topicId;
+    }
+
+    /**
+     * Get paged posts by planId.
+     */
+    @RequestMapping(value="/plans/{planId}") 
+    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize,  Map model) {
+
+        System.out.println("current plan: " + planId);
+
+        Topic topic = topicService.getTopicByPlanId(planId);
+        System.out.println(topic);
+        System.out.println("title: " + topic.getTitle());
+        model.put("topic", topic);
+
+        List<Post> posts = postService.getPostsByPlanId(planId);
+        model.put("posts", posts);
+
+        model.put("viewer", SecurityUtil.getUser());
+
+        return "topic";
     }
 
 

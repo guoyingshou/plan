@@ -2,27 +2,41 @@
 <#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
 
+<#--
 <#assign myscripts=["/ckeditor/ckeditor.js", "/ckeditor/adapters/jquery.js"] in tissue>
+-->
+<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 
 <#assign mystyles=["http://www.tissue.com/resources/css/content-2cols.css", "http://www.tissue.com/resources/css/topic.css", "http://www.tissue.com/resources/css/plan.css", "http://www.tissue.com/resources/css/postForm.css"] in tissue>
 
 <@tissue.layout "topic">
 
     <div id="logo">
-        <@tissue.topicLogo />
+        <@tissue.topicLogo topic />
     </div>
 
     <div id="contentWrapper">
         <div id="sidebar">
+
+            <#if topic.activePlan??>
+                <#assign activePlan = topic.activePlan in tissue />
+            </#if>
             <@tissue.showActivePlan />
+
+            <#--
             <@tissue.showDeadPlans />
+            -->
         </div>
 
        <div id="content">
+           <#if posts??>
+               <@gadgets.showPostList posts />
+           </#if>
        </div>
 
     </div>
 
+<#--
     <script type="text/javascript">
 
             var config = { language: '${lang}', filebrowserImageUploadUrl : '/u2/plan/images' }; 
@@ -36,8 +50,6 @@
             ];
 
             $(document).ready(function() {
-                $('#content').load('/u2/plan/topics/${topic.id}/posts');
-
                 $("a.ajx").on('click', function(e) {
                     e.preventDefault();
                     $('#content').load(this.href);
@@ -45,6 +57,6 @@
 
             });
     </script>
-
+    -->
 
 </@tissue.layout>

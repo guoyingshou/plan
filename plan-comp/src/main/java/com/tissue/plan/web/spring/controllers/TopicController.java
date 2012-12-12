@@ -40,6 +40,9 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
 
+    @Autowired
+    private PostService postService;
+
     /**
      * Show topic create form.
      */
@@ -78,17 +81,14 @@ public class TopicController {
 
         topic = topicService.addTopic(topic);
         
-        StringBuilder buf = new StringBuilder("redirect:/plan/topics/");
-        buf.append(topic.getId());
-
-        return buf.toString();
+        return "redirect:/plan/topics/" + topic.getId();
     }
 
     /**
      * Get paged posts by topicId.
      */
     @RequestMapping(value="/topics/{id}")
-    public String getTopics(@PathVariable("id") String topicId, @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize, Locale locale, Map model) {
+    public String getTopic(@PathVariable("id") String topicId, @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize, Locale locale, Map model) {
 
         /**
         Integer page = currentPage == null ? 1 : currentPage;
@@ -104,9 +104,12 @@ public class TopicController {
 
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);
+
+        List<Post> posts = postService.getPostsByTopicId(topicId);
+        model.put("posts", posts);
+
         model.put("viewer", SecurityUtil.getUser());
 
-        
         /**
         long count = topic.getPostsCount();
 
@@ -126,27 +129,20 @@ public class TopicController {
     }
 
     /**
-     * Show specific post.
-     * Intended to by used by ajax.
+     * Get paged posts by topicId and type.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}")
-    public String getPost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, Map model, Locale locale) {
-
-        String lang = locale.toLanguageTag();
-        if(lang != null) 
-            model.put("lang", lang);
+    @RequestMapping(value="/topics/{topicId}/{type}")
+    public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize,  Map model) throws Exception {
 
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);
-        model.put("viewer", SecurityUtil.getUser());
-        model.put("postId", postId);
 
-        /**
-        if("question".equals(post.getType())) {
-            return "questionDetail";
-        }
-        */
-        return "topicPostDetail";
+        List<Post> posts = postService.getPostsByTopicIdAndType(topicId, type);
+        model.put("posts", posts);
+
+        model.put("viewer", SecurityUtil.getUser());
+
+        return "topic";
     }
 
 

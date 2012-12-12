@@ -95,6 +95,34 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     /**
+     * Get a topic by plan id with all fields available.
+     */
+    public Topic getTopicByPlanId(String planId) {
+        Topic topic = null;
+
+        String sql = "select topic from " + OrientIdentityUtil.decode(planId);
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OSQLSynchQuery<ODocument> q = new OSQLSynchQuery(sql);
+            List<ODocument> result = db.query(q.setFetchPlan("*:-1"));
+            if(result.size() > 0) {
+                ODocument doc = result.get(0);
+                ODocument topicDoc = doc.field("topic");
+                topic = TopicConverter.buildTopic(topicDoc);
+            }
+        }
+        catch(Exception exc) {
+            exc.printStackTrace();
+            //to do
+        }
+        finally {
+            db.close();
+        }
+        return topic;
+    }
+
+
+    /**
      * Get topics with the largest members.
      */
     public List<Topic> getTrendingTopics() {
@@ -109,7 +137,6 @@ public class TopicDaoImpl implements TopicDao {
             List<ODocument> docs = db.query(query);
             for(ODocument doc : docs) {
                 ODocument topicDoc = doc.field("topic");
-                System.out.println(topicDoc);
                 Topic topic = TopicConverter.buildTopicWithoutChild(topicDoc);
                 topics.add(topic);
             }

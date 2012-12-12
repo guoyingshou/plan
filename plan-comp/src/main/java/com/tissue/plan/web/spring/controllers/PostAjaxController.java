@@ -15,7 +15,6 @@ import com.tissue.domain.plan.PostMessageComment;
 import com.tissue.domain.plan.QuestionComment;
 import com.tissue.domain.plan.Answer;
 import com.tissue.domain.plan.AnswerComment;
-import com.tissue.plan.service.TopicService;
 import com.tissue.plan.service.PostService;
 import com.tissue.plan.service.PostMessageService;
 import com.tissue.plan.service.PostMessageCommentService;
@@ -44,10 +43,7 @@ import java.util.Date;
 import java.security.Principal;
 
 @Controller
-public class PostController {
-
-    @Autowired
-    protected TopicService topicService;
+public class PostAjaxController {
 
     @Autowired
     protected PostService postService;
@@ -68,37 +64,23 @@ public class PostController {
     protected AnswerCommentService answerCommentService;
 
     /**
-     * Add a post to the active plan.
+     * Show form for adding a new post.
      */
-    @RequestMapping(value="/plans/{planId}/posts", method=POST)
-    public String addPost(@PathVariable("planId") String planId, PostForm form, Map model) {
+    @RequestMapping(value="/plans/{planId}/posts")
+    public String showPostCreateForm(@PathVariable("planId") String planId, Locale locale, Map model) {
 
-        Post post = new Post();
-        post.setTitle(form.getTitle());
-        post.setContent(form.getContent());
-        post.setType(form.getType());
+        model.put("planId", planId);
+        model.put("viewer", SecurityUtil.getUser());
 
-        post.setCreateTime(new Date());
+        String lang = locale.toLanguageTag();
+        if(lang != null) 
+            model.put("lang", lang);
 
-        Plan plan = new Plan();
-        //plan.setId(form.getPlanId());
-        plan.setId(planId);
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-
-        post.setPlan(plan);
-        post.setUser(user);
-
-        post = postService.addPost(post);
-
-        return "redirect:/plan/posts/" + post.getId();
+        return "fragments/postForm";
     }
-
+ 
     /**
      * Get specific post.
-     */
     @RequestMapping(value="/posts/{postId}")
     public String getPost(@PathVariable("postId") String postId, Map model, Locale locale) {
         String viewerId = SecurityUtil.getUserId();
@@ -113,19 +95,16 @@ public class PostController {
         Post post = postService.getPost(postId);
         model.put("post", post);
 
-        String topicId = post.getPlan().getTopic().getId();
-        Topic topic = topicService.getTopic(topicId);
-        model.put("topic", topic);
-        
         if("question".equals(post.getType())) {
             return "questionDetail";
         }
         return "postDetail";
     }
+     */
 
     /**
      * Add a message to a specific post.
-     */
+     * For ajax request only.
     @RequestMapping(value="/posts/{postId}/messages", method=POST)
     public String addMessage(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
 
@@ -143,7 +122,10 @@ public class PostController {
 
         postMessageService.addMessage(message);
 
-        return "redirect:/plan/posts/" + postId;
+        post = postService.getPost(postId);
+        model.put("post", post);
+
+        return "postDetail";
     }
 
     @RequestMapping(value="/posts/{postId}/messages/{msgId}/comments", method=POST)
@@ -163,12 +145,16 @@ public class PostController {
 
         postMessageCommentService.addComment(comment);
 
-        return "redirect:/plan/posts/" + postId;
+        Post post = postService.getPost(postId);
+        model.put("post", post);
+
+        return "postDetail";
     }
+     */
 
     /**
      * Add a comment to a specific question.
-     */
+     * For ajax request only.
     @RequestMapping(value="/questions/{postId}/comments", method=POST)
     public String addQuestionComment(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
 
@@ -186,13 +172,17 @@ public class PostController {
 
         questionCommentService.addComment(comment);
 
-        return "redirect:/plan/posts/" + postId;
+        post = postService.getPost(postId);
+        model.put("post", post);
+
+        return "questionDetail";
     }
+     */
 
 
     /**
      * Add an answer to a specific post.
-     */
+     * For ajax request only.
     @RequestMapping(value="/posts/{postId}/answers", method=POST)
     public String addAnswer(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
 
@@ -210,7 +200,10 @@ public class PostController {
 
         answerService.addAnswer(answer);
 
-        return "redirect:/plan/posts/" + postId;
+        post = postService.getPost(postId);
+        model.put("post", post);
+
+        return "questionDetail";
     }
 
     @RequestMapping(value="/posts/{postId}/answers/{answerId}/comments", method=POST)
@@ -230,7 +223,75 @@ public class PostController {
 
         answerCommentService.addComment(comment);
 
-        return "redirect:/plan/posts/" + postId;
+        Post post = postService.getPost(postId);
+        model.put("post", post);
+
+        return "questionDetail";
     }
+     */
+
+
+    //----------------- get posts by topic ---
+
+    /**
+     * Get post list by topic id.
+     * Used only by ajax request.
+    @RequestMapping(value="/topics/{topicId}/posts")
+    public String getPostsByTopicId(@PathVariable("topicId") String topicId, Map model) {
+
+        List<Post> posts = postService.getPostsByTopicId(topicId);
+        model.put("posts", posts);
+        model.put("viewer", SecurityUtil.getUser());
+
+        return "postList";
+    }
+     */
+
+    /**
+     * Get paged posts by topicId and type.
+     * Intended to by used by an ajax request.
+    @RequestMapping(value="/topics/{topicId}/{type}")
+    public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize,  Map model) throws Exception {
+
+        List<Post> posts = postService.getPostsByTopicIdAndType(topicId, type);
+        model.put("posts", posts);
+
+        return "postList";
+    }
+     */
+
+    //----------------- get posts by plan ---
+
+    /**
+     * Get paged posts by planId.
+     * Intended to by used by an ajax request.
+    @RequestMapping(value="/plans/{planId}") 
+    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize,  Map model) {
+
+        System.out.println("current plan: " + planId);
+
+        List<Post> posts = postService.getPostsByPlanId(planId);
+        model.put("posts", posts);
+
+        return "postList";
+    }
+     */
+
+
+
+    //----------------- get posts by user ---
+
+    /**
+     * Get paged posts by userId.
+     * Intended to by used by an ajax request.
+    @RequestMapping(value="/users/{userId}/posts") 
+    public String getPostsByUserId(@PathVariable("userId") String userId,  @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize,  Map model) {
+
+        List<Post> posts = postService.getPostsByUserId(userId);
+        model.put("posts", posts);
+
+        return "postList";
+    }
+     */
 
 }

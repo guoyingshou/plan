@@ -1,70 +1,26 @@
+<#import "tissue.ftl" as tissue />
+<#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
 
-<div id="postDetail">
-    <h3>title: ${post.title}</h3>
-    <p class="author">user: ${post.user.displayName}</p>
-    <p class="entry">content: ${post.content}</p>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 
-    <div class="message">
-        <#if post.messages??>
-            <h2>Messages: </h2>
-            <ul>
-                <#list post.messages as msg>
-                    <li>
-                        <div>
-                            <div>${msg.content}</div>
+<#assign mystyles=["http://www.tissue.com/resources/css/content-2cols.css", "http://www.tissue.com/resources/css/topic.css", "http://www.tissue.com/resources/css/plan.css", "http://www.tissue.com/resources/css/postForm.css"] in tissue>
 
-                            <div>
-                                <#if msg.comments??>
-                                    <ul>
-                                        <#list msg.comments as comment>
-                                            <li>${comment.content}</li>
-                                        </#list>
-                                    </ul>
-                                </#if>
-                            </div>
-                        </div>
-                        <div>
-                            <p><a class="comment" href="#">comment</a></p>
-                            <form class="commentForm" action= "<@spring.url '/plan/posts/${post.id}/messages/${msg.id}/comments'/>">
-                                    <textarea name="content"></textarea>
-                                    <input type="submit" value="submit" />
-                            </form>
-                        </div>
-                    </li>
-                </#list>
-            </ul>
-        </#if>
+<@tissue.layout "post detail">
+    <div id="logo">
+        <@tissue.topicLogo post.plan.topic />
     </div>
 
-    <form id="messageForm" action="<@spring.url '/plan/posts/${post.id}/messages' />" > 
-        <fieldset>
-            <legend>Leave a message</legend>
-            <textarea id="message" name="content" cols="60" rows="20"></textarea>
-            <input type="submit" value="submit" />
-        </fieldset>
-    </form>
+    <div id="contentWrapper">
+        <div id="sidebar">
+            <#assign activePlan = topic.activePlan in tissue />
+            <@tissue.showActivePlan />
+        </div>
+        <div id="content">
+           <@gadgets.showPostDetail />
+        </div>
 
-    <script type="text/javascript">
-            $(document).ready(function() {
-                CKEDITOR.instances = [];
-                $('#message').ckeditor(); 
+    </div>
+</@tissue.layout>
 
-                $('.commentForm').hide();
-                $('a.comment').on('click', function() {
-                    $target = $(this).parent().next();
-                    $target.toggle();
-                    return false;
-                });
 
-                $('form').submit(function() {
-                    $.post(this.action, $(this).serialize(), function(res, status) {
-                        $('#content').html(res);
-                    });
- 
-                    return false;
-                });
-
-            });
-    </script>
-</div>

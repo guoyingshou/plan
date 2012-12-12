@@ -1,6 +1,6 @@
-<#import "spring.ftl" as spring />
+<#import "../spring.ftl" as spring />
 
-            <form action="<@spring.url '/plan/posts'/>" method="post">
+            <form action="<@spring.url '/plan/plans/${planId}/posts'/>" method="post">
                 <fieldset>
                     <legend>please select post type</legend>
                     <label>Concept  <input type="radio" name="type" value="concept"/></label>
@@ -21,16 +21,16 @@
                             <textarea id="usercontent" name="content"></textarea>
                         </li>
                         <li>
-                            <input type="hidden" name="planId" value="${planId}" />
                             <input type="submit" value="submit" />
                         </li>
                     </ul>
                 </fieldset>
             </form>
 
+<#--
         <script type="text/javascript">
             $(document).ready(function() {
-                $('#usercontent').ckeditor();
+                CKEDITOR.replace('usercontent');
 
                 $('form').submit(function(e) {
                     $.post(this.action, $(this).serialize(), function(res, status) {
@@ -40,5 +40,6 @@
                 });
             });
         </script>
+        -->
  
 

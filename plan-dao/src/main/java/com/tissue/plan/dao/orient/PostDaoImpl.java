@@ -42,7 +42,8 @@ public class PostDaoImpl implements PostDao {
         try {
             ODocument doc = PostConverter.convert(post);
             doc.save();
-            post = PostConverter.buildPostWithoutChild(doc);
+            //post = PostConverter.buildPostWithoutChild(doc);
+            post = PostConverter.buildPost(doc);
         }
         catch(Exception exc) {
             exc.printStackTrace();
