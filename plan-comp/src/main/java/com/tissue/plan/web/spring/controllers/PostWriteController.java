@@ -44,7 +44,7 @@ import java.util.Date;
 import java.security.Principal;
 
 @Controller
-public class PostController {
+public class PostWriteController {
 
     @Autowired
     protected TopicService topicService;
@@ -81,7 +81,6 @@ public class PostController {
         post.setCreateTime(new Date());
 
         Plan plan = new Plan();
-        //plan.setId(form.getPlanId());
         plan.setId(planId);
 
         User user = new User();
@@ -94,33 +93,6 @@ public class PostController {
         post = postService.addPost(post);
 
         return "redirect:/plan/posts/" + post.getId();
-    }
-
-    /**
-     * Get specific post.
-     */
-    @RequestMapping(value="/posts/{postId}")
-    public String getPost(@PathVariable("postId") String postId, Map model, Locale locale) {
-        String viewerId = SecurityUtil.getUserId();
-        if(viewerId != null) {
-             model.put("viewer", SecurityUtil.getUser());
-        }
-
-        String lang = locale.toLanguageTag();
-        if(lang != null) 
-            model.put("lang", lang);
-
-        Post post = postService.getPost(postId);
-        model.put("post", post);
-
-        String topicId = post.getPlan().getTopic().getId();
-        Topic topic = topicService.getTopic(topicId);
-        model.put("topic", topic);
-        
-        if("question".equals(post.getType())) {
-            return "questionDetail";
-        }
-        return "postDetail";
     }
 
     /**
@@ -188,7 +160,6 @@ public class PostController {
 
         return "redirect:/plan/posts/" + postId;
     }
-
 
     /**
      * Add an answer to a specific post.

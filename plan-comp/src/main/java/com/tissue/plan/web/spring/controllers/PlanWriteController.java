@@ -2,18 +2,11 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-
 import com.tissue.domain.profile.User;
-
-import com.tissue.plan.web.model.TopicForm;
-import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.web.model.PlanForm;
 import com.tissue.domain.plan.Topic;
 import com.tissue.domain.plan.Plan;
-import com.tissue.domain.plan.Post;
-import com.tissue.plan.service.TopicService;
 import com.tissue.plan.service.PlanService;
-import com.tissue.plan.service.PostService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +27,10 @@ import java.util.Date;
 import java.security.Principal;
 
 @Controller
-public class PlanController {
-
-    @Autowired
-    private TopicService topicService;
+public class PlanWriteController {
 
     @Autowired
     private PlanService planService;
-
-    @Autowired
-    private PostService postService;
 
     /**
      * Add a plan to the specific topic.
@@ -75,32 +62,6 @@ public class PlanController {
     public String joinPlan(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId, Map model) {
         planService.addMember(planId, SecurityUtil.getUserId());
         return "redirect:/plan/topics/" + topicId;
-    }
-
-    /**
-     * Get paged posts by planId.
-     */
-    @RequestMapping(value="/plans/{planId}") 
-    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
-
-        page = (page == null) ? 1 : page;
-        size = (size == null) ? 50 : size;
-        long total = postService.getPostsCountByPlanId(planId);
-        Pager pager = new Pager(total, page, size);
-        model.put("pager", pager);
-
-        System.out.println("current plan: " + planId);
-
-        Topic topic = topicService.getTopicByPlanId(planId);
-        model.put("topic", topic);
-
-        //List<Post> posts = postService.getPostsByPlanId(planId);
-        List<Post> posts = postService.getPagedPostsByPlanId(planId, page, size);
-        model.put("posts", posts);
-
-        model.put("viewer", SecurityUtil.getUser());
-
-        return "topic";
     }
 
 
