@@ -272,6 +272,49 @@ public class PostDaoImpl implements PostDao {
     }
 
     //-- by user
+    
+    public long getPostsCountByUserId(String userId) {
+        long result = 0;
+
+        String sql = "select count(*) from post where user in ?";
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OSQLSynchQuery q = new OSQLSynchQuery(sql);
+            List<ODocument> postsCountDoc = db.command(q).execute(OrientIdentityUtil.decode(userId));
+            if(postsCountDoc.size() > 0) {
+                 ODocument doc = postsCountDoc.get(0);
+                 result = doc.field("count", long.class);
+            }
+        }
+        finally {
+            db.close();
+        }
+        return result;
+    }
+
+
+    public List<Post> getPagedPostsByUserId(String userId, int page, int size) {
+        List<Post> posts = null;
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            posts = getPagedPostsByUserId(db, userId, page, size);
+        }
+        finally {
+            db.close();
+        }
+        return posts;
+    }
+
+    public List<Post> getPagedPostsByUserId(OGraphDatabase db, String userId, int page, int size) {
+        String postQstr = "select from post where user in ? order by createTime desc skip " +
+                           (page - 1) * size +
+                           " limit " + size;
+        OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
+        List<ODocument> postsDoc = db.command(q).execute(OrientIdentityUtil.decode(userId));
+        List<Post> posts = PostConverter.buildPosts(postsDoc);
+        return posts;
+    }
 
     public List<Post> getPostsByUserId(String userId) {
         List<Post> posts = null;
