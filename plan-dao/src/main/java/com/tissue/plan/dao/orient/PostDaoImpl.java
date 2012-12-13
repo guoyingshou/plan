@@ -94,6 +94,73 @@ public class PostDaoImpl implements PostDao {
         return posts;
     }
 
+    public List<Post> getPagedPostsByTopicId(String topicId, int page, int size) {
+        List<Post> posts = null;
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            posts = getPagedPostsByTopicId(db, topicId, page, size);
+        }
+        finally {
+            db.close();
+        }
+
+        return posts;
+    }
+
+    private List<Post> getPagedPostsByTopicId(OGraphDatabase db, String topicId, int page, int size) {
+        String sql = "select from post where plan.topic in " + 
+                      OrientIdentityUtil.decode(topicId) + 
+                      " order by createTime desc skip " + 
+                      ((page - 1) * size) + 
+                      " limit " + size;
+        OSQLSynchQuery q = new OSQLSynchQuery(sql);
+
+        List<ODocument> postsDoc = db.query(q);
+        List<Post> posts = PostConverter.buildPosts(postsDoc);
+        return posts;
+    }
+
+
+    public long getPostsCountByTopicId(String topicId) {
+        long result = 0;
+
+        String sql = "select count(*) from post where plan.topic in " + OrientIdentityUtil.decode(topicId);
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OSQLSynchQuery q = new OSQLSynchQuery(sql);
+            List<ODocument> postsCountDoc = db.query(q);
+            if(postsCountDoc.size() > 0) {
+                 ODocument doc = postsCountDoc.get(0);
+                 result = doc.field("count", long.class);
+            }
+        }
+        finally {
+            db.close();
+        }
+        return result;
+    }
+
+
+    public long getPostsCountByTopicIdAndType(String topicId, String type) {
+        long result = 0;
+
+        String sql = "select count(*) from post where plan.topic in ? and type = ?";
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OSQLSynchQuery q = new OSQLSynchQuery(sql);
+            List<ODocument> postsCountDoc = db.command(q).execute(OrientIdentityUtil.decode(topicId), type);
+            if(postsCountDoc.size() > 0) {
+                 ODocument doc = postsCountDoc.get(0);
+                 result = doc.field("count", long.class);
+            }
+        }
+        finally {
+            db.close();
+        }
+        return result;
+    }
+
     public List<Post> getPostsByTopicIdAndType(String topicId, String type) {
         List<Post> posts = null;
 
@@ -113,6 +180,72 @@ public class PostDaoImpl implements PostDao {
         OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
 
         List<ODocument> postsDoc = db.command(q).execute(OrientIdentityUtil.decode(topicId), type);
+        List<Post> posts = PostConverter.buildPosts(postsDoc);
+        return posts;
+    }
+
+    public List<Post> getPagedPostsByTopicIdAndType(String topicId, String type, int page, int size) {
+        List<Post> posts = null;
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            posts = getPagedPostsByTopicIdAndType(db, topicId, type, page, size);
+        }
+        finally {
+            db.close();
+        }
+
+        return posts;
+    }
+
+    public List<Post> getPagedPostsByTopicIdAndType(OGraphDatabase db, String topicId, String type, int page, int size) {
+        String postQstr = "select from post where plan.topic in ? and type = ? order by createTime desc skip " + 
+                           (page - 1) * size +
+                           " limit " + size;
+        OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
+
+        List<ODocument> postsDoc = db.command(q).execute(OrientIdentityUtil.decode(topicId), type);
+        List<Post> posts = PostConverter.buildPosts(postsDoc);
+        return posts;
+    }
+
+    public long getPostsCountByPlanId(String planId) {
+        long result = 0;
+
+        String sql = "select count(*) from post where plan in ?";
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OSQLSynchQuery q = new OSQLSynchQuery(sql);
+            List<ODocument> postsCountDoc = db.command(q).execute(OrientIdentityUtil.decode(planId));
+            if(postsCountDoc.size() > 0) {
+                 ODocument doc = postsCountDoc.get(0);
+                 result = doc.field("count", long.class);
+            }
+        }
+        finally {
+            db.close();
+        }
+        return result;
+    }
+
+    public List<Post> getPagedPostsByPlanId(String planId, int page, int size) {
+        List<Post> posts = null;
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            posts = getPagedPostsByPlanId(db, planId, page, size);
+        }
+        finally {
+            db.close();
+        }
+        return posts;
+    }
+
+    public List<Post> getPagedPostsByPlanId(OGraphDatabase db, String planId, int page, int size) {
+        String postQstr = "select from post where plan in ? order by createTime desc skip " +
+                           (page - 1) * size + 
+                           " limit " + size;
+        OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
+        List<ODocument> postsDoc = db.command(q).execute(OrientIdentityUtil.decode(planId));
         List<Post> posts = PostConverter.buildPosts(postsDoc);
         return posts;
     }

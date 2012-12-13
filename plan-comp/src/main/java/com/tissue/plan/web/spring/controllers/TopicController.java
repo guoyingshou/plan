@@ -1,7 +1,7 @@
 package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.commons.security.util.SecurityUtil;
-//import com.tissue.commons.util.PagedDataHolder;
+import com.tissue.commons.util.Pager;
 
 import com.tissue.domain.profile.User;
 
@@ -88,43 +88,24 @@ public class TopicController {
      * Get paged posts by topicId.
      */
     @RequestMapping(value="/topics/{id}")
-    public String getTopic(@PathVariable("id") String topicId, @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize, Locale locale, Map model) {
+    public String getTopic(@PathVariable("id") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Locale locale, Map model) {
 
-        /**
-        Integer page = currentPage == null ? 1 : currentPage;
-        Integer size = pageSize == null ? PAGE_SIZE : pageSize;
+        page = ((page == null) || (page < 1)) ? 1 : page;
+        size = (size == null) ? 50 : size;
 
-        long count = postService.getPostsCountByTopicId(topicId);
-        List<Post> posts = postService.getPagedPostsByTopicId(topicId, page, size);
+        long total = postService.getPostsCountByTopicId(topicId);
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
 
-        PagedDataHolder<Post> pdh = new PagedDataHolder(page, size, count);
-        pdh.setPagedItems(posts);
-        model.put("pagedData", pdh);
-        */
+        model.put("viewer", SecurityUtil.getUser());
 
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);
 
-        List<Post> posts = postService.getPostsByTopicId(topicId);
+        //List<Post> posts = postService.getPostsByTopicId(topicId);
+        List<Post> posts = postService.getPagedPostsByTopicId(topicId, page, size);
         model.put("posts", posts);
 
-        model.put("viewer", SecurityUtil.getUser());
-
-        /**
-        long count = topic.getPostsCount();
-
-        int size = pageSize == null ? PAGE_SIZE : pageSize;
-        int page = currentPage == null ? 1 : currentPage;
-
-        int start = (page - 1) * size;
-        int end = start + size;
-        List<Post> posts = topic.getPosts().subList(start, end);
-
-        PagedDataHolder<Post> pdh = new PagedDataHolder(page, size, count);
-        pdh.setPagedItems(posts);
-        model.put("pagedData", pdh);
-        */
- 
         return "topic";
     }
 
@@ -132,12 +113,21 @@ public class TopicController {
      * Get paged posts by topicId and type.
      */
     @RequestMapping(value="/topics/{topicId}/{type}")
-    public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize,  Map model) throws Exception {
+    public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) throws Exception {
+
+        page = (page == null) ? 1 : page;
+        size = (size == null) ? 50 : size;
+
+        long total = postService.getPostsCountByTopicIdAndType(topicId, type);
+
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
 
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);
 
-        List<Post> posts = postService.getPostsByTopicIdAndType(topicId, type);
+        //List<Post> posts = postService.getPostsByTopicIdAndType(topicId, type);
+        List<Post> posts = postService.getPagedPostsByTopicIdAndType(topicId, type, page, size);
         model.put("posts", posts);
 
         model.put("viewer", SecurityUtil.getUser());

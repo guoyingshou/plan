@@ -1,7 +1,7 @@
 package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.commons.security.util.SecurityUtil;
-//import com.tissue.core.util.PagedDataHolder;
+import com.tissue.commons.util.Pager;
 
 import com.tissue.domain.profile.User;
 
@@ -65,8 +65,6 @@ public class PlanController {
 
         plan = planService.addPlan(plan);
 
-        System.out.println("current plan: " + plan.getId());
-
         return "redirect:/plan/topics/" + topicId;
     }
 
@@ -83,16 +81,21 @@ public class PlanController {
      * Get paged posts by planId.
      */
     @RequestMapping(value="/plans/{planId}") 
-    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize,  Map model) {
+    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+
+        page = (page == null) ? 1 : page;
+        size = (size == null) ? 50 : size;
+        long total = postService.getPostsCountByPlanId(planId);
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
 
         System.out.println("current plan: " + planId);
 
         Topic topic = topicService.getTopicByPlanId(planId);
-        System.out.println(topic);
-        System.out.println("title: " + topic.getTitle());
         model.put("topic", topic);
 
-        List<Post> posts = postService.getPostsByPlanId(planId);
+        //List<Post> posts = postService.getPostsByPlanId(planId);
+        List<Post> posts = postService.getPagedPostsByPlanId(planId, page, size);
         model.put("posts", posts);
 
         model.put("viewer", SecurityUtil.getUser());

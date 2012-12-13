@@ -18,6 +18,10 @@ public interface TopicDao {
 
     List<Topic> getTopics();
 
+    List<Topic> getPagedTopics(int page, int size);
+
+    long getTopicsCount();
+
     List<String> getTopicTags();
 
     List<Topic> getTopicsByTag(String tag);

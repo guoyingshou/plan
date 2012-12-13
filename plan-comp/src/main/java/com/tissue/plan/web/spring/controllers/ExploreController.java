@@ -5,7 +5,7 @@ import com.tissue.domain.plan.Topic;
 import com.tissue.plan.service.TopicService;
 import com.tissue.commons.service.EventService;
 import com.tissue.commons.security.util.SecurityUtil;
-//import com.tissue.commons.util.PagedDataHolder;
+import com.tissue.commons.util.Pager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,21 +48,16 @@ public class ExploreController {
     }
 
     @RequestMapping("/exploreTopics")
-    public String exploreTopics(@RequestParam(value="page", required=false) Integer currentPage, @RequestParam(value="pageSize", required=false) Integer pageSize, Map model) {
+    public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
-        /**
-        Integer page = currentPage == null ? 1 : currentPage;
-        Integer size = pageSize == null ? 2 : pageSize;
+        long total = topicService.getTopicsCount();
+        page = (page == null) ? 1 : page;
+        size = (size == null) ? 50 : size;
 
-        long count = topicService.getTopicsCount();
-        List<Topic> topics = topicService.getTopics(page, size);
-        
-        PagedDataHolder<Topic> pdh = new PagedDataHolder(page, size, count);
-        pdh.setPagedItems(topics);
-        model.put("pagedData", pdh);
-        */
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
 
-        List<Topic> topics = topicService.getTopics();
+        List<Topic> topics = topicService.getPagedTopics(page, size);
         model.put("topics", topics);
         model.put("viewer", SecurityUtil.getUser());
 

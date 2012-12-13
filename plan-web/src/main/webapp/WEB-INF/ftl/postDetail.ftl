@@ -8,7 +8,8 @@
 
 <@tissue.layout "post detail">
     <div id="logo">
-        <@tissue.topicLogo post.plan.topic />
+        <#assign topic = post.plan.topic in tissue />
+        <@tissue.topicLogo />
     </div>
 
     <div id="contentWrapper">

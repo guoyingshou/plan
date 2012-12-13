@@ -16,11 +16,24 @@ public interface PostDao {
     Post getPost(String id);
 
     //-- by topic
+
+    long getPostsCountByTopicId(String topicId);
+
+    List<Post> getPagedPostsByTopicId(String topicId, int page, int size);
+
     List<Post> getPostsByTopicId(String topicId);
+
+    long getPostsCountByTopicIdAndType(String topicId, String type);
+
+    List<Post> getPagedPostsByTopicIdAndType(String topicId, String type, int page, int size);
 
     List<Post> getPostsByTopicIdAndType(String topicId, String type);
 
     //-- by plan
+
+    long getPostsCountByPlanId(String planId);
+
+    List<Post> getPagedPostsByPlanId(String planId, int page, int size);
 
     List<Post> getPostsByPlanId(String planId);
 

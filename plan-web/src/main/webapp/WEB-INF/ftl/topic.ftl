@@ -12,7 +12,7 @@
 <@tissue.layout "topic">
 
     <div id="logo">
-        <@tissue.topicLogo topic />
+        <@tissue.topicLogo />
     </div>
 
     <div id="contentWrapper">
@@ -32,6 +32,7 @@
            <#if posts??>
                <@gadgets.showPostList posts />
            </#if>
+           <@gadgets.showPager />
        </div>
 
     </div>

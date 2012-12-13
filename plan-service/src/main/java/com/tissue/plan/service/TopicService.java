@@ -64,6 +64,14 @@ public class TopicService {
         return topicDao.getTopics();
     }
 
+    public List<Topic> getPagedTopics(int page, int size) {
+        return topicDao.getPagedTopics(page, size);
+    }
+
+    public long getTopicsCount() {
+        return topicDao.getTopicsCount();
+    }
+
     public List<String> getTopicTags() {
         return topicDao.getTopicTags();
     }

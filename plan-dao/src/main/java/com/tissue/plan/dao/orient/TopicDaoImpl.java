@@ -208,6 +208,54 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     /**
+     * Get paged topics reverse ordered by createTime.
+     */
+    public List<Topic> getPagedTopics(int page, int size) {
+        List<Topic> topics = new ArrayList();
+
+        String qstr = "select from topic order by createTime desc skip " + ((page -1) * size) + " limit " + size;
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OSQLSynchQuery query = new OSQLSynchQuery(qstr);
+            List<ODocument> docs = db.query(query);
+            for(ODocument doc : docs) {
+                Topic topic = TopicConverter.buildTopicWithoutChild(doc);
+                topics.add(topic);
+            }
+        }
+        catch(Exception exc) {
+            //to do
+            exc.printStackTrace();
+        }
+        finally {
+            db.close();
+        }
+        return topics;
+    }
+
+    /**
+     * Get topics count.
+     */
+    public long getTopicsCount() {
+        long result = 0;
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            result = db.countClass("topic");
+        }
+        catch(Exception exc) {
+            //to do
+            exc.printStackTrace();
+        }
+        finally {
+            db.close();
+        }
+        return result;
+    }
+
+
+    /**
      * Get all tags.
      */
     public List<String> getTopicTags() {
