@@ -80,9 +80,17 @@ public class PostAjaxController {
     }
  
     /**
-     * Get specific post.
-    @RequestMapping(value="/posts/{postId}")
+     * show post update form.
+     */
+    @RequestMapping(value="/posts/{postId}/edit")
     public String getPost(@PathVariable("postId") String postId, Map model, Locale locale) {
+
+        Post post = postService.getPost(postId);
+        model.put("post", post);
+
+        return "fragments/postUpdateForm";
+
+        /**
         String viewerId = SecurityUtil.getUserId();
         if(viewerId != null) {
              model.put("viewer", SecurityUtil.getUser());
@@ -99,8 +107,8 @@ public class PostAjaxController {
             return "questionDetail";
         }
         return "postDetail";
+        */
     }
-     */
 
     /**
      * Add a message to a specific post.

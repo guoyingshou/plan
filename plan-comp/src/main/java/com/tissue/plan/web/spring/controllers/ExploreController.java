@@ -76,9 +76,15 @@ public class ExploreController {
     }
 
     @RequestMapping("/exploreTags/{tag}")
-    public String getTopicsByTag(@PathVariable("tag") String tag, Map model) {
+    public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
-        List<Topic> topics = topicService.getTopicsByTag(tag);
+        page = (page == null) ? 1 : page;
+        size = (size == null) ? 50 : size;
+        long total = topicService.getTopicsCountByTag(tag);
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
+
+        List<Topic> topics = topicService.getPagedTopicsByTag(tag, page, size);
         model.put("topics", topics);
 
         return "exploreTopics";

@@ -10,6 +10,8 @@ public interface PostDao {
      */
     Post create(Post post);
 
+    Post update(Post post);
+
     /**
      * Get the specific post.
      */

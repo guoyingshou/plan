@@ -42,7 +42,25 @@ public class PostDaoImpl implements PostDao {
         try {
             ODocument doc = PostConverter.convert(post);
             doc.save();
-            //post = PostConverter.buildPostWithoutChild(doc);
+            post = PostConverter.buildPost(doc);
+        }
+        catch(Exception exc) {
+            exc.printStackTrace();
+        }
+        finally {
+            db.close();
+        }
+        return post;
+    }
+
+    public Post update(Post post) {
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            //ODocument doc = PostConverter.convert(post);
+            ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(post.getId())));
+            doc.field("title", post.getTitle());
+            doc.field("content", post.getContent());
+            doc.save();
             post = PostConverter.buildPost(doc);
         }
         catch(Exception exc) {

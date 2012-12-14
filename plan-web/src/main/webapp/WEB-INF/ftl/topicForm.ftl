@@ -41,6 +41,7 @@
         </div>
 
         <script type="text/javascript">
+        <#--
             var config = {
                 language: '${lang}',
                 filebrowserImageUploadUrl : '/u2/plan/images',
@@ -55,12 +56,10 @@
                    }
                 ]
             };
+            -->
 
             $(document).ready(function() {
-            
-                //$('#usercontent').ckeditor(config);
                 CKEDITOR.replace('usercontent');
-
             });
 
         </script>

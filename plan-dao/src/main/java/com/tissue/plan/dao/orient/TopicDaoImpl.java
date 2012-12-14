@@ -179,23 +179,15 @@ public class TopicDaoImpl implements TopicDao {
         return topics;
     }
 
-
     /**
-     * Get all topics reverse ordered by createTime.
+     * Get topics count.
      */
-    public List<Topic> getTopics() {
-        List<Topic> topics = new ArrayList();
-
-        String qstr = "select from topic order by createTime desc";
+    public long getTopicsCount() {
+        long result = 0;
 
         OGraphDatabase db = dataSource.getDB();
         try {
-            OSQLSynchQuery query = new OSQLSynchQuery(qstr);
-            List<ODocument> docs = db.query(query);
-            for(ODocument doc : docs) {
-                Topic topic = TopicConverter.buildTopicWithoutChild(doc);
-                topics.add(topic);
-            }
+            result = db.countClass("topic");
         }
         catch(Exception exc) {
             //to do
@@ -204,7 +196,7 @@ public class TopicDaoImpl implements TopicDao {
         finally {
             db.close();
         }
-        return topics;
+        return result;
     }
 
     /**
@@ -235,14 +227,21 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     /**
-     * Get topics count.
+     * Get all topics reverse ordered by createTime.
      */
-    public long getTopicsCount() {
-        long result = 0;
+    public List<Topic> getTopics() {
+        List<Topic> topics = new ArrayList();
+
+        String qstr = "select from topic order by createTime desc";
 
         OGraphDatabase db = dataSource.getDB();
         try {
-            result = db.countClass("topic");
+            OSQLSynchQuery query = new OSQLSynchQuery(qstr);
+            List<ODocument> docs = db.query(query);
+            for(ODocument doc : docs) {
+                Topic topic = TopicConverter.buildTopicWithoutChild(doc);
+                topics.add(topic);
+            }
         }
         catch(Exception exc) {
             //to do
@@ -251,9 +250,8 @@ public class TopicDaoImpl implements TopicDao {
         finally {
             db.close();
         }
-        return result;
+        return topics;
     }
-
 
     /**
      * Get all tags.
@@ -279,6 +277,56 @@ public class TopicDaoImpl implements TopicDao {
             db.close();
         }
         return tags;
+    }
+
+    public long getTopicsCountByTag(String tag) {
+        long result = 0L;
+
+        String qstr = "select count(*) from topic where tags in ?";
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OCommandSQL cmd = new OCommandSQL(qstr);
+            List<ODocument> docs = db.command(cmd).execute(tag);
+            if(docs.size() > 0) {
+                ODocument countDoc = docs.get(0);
+                result = countDoc.field("count", long.class);
+            }
+        }
+        catch(Exception exc) {
+            //to do
+            exc.printStackTrace();
+        }
+        finally {
+            db.close();
+        }
+        return result;
+    }
+
+    public List<Topic> getPagedTopicsByTag(String tag, int page, int size) {
+        List<Topic> topics = new ArrayList();
+
+        String qstr = "select from topic where tags in ? order by createTime desc skip " + 
+                       (page - 1) * size +
+                       " limit " + size;
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OCommandSQL cmd = new OCommandSQL(qstr);
+            List<ODocument> docs = db.command(cmd).execute(tag);
+            for(ODocument doc : docs) {
+                Topic topic = TopicConverter.buildTopicWithoutChild(doc);
+                topics.add(topic);
+            }
+        }
+        catch(Exception exc) {
+            //to do
+            exc.printStackTrace();
+        }
+        finally {
+            db.close();
+        }
+        return topics;
     }
 
     public List<Topic> getTopicsByTag(String tag) {

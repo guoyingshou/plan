@@ -45,6 +45,10 @@ public class PostService {
         return post;
     }
 
+    public Post updatePost(Post post) {
+        return postDao.update(post);
+    }
+
     /**
      * Get a specific post.
      */

@@ -16,13 +16,17 @@ public interface TopicDao {
 
     List<Topic> getFeaturedTopics();
 
-    List<Topic> getTopics();
+    long getTopicsCount();
 
     List<Topic> getPagedTopics(int page, int size);
 
-    long getTopicsCount();
+    List<Topic> getTopics();
+
+    long getTopicsCountByTag(String tag);
 
     List<String> getTopicTags();
+
+    List<Topic> getPagedTopicsByTag(String tag, int page, int size);
 
     List<Topic> getTopicsByTag(String tag);
 

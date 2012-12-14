@@ -3,25 +3,16 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.domain.profile.User;
 
-import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.web.model.MessageForm;
-import com.tissue.plan.web.model.AnswerForm;
-import com.tissue.domain.plan.Topic;
+
 import com.tissue.domain.plan.Plan;
 import com.tissue.domain.plan.Post;
 import com.tissue.domain.plan.PostMessage;
 import com.tissue.domain.plan.PostMessageComment;
-import com.tissue.domain.plan.QuestionComment;
-import com.tissue.domain.plan.Answer;
-import com.tissue.domain.plan.AnswerComment;
-import com.tissue.plan.service.TopicService;
 import com.tissue.plan.service.PostService;
 import com.tissue.plan.service.PostMessageService;
 import com.tissue.plan.service.PostMessageCommentService;
-import com.tissue.plan.service.QuestionCommentService;
-import com.tissue.plan.service.AnswerService;
-import com.tissue.plan.service.AnswerCommentService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +38,6 @@ import java.security.Principal;
 public class PostWriteController {
 
     @Autowired
-    protected TopicService topicService;
-
-    @Autowired
     protected PostService postService;
 
     @Autowired
@@ -58,17 +46,9 @@ public class PostWriteController {
     @Autowired
     protected PostMessageCommentService postMessageCommentService;
 
-    @Autowired
-    protected QuestionCommentService questionCommentService;
-
-    @Autowired
-    protected AnswerService answerService;
-
-    @Autowired
-    protected AnswerCommentService answerCommentService;
-
     /**
      * Add a post to the active plan.
+     * The post can be any type.
      */
     @RequestMapping(value="/plans/{planId}/posts", method=POST)
     public String addPost(@PathVariable("planId") String planId, PostForm form, Map model) {
@@ -96,7 +76,25 @@ public class PostWriteController {
     }
 
     /**
+     * Update a post.
+     * The post can be of any type.
+     */
+    @RequestMapping(value="/posts/{postId}", method=POST)
+    public String updatePost(@PathVariable("postId") String postId, PostForm form, Map model) {
+
+        Post post = new Post();
+        post.setId(postId);
+        post.setTitle(form.getTitle());
+        post.setContent(form.getContent());
+
+        postService.updatePost(post);
+
+        return "redirect:/plan/posts/" + postId;
+    }
+
+    /**
      * Add a message to a specific post.
+     * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/posts/{postId}/messages", method=POST)
     public String addMessage(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
@@ -118,6 +116,10 @@ public class PostWriteController {
         return "redirect:/plan/posts/" + postId;
     }
 
+    /**
+     * Add a comment to the message of a specific post.
+     * The post's type can be 'concept', 'note' or 'tutorial'.
+     */
     @RequestMapping(value="/posts/{postId}/messages/{msgId}/comments", method=POST)
     public String addMessageComment(@PathVariable("postId") String postId, @PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
 
@@ -134,72 +136,6 @@ public class PostWriteController {
         comment.setPostMessage(msg);
 
         postMessageCommentService.addComment(comment);
-
-        return "redirect:/plan/posts/" + postId;
-    }
-
-    /**
-     * Add a comment to a specific question.
-     */
-    @RequestMapping(value="/questions/{postId}/comments", method=POST)
-    public String addQuestionComment(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
-
-        QuestionComment comment = new QuestionComment();
-        comment.setContent(content);
-        comment.setCreateTime(new Date());
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        comment.setUser(user);
-
-        Post post = new Post();
-        post.setId(postId);
-        comment.setQuestion(post);
-
-        questionCommentService.addComment(comment);
-
-        return "redirect:/plan/posts/" + postId;
-    }
-
-    /**
-     * Add an answer to a specific post.
-     */
-    @RequestMapping(value="/posts/{postId}/answers", method=POST)
-    public String addAnswer(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
-
-        Answer answer = new Answer();
-        answer.setContent(content);
-        answer.setCreateTime(new Date());
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        answer.setUser(user);
-
-        Post post = new Post();
-        post.setId(postId);
-        answer.setQuestion(post);
-
-        answerService.addAnswer(answer);
-
-        return "redirect:/plan/posts/" + postId;
-    }
-
-    @RequestMapping(value="/posts/{postId}/answers/{answerId}/comments", method=POST)
-    public String addAnswerComment(@PathVariable("postId") String postId, @PathVariable("answerId") String answerId, @RequestParam("content") String content, Map model) {
-
-        AnswerComment comment = new AnswerComment();
-        comment.setContent(content);
-        comment.setCreateTime(new Date());
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        comment.setUser(user);
-
-        Answer answer = new Answer();
-        answer.setId(answerId);
-        comment.setAnswer(answer);
-
-        answerCommentService.addComment(comment);
 
         return "redirect:/plan/posts/" + postId;
     }

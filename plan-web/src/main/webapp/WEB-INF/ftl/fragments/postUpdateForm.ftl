@@ -1,24 +1,17 @@
 <#import "../spring.ftl" as spring />
 
-            <form action="<@spring.url '/plan/plans/${planId}/posts'/>" method="post">
-                <fieldset>
-                    <legend>please select post type</legend>
-                    <label>Concept  <input type="radio" name="type" value="concept"/></label>
-                    <label>Note  <input type="radio" name="type" value="note"/></label>
-                    <label>Question  <input type="radio" name="type" value="question"/></label>
-                    <label>Tutorial  <input type="radio" name="type" value="tutorial"/></label>
-                </fieldset>
-
+            <form action="<@spring.url '/plan/posts/${post.id}'/>" method="post">
+            <from>
                 <fieldset class="post">
                     <legend>your post</legend>
                     <ul>
                         <li>
                             <label for="title">title</label>
-                            <input type="input" id="title" name="title" />
+                            <input type="input" id="title" name="title" value="${post.title}" />
                         </li>
                         <li>
                             <label for="usercontent">content</label>
-                            <textarea id="usercontent" name="content"></textarea>
+                            <textarea id="usercontent" name="content">${post.content}</textarea>
                         </li>
                         <li>
                             <input type="submit" value="submit" />

@@ -60,20 +60,28 @@ public class TopicService {
         return topicDao.getFeaturedTopics();
     }
 
-    public List<Topic> getTopics() {
-        return topicDao.getTopics();
+    public long getTopicsCount() {
+        return topicDao.getTopicsCount();
     }
 
     public List<Topic> getPagedTopics(int page, int size) {
         return topicDao.getPagedTopics(page, size);
     }
 
-    public long getTopicsCount() {
-        return topicDao.getTopicsCount();
+    public List<Topic> getTopics() {
+        return topicDao.getTopics();
     }
 
     public List<String> getTopicTags() {
         return topicDao.getTopicTags();
+    }
+
+    public long getTopicsCountByTag(String tag) {
+        return topicDao.getTopicsCountByTag(tag);
+    }
+
+    public List<Topic> getPagedTopicsByTag(String tag, int page, int size) {
+        return topicDao.getPagedTopicsByTag(tag, page, size);
     }
 
     public List<Topic> getTopicsByTag(String tag) {
