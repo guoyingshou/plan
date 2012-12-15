@@ -29,8 +29,10 @@
         </div>
 
        <div id="content">
-           <p>${topic.content}</p>
-           <p><a href="<@spring.url '/plan/topics/${topic.id}/edit' />">edit</a></p>
+           <#if posts??>
+               <@gadgets.showPostList posts />
+           </#if>
+           <@gadgets.showPager />
        </div>
 
     </div>

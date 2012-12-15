@@ -40,14 +40,6 @@ public class TopicDaoImpl implements TopicDao {
     private OrientDataSource dataSource;
 
     /**
-    @Autowired
-    private PostDao postDao;
-
-    @Autowired
-    private EventDao eventDao;
-    */
-
-    /**
      * Add a topic.
      */
     public Topic create(Topic topic) {
@@ -66,6 +58,30 @@ public class TopicDaoImpl implements TopicDao {
         }
 
         return topic;
+    }
+
+    /**
+     * Update a topic.
+     */
+    public void update(Topic topic) {
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            //ODocument doc = TopicConverter.convertTopic(topic);
+            ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(topic.getId())));
+            doc.field("content", topic.getContent());
+            doc.field("tags", topic.getTags());
+            doc.save();
+            //topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
+        }
+        catch(Exception exc) {
+            //to do
+            exc.printStackTrace();
+        }
+        finally {
+            db.close();
+        }
+
+        //return topic;
     }
 
     /**

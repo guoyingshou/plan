@@ -1,7 +1,22 @@
-<#import "../spring.ftl" as spring />
+<#import "tissue.ftl" as tissue />
+<#import "spring.ftl" as spring />
 
+<#assign myscripts=["http://www.tissue.com/ckeditor/ckeditor.js"] in tissue>
+
+<#assign mystyles=["http://www.tissue.com/resources/css/content-2cols.css", "http://www.tissue.com/resources/css/topicForm.css"] in tissue>
+
+<@tissue.layout "topic">
+
+    <div id="logo">
+        <@tissue.topicLogo />
+    </div>
+
+    <div id="contentWrapper">
+        <div id="sidebar">
+        </div>
+
+        <div id="content" class="postEditForm">
             <form action="<@spring.url '/plan/posts/${post.id}'/>" method="post">
-            <from>
                 <fieldset class="post">
                     <legend>your post</legend>
                     <ul>
@@ -19,6 +34,7 @@
                     </ul>
                 </fieldset>
             </form>
+        </div>
 
         <script type="text/javascript">
             $(document).ready(function() {
@@ -26,4 +42,6 @@
             });
         </script>
  
+    </div>
 
+</@tissue.layout>

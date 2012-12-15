@@ -59,7 +59,7 @@ public class PlanReadController {
         List<Post> posts = postService.getPagedPostsByPlanId(planId, page, size);
         model.put("posts", posts);
 
-        return "topic";
+        return "topicPosts";
     }
 
 

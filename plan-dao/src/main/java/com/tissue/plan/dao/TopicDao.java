@@ -8,6 +8,8 @@ public interface TopicDao {
 
     Topic create(Topic topic);
 
+    void update(Topic topic);
+
     Topic getTopic(String id);
 
     Topic getTopicByPlanId(String planId);

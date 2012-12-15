@@ -1,6 +1,7 @@
 package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.commons.security.util.SecurityUtil;
+import com.tissue.commons.security.core.userdetails.UserDetailsImpl;
 import com.tissue.domain.plan.Topic;
 import com.tissue.domain.plan.Post;
 import com.tissue.plan.service.TopicService;
@@ -8,6 +9,7 @@ import com.tissue.plan.service.PostService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,31 +32,60 @@ public class PostReadController {
     @Autowired
     protected PostService postService;
 
+    @ModelAttribute("viewer")
+    public UserDetailsImpl prefetchViewer() {
+        return SecurityUtil.getUser();
+    }
+ 
+    @ModelAttribute("post")
+    public Post prefetchPost(@PathVariable("postId") String postId, Map model) {
+        Post post = postService.getPost(postId);
+        String topicId = post.getPlan().getTopic().getId();
+        Topic topic = topicService.getTopic(topicId);
+        model.put("topic", topic);
+        return post;
+    }
+
     /**
      * Get specific post.
      */
     @RequestMapping(value="/posts/{postId}")
-    public String getPost(@PathVariable("postId") String postId, Map model, Locale locale) {
-        String viewerId = SecurityUtil.getUserId();
-        if(viewerId != null) {
-             model.put("viewer", SecurityUtil.getUser());
-        }
+    public String getPost(@PathVariable("postId") String postId, @ModelAttribute("post") Post post, Map model, Locale locale) {
+
+        //model.put("viewer", SecurityUtil.getUser());
 
         String lang = locale.toLanguageTag();
         if(lang != null) 
             model.put("lang", lang);
 
+        /**
         Post post = postService.getPost(postId);
         model.put("post", post);
 
         String topicId = post.getPlan().getTopic().getId();
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);
+        */
         
         if("question".equals(post.getType())) {
             return "questionDetail";
         }
         return "postDetail";
     }
+
+    /**
+     * show post edit form.
+     */
+    @RequestMapping(value="/posts/{postId}/edit")
+    public String showPostEditForm(@PathVariable("postId") String postId, Map model, Locale locale) {
+
+        /**
+        Post post = postService.getPost(postId);
+        model.put("post", post);
+        */
+
+        return "postEditForm";
+    }
+
 
 }

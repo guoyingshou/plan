@@ -68,7 +68,34 @@ public class TopicWriteController {
 
         topic = topicService.addTopic(topic);
         
-        return "redirect:/plan/topics/" + topic.getId();
+        return "redirect:/plan/topics/" + topic.getId() + "/posts";
     }
+
+    /**
+     * Update topic.
+     */
+    @RequestMapping(value="/topics/{topicId}", method=POST)
+    public String updateTopic(@PathVariable("topicId") String topicId, TopicForm form, Map model) throws Exception {
+
+        Topic topic = new Topic();
+        topic.setId(topicId);
+        topic.setContent(form.getContent());
+
+        User user = new User();
+        user.setId(SecurityUtil.getUserId());
+        topic.setUser(user);
+
+        Date date = new Date();
+        topic.setUpdateTime(date);
+
+        String tags = form.getTags();
+        String[] splits = tags.split("\\s");
+        topic.setTags(new HashSet(Arrays.asList(splits)));
+
+        topicService.updateTopic(topic);
+        
+        return "redirect:/plan/topics/" + topicId;
+    }
+
 
 }

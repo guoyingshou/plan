@@ -44,6 +44,10 @@ public class TopicService {
         return topic;
     }
 
+    public void updateTopic(Topic topic) {
+        topicDao.update(topic);
+    }
+
     public Topic getTopic(String topicId) {
         return topicDao.getTopic(topicId);
     }

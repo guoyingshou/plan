@@ -52,9 +52,33 @@ public class TopicReadController {
     }
 
     /**
-     * Get paged posts by topicId.
+     * Show topic.
      */
     @RequestMapping(value="/topics/{topicId}")
+    public String getTopic(@PathVariable("topicId") String topicId, Locale locale, Map model) {
+        return "topic";
+    }
+
+    /**
+     * Show topic edit form.
+     */
+    @RequestMapping(value="/topics/{topicId}/edit")
+    public String showTopicForm(Locale locale, Map model) {
+
+        /**
+        String lang = locale.toLanguageTag();
+        if(lang != null) 
+            model.put("lang", lang);
+
+            */
+        return "topicEditForm";
+    }
+
+
+    /**
+     * Get paged posts by topicId.
+     */
+    @RequestMapping(value="/topics/{topicId}/posts")
     public String getTopic(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Locale locale, Map model) {
 
         page = ((page == null) || (page < 1)) ? 1 : page;
@@ -66,13 +90,13 @@ public class TopicReadController {
         List<Post> posts = postService.getPagedPostsByTopicId(topicId, page, size);
         model.put("posts", posts);
 
-        return "topic";
+        return "topicPosts";
     }
 
     /**
      * Get paged posts by topicId and type.
      */
-    @RequestMapping(value="/topics/{topicId}/{type}")
+    @RequestMapping(value="/topics/{topicId}/{type}/posts")
     public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) throws Exception {
 
         page = (page == null) ? 1 : page;
@@ -84,7 +108,7 @@ public class TopicReadController {
         List<Post> posts = postService.getPagedPostsByTopicIdAndType(topicId, type, page, size);
         model.put("posts", posts);
 
-        return "topic";
+        return "topicPosts";
     }
 
 }
