@@ -29,12 +29,15 @@
         </div>
 
        <div id="content">
-           <#if posts??>
-               <@gadgets.showPostList posts />
-           </#if>
-           <@gadgets.showPager />
+           <div id="contentInner">
+               <#if posts??>
+                   <@gadgets.showPostList posts />
+               </#if>
+               <@gadgets.showPager />
+           </div>
        </div>
 
+       
     </div>
 
 <#--

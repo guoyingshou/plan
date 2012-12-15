@@ -18,7 +18,9 @@
             <@tissue.showActivePlan />
         </div>
         <div id="content">
-           <@gadgets.showQuestionDetail />
+            <div id="contentInner">
+               <@gadgets.showQuestionDetail />
+            </div>
         </div>
 
     </div>

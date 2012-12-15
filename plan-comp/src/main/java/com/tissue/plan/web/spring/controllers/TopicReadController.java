@@ -64,16 +64,8 @@ public class TopicReadController {
      */
     @RequestMapping(value="/topics/{topicId}/edit")
     public String showTopicForm(Locale locale, Map model) {
-
-        /**
-        String lang = locale.toLanguageTag();
-        if(lang != null) 
-            model.put("lang", lang);
-
-            */
         return "topicEditForm";
     }
-
 
     /**
      * Get paged posts by topicId.

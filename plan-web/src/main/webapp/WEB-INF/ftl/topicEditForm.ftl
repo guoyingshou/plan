@@ -16,7 +16,8 @@
         </div>
 
        <div id="content" class="topicEditForm">
-            <form action="<@spring.url '/plan/topics/${topic.id}' />" method="post">
+           <div id="contentInner">
+               <form action="<@spring.url '/plan/topics/${topic.id}' />" method="post">
                 <fieldset class="topic">
                     <legend>your topic</legend>
                         <ul>
@@ -33,7 +34,8 @@
                             </li>
                         </ul>
                 </fieldset>
-            </form>
+                </form>
+            </div>
         </div>
 
         <script type="text/javascript">

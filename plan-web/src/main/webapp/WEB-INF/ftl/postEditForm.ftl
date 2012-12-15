@@ -16,8 +16,9 @@
         </div>
 
         <div id="content" class="postEditForm">
-            <form action="<@spring.url '/plan/posts/${post.id}'/>" method="post">
-                <fieldset class="post">
+            <div id="contentInner">
+                <form action="<@spring.url '/plan/posts/${post.id}'/>" method="post">
+                    <fieldset class="post">
                     <legend>your post</legend>
                     <ul>
                         <li>
@@ -32,16 +33,10 @@
                             <input type="submit" value="submit" />
                         </li>
                     </ul>
-                </fieldset>
-            </form>
+                    </fieldset>
+                </form>
+            </div>
         </div>
-
-        <script type="text/javascript">
-            $(document).ready(function() {
-                CKEDITOR.replace('usercontent');
-            });
-        </script>
- 
     </div>
 
 </@tissue.layout>

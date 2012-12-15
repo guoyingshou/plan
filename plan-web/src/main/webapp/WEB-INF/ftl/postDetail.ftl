@@ -18,10 +18,13 @@
             <@tissue.showActivePlan />
         </div>
         <div id="content">
-           <@gadgets.showPostDetail />
+            <div id="contentInner">
+               <@gadgets.showPostDetail />
+            </div>
         </div>
-
     </div>
+
+
 </@tissue.layout>
 
 

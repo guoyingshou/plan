@@ -29,33 +29,12 @@
         </div>
 
        <div id="content">
-           <p>${topic.content}</p>
-           <p><a href="<@spring.url '/plan/topics/${topic.id}/edit' />">edit</a></p>
+           <div id="contentInner">
+               <p>${topic.content}</p>
+               <p><a href="<@spring.url '/plan/topics/${topic.id}/edit' />">edit</a></p>
+           </div>
        </div>
 
     </div>
-
-<#--
-    <script type="text/javascript">
-
-            var config = { language: '${lang}', filebrowserImageUploadUrl : '/u2/plan/images' }; 
-            config.toolbar = [
-                { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
-                { name: 'clipboard',items: [ 'Undo', 'Redo' ] },
-                { name: 'insert',items: [ 'Image'] },
-                { name: 'paragraph',items: [ 'NumberedList', 'BulletedList'] },
-                { name: 'links', items : [ 'Link', 'Unlink', 'Anchor' ] }
-
-            ];
-
-            $(document).ready(function() {
-                $("a.ajx").on('click', function(e) {
-                    e.preventDefault();
-                    $('#content').load(this.href);
-                });
-
-            });
-    </script>
-    -->
 
 </@tissue.layout>
