@@ -8,11 +8,15 @@
 <@tissue.layout "topic">
 
     <div id="logo">
-        <@tissue.exploreLogo />
+        <@tissue.topicLogo />
     </div>
 
     <div id="contentWrapper">
         <div id="sidebar">
+            <#if topic.activePlan??>
+                <#assign activePlan = topic.activePlan in tissue />
+            </#if>
+            <@tissue.showActivePlan />
         </div>
 
        <div id="content" class="topicEditForm">

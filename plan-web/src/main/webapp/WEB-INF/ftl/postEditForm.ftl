@@ -26,8 +26,8 @@
                             <input type="input" id="title" name="title" value="${post.title}" />
                         </li>
                         <li>
-                            <label for="usercontent">content</label>
-                            <textarea id="usercontent" name="content">${post.content}</textarea>
+                            <label for="posteditor">content</label>
+                            <textarea id="posteditor" name="content">${post.content}</textarea>
                         </li>
                         <li>
                             <input type="submit" value="submit" />
@@ -36,6 +36,11 @@
                     </fieldset>
                 </form>
             </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    CKEDITOR.replace('posteditor');
+                });
+            </script>
         </div>
     </div>
 
