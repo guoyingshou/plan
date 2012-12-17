@@ -119,7 +119,6 @@ public class PostWriteController {
     /**
      * Add a comment to the message of a specific post.
      * The post's type can be 'concept', 'note' or 'tutorial'.
-     */
     @RequestMapping(value="/posts/{postId}/messages/{msgId}/comments", method=POST)
     public String addMessageComment(@PathVariable("postId") String postId, @PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
 
@@ -139,5 +138,6 @@ public class PostWriteController {
 
         return "redirect:/plan/posts/" + postId;
     }
+     */
 
 }

@@ -9,5 +9,6 @@ public interface PostMessageDao {
      * Add a message to the specific post.
      */
     PostMessage create(PostMessage message);
+    void update(PostMessage message);
 
 }

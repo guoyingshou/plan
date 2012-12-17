@@ -36,7 +36,6 @@ public class PostMessageDaoImpl implements PostMessageDao {
      * It seems that sql command cann't be mixed with java api call.
      */
     public PostMessage create(PostMessage message) {
-
         OGraphDatabase db = dataSource.getDB();
         try {
 
@@ -59,8 +58,19 @@ public class PostMessageDaoImpl implements PostMessageDao {
         finally {
             db.close();
         }
-
         return message;
+    }
+
+    public void update(PostMessage message) {
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(message.getId())));
+            doc.field("content", message.getContent());
+            doc.save();
+        }
+        finally {
+            db.close();
+        }
     }
 
 }

@@ -24,4 +24,7 @@ public class PostMessageService {
         eventDao.addEvent(event);
     }
 
+    public void updatePostMessage(PostMessage message) {
+        postMessageDao.update(message);
+    }
 }
