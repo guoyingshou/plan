@@ -2,9 +2,9 @@
 <#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
 
-<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/js/pop.js"] in tissue>
 
-<#assign mystyles=["http://www.tissue.com/resources/css/content-2cols.css", "http://www.tissue.com/resources/css/topic.css", "http://www.tissue.com/resources/css/plan.css", "http://www.tissue.com/resources/css/postForm.css"] in tissue>
+<#assign mystyles=["/resources/css/content-2cols.css", "/resources/css/topic.css", "/resources/css/plan.css", "/resources/css/postForm.css", "/resources/css/pop.css"] in tissue>
 
 <@tissue.layout "post detail">
     <div id="logo">
