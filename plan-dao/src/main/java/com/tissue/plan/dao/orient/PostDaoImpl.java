@@ -56,7 +56,6 @@ public class PostDaoImpl implements PostDao {
     public Post update(Post post) {
         OGraphDatabase db = dataSource.getDB();
         try {
-            //ODocument doc = PostConverter.convert(post);
             ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(post.getId())));
             doc.field("title", post.getTitle());
             doc.field("content", post.getContent());

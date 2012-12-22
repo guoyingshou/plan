@@ -2,12 +2,9 @@
 <#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
 
-<#--
-<#assign myscripts=["/ckeditor/ckeditor.js", "/ckeditor/adapters/jquery.js"] in tissue>
--->
-<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
-<#assign mystyles=["http://www.tissue.com/resources/css/content-2cols.css", "http://www.tissue.com/resources/css/topic.css", "http://www.tissue.com/resources/css/plan.css", "http://www.tissue.com/resources/css/postForm.css"] in tissue>
+<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css", "/tissue/css/pop.css"] in tissue>
 
 <@tissue.layout "topic">
 
@@ -30,11 +27,40 @@
 
        <div id="content">
            <div id="contentInner">
-               <p>${topic.content}</p>
-               <p><a href="<@spring.url '/plan/topics/${topic.id}/edit' />">edit</a></p>
+               <div>
+                   <div class="topic-content">${topic.content}</div>
+                   <div class="topic-tags"><#list topic.tags as tag>${tag}&nbsp;</#list></div>
+               </div>
+               <a class="topic-edit" data-action="<@spring.url '/plan/topics/${topic.id}' />" href="#">edit</a>
            </div>
-       </div>
 
+           <script type="text/javascript">
+               $(document).on('click', 'a.topic-edit', function(e) {
+                   e.preventDefault();
+                   $(this).prev().editTopicDialog($(this).data("action"));
+               });
+           </script>
+       </div>
     </div>
+
+    <div id="topicDia" style="display: none">
+        <form>
+            <ul>
+                <li>
+                    <textarea id="editor" name="content"></textarea>
+                </li>
+                <li>
+                    <input id="tags" type="input" name="tags" />
+                </li>
+                <li>
+                    <input type="submit" value="submit"/>
+                </li>
+            </ul>
+        </form>
+        <div>
+            <a href="#" class="cancel">cancel</a>
+        </div>
+    </div>
+
 
 </@tissue.layout>

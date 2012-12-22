@@ -18,10 +18,17 @@ public class PostMessageCommentService {
     @Autowired
     private EventDao eventDao;
 
-    public void addComment(PostMessageComment comment) {
+    public PostMessageComment addComment(PostMessageComment comment) {
         comment = postMessageCommentDao.create(comment);
         Event event = EventFactory.createEvent(comment);
         eventDao.addEvent(event);
+
+        return comment;
+    }
+
+    public String updateComment(PostMessageComment comment) {
+        comment = postMessageCommentDao.update(comment);
+        return comment.getId();
     }
 
 }

@@ -1,0 +1,2 @@
+${postMessageComment.content}
+

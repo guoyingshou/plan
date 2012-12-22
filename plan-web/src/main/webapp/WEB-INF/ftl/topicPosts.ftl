@@ -2,12 +2,9 @@
 <#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
 
-<#--
-<#assign myscripts=["/ckeditor/ckeditor.js", "/ckeditor/adapters/jquery.js"] in tissue>
--->
-<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
-<#assign mystyles=["http://www.tissue.com/resources/css/content-2cols.css", "http://www.tissue.com/resources/css/topic.css", "http://www.tissue.com/resources/css/plan.css", "http://www.tissue.com/resources/css/postForm.css"] in tissue>
+<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css", "/tissue/css/pop.css"] in tissue>
 
 <@tissue.layout "topic">
 
@@ -36,31 +33,6 @@
                <@gadgets.showPager />
            </div>
        </div>
-
-       
     </div>
-
-<#--
-    <script type="text/javascript">
-
-            var config = { language: '${lang}', filebrowserImageUploadUrl : '/u2/plan/images' }; 
-            config.toolbar = [
-                { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
-                { name: 'clipboard',items: [ 'Undo', 'Redo' ] },
-                { name: 'insert',items: [ 'Image'] },
-                { name: 'paragraph',items: [ 'NumberedList', 'BulletedList'] },
-                { name: 'links', items : [ 'Link', 'Unlink', 'Anchor' ] }
-
-            ];
-
-            $(document).ready(function() {
-                $("a.ajx").on('click', function(e) {
-                    e.preventDefault();
-                    $('#content').load(this.href);
-                });
-
-            });
-    </script>
-    -->
 
 </@tissue.layout>

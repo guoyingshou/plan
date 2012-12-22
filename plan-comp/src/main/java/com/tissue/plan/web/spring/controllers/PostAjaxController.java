@@ -47,12 +47,55 @@ public class PostAjaxController {
     protected PostMessageCommentService postMessageCommentService;
 
     /**
+     * Update a post.
+     * The post can be of any type.
+     */
+    @RequestMapping(value="/posts/{postId}", method=POST)
+    public String updatePost(@PathVariable("postId") String postId, PostForm form, Map model) {
+
+        Post post = new Post();
+        post.setId(postId);
+        post.setTitle(form.getTitle());
+        post.setContent(form.getContent());
+
+        postService.updatePost(post);
+
+        model.put("post", post);
+
+        return "fragments/updatePost";
+    }
+
+    /**
+     * Add a message to a specific post.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/posts/{postId}/messages", method=POST)
+    public String addMessage(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
+
+        PostMessage message = new PostMessage();
+        message.setContent(content);
+        message.setCreateTime(new Date());
+
+        User user = new User();
+        user.setId(SecurityUtil.getUserId());
+        message.setUser(user);
+
+        Post post = new Post();
+        post.setId(postId);
+        message.setPost(post);
+
+        PostMessage postMessage = postMessageService.addMessage(message);
+        model.put("postMessage", postMessage);
+
+        return "fragments/newMessage";
+    }
+ 
+    /**
      * Update a message.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{msgId}", method=POST)
-    @ResponseBody
-    public String addMessage(@PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
+    public String updateMessage(@PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
         System.out.println("msgId: " + msgId);
         System.out.println("content: " + content);
 
@@ -60,7 +103,10 @@ public class PostAjaxController {
         postMessage.setId(msgId);
         postMessage.setContent(content);
         postMessageService.updatePostMessage(postMessage);
-        return "ok";
+
+        model.put("postMessage", postMessage);
+
+        return "fragments/updateMessage";
     }
 
     /**
@@ -68,7 +114,6 @@ public class PostAjaxController {
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{msgId}/comments", method=POST)
-    @ResponseBody
     public String addMessageComment(@PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
 
         PostMessageComment comment = new PostMessageComment();
@@ -83,8 +128,25 @@ public class PostAjaxController {
         msg.setId(msgId);
         comment.setPostMessage(msg);
 
-        postMessageCommentService.addComment(comment);
-        return "ok";
+        comment = postMessageCommentService.addComment(comment);
+        model.put("postMessageComment", comment);
+        return "fragments/newPostMessageComment";
+    }
+
+    /**
+     * Update a PostMessageComment.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/messageComments/{commentId}", method=POST)
+    public String updateMessageComment(@PathVariable("commentId") String commentId, @RequestParam("content") String content, Map model) {
+
+        PostMessageComment comment = new PostMessageComment();
+        comment.setId(commentId);
+        comment.setContent(content);
+        postMessageCommentService.updateComment(comment);
+
+        model.put("postMessageComment", comment);
+        return "fragments/updatePostMessageComment";
     }
 
 }

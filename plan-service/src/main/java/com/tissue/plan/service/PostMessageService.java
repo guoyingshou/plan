@@ -18,10 +18,13 @@ public class PostMessageService {
     @Autowired
     private EventDao eventDao;
 
-    public void addMessage(PostMessage message) {
+    public PostMessage addMessage(PostMessage message) {
         message = postMessageDao.create(message);
         Event event = EventFactory.createEvent(message);
         eventDao.addEvent(event);
+
+        return message;
+        //return message.getId();
     }
 
     public void updatePostMessage(PostMessage message) {

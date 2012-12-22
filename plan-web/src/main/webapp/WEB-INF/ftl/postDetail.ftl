@@ -2,9 +2,9 @@
 <#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/js/pop.js"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
-<#assign mystyles=["/resources/css/content-2cols.css", "/resources/css/topic.css", "/resources/css/plan.css", "/resources/css/postForm.css", "/resources/css/pop.css"] in tissue>
+<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css", "/tissue/css/post.css", "/tissue/css/pop.css"] in tissue>
 
 <@tissue.layout "post detail">
     <div id="logo">
@@ -24,6 +24,21 @@
         </div>
     </div>
 
+    <div id="dia" style="display: none">
+        <form>
+            <ul>
+                <li>
+                    <textarea id="editor" name="content"></textarea>
+                </li>
+                <li>
+                    <input type="submit" value="submit"/>
+                </li>
+            </ul>
+        </form>
+        <div>
+            <a href="#" class="cancel">cancel</a>
+        </div>
+    </div>
 
 </@tissue.layout>
 

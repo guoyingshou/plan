@@ -59,4 +59,20 @@ public class PostMessageCommentDaoImpl implements PostMessageCommentDao {
         return comment;
     }
 
+    public PostMessageComment update(PostMessageComment comment) {
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            ODocument commentDoc = db.load(new ORecordId(OrientIdentityUtil.decode(comment.getId())));
+            commentDoc.field("content", comment.getContent());
+            commentDoc.save();
+        }
+        finally {
+            db.close();
+        }
+
+        return comment;
+    }
+
+
 }

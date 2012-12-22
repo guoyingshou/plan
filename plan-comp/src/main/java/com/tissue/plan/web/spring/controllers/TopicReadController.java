@@ -61,11 +61,11 @@ public class TopicReadController {
 
     /**
      * Show topic edit form.
-     */
     @RequestMapping(value="/topics/{topicId}/edit")
     public String showTopicForm(Locale locale, Map model) {
         return "topicEditForm";
     }
+     */
 
     /**
      * Get paged posts by topicId.

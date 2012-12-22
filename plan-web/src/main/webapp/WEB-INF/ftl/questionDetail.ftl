@@ -4,7 +4,7 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 
-<#assign mystyles=["http://www.tissue.com/resources/css/content-2cols.css", "http://www.tissue.com/resources/css/topic.css", "http://www.tissue.com/resources/css/plan.css", "http://www.tissue.com/resources/css/postForm.css"] in tissue>
+<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css"] in tissue>
 
 <@tissue.layout "question">
     <div id="logo">
