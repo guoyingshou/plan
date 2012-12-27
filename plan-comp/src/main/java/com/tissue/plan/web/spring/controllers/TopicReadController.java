@@ -41,6 +41,11 @@ public class TopicReadController {
     @Autowired
     private PostService postService;
 
+    @ModelAttribute
+    public String setupLocale(Locale locale) {
+        return locale.toString();
+    }
+
     @ModelAttribute("topic")
     public Topic prefetchTopic(@PathVariable("topicId") String topicId) {
         return topicService.getTopic(topicId);

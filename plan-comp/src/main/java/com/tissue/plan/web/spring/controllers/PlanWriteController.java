@@ -52,7 +52,7 @@ public class PlanWriteController {
 
         plan = planService.addPlan(plan);
 
-        return "redirect:/plan/topics/" + topicId + "/posts";
+        return "redirect:/topics/" + topicId + "/posts";
     }
 
     /**
@@ -61,7 +61,7 @@ public class PlanWriteController {
     @RequestMapping(value="/topics/{topicId}/plans/{planId}/join")
     public String joinPlan(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId, Map model) {
         planService.addMember(planId, SecurityUtil.getUserId());
-        return "redirect:/plan/topics/" + topicId + "/posts";
+        return "redirect:/topics/" + topicId + "/posts";
     }
 
 

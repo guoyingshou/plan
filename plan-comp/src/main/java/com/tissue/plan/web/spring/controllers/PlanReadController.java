@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 @Controller
 public class PlanReadController {
@@ -31,6 +32,11 @@ public class PlanReadController {
 
     @Autowired
     private PostService postService;
+
+    @ModelAttribute("locale")
+    public String setupLocale(Locale locale) {
+        return locale.toString();
+    }
 
     @ModelAttribute("topic")
     public Topic prefetchTopic(@PathVariable("planId") String planId) {

@@ -32,6 +32,11 @@ public class PostReadController {
     @Autowired
     protected PostService postService;
 
+    @ModelAttribute
+    public String setupLocale(Locale locale) {
+        return locale.toString();
+    }
+
     @ModelAttribute("viewer")
     public UserDetailsImpl prefetchViewer() {
         return SecurityUtil.getUser();

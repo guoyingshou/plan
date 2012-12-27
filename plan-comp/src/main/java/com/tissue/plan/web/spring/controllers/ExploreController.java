@@ -42,6 +42,11 @@ public class ExploreController {
         return SecurityUtil.getUser();
     }
 
+    @ModelAttribute("locale")
+    public String setupLocale(Locale locale) {
+        return locale.toString();
+    }
+
     @RequestMapping("/explore")
     public String explore(Map model) {
 
@@ -57,7 +62,7 @@ public class ExploreController {
     public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         page = (page == null) ? 1 : page;
-        size = (size == null) ? 50 : size;
+        size = (size == null) ? 15 : size;
         long total = topicService.getTopicsCount();
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
@@ -79,7 +84,7 @@ public class ExploreController {
     public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         page = (page == null) ? 1 : page;
-        size = (size == null) ? 50 : size;
+        size = (size == null) ? 15 : size;
         long total = topicService.getTopicsCountByTag(tag);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);

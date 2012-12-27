@@ -20,7 +20,7 @@
                 <#if tags??>
                 <ul>
                 <#list tags as tag>
-                    <li><a href="/u2/plan/exploreTags/${tag}">${tag}</a></li>
+                    <li><a href="/group/exploreTags/${tag}">${tag}</a></li>
                 </#list>
                 </ul>
                 </#if>

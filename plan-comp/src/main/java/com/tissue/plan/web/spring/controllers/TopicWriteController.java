@@ -68,7 +68,7 @@ public class TopicWriteController {
 
         topic = topicService.addTopic(topic);
         
-        return "redirect:/plan/topics/" + topic.getId() + "/posts";
+        return "redirect:/topics/" + topic.getId() + "/posts";
     }
 
     /**

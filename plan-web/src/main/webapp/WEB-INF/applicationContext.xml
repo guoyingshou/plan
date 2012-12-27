@@ -22,13 +22,9 @@
          <constructor-arg value="40" />
      </bean>
 
-  <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
   <import resource="commons-dao.xml" />
   <import resource="plan-dao.xml" />
   <import resource="profile-dao.xml" />
   <import resource="security.xml" />
-  <!--
-  <import resource="sso-cas.xml" />
-  -->
- 
+
 </beans>

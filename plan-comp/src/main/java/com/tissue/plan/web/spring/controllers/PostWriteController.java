@@ -46,6 +46,7 @@ public class PostWriteController {
     @Autowired
     protected PostMessageCommentService postMessageCommentService;
 
+
     /**
      * Add a post to the active plan.
      * The post can be any type.
@@ -72,7 +73,7 @@ public class PostWriteController {
 
         post = postService.addPost(post);
 
-        return "redirect:/plan/posts/" + post.getId();
+        return "redirect:/posts/" + post.getId();
     }
 
 }

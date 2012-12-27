@@ -66,7 +66,7 @@ public class QuestionWriteController {
 
         questionCommentService.addComment(comment);
 
-        return "redirect:/plan/posts/" + postId;
+        return "redirect:/posts/" + postId;
     }
 
     /**
@@ -90,7 +90,7 @@ public class QuestionWriteController {
 
         answerService.addAnswer(answer);
 
-        return "redirect:/plan/posts/" + postId;
+        return "redirect:/posts/" + postId;
     }
 
     /**
@@ -113,7 +113,7 @@ public class QuestionWriteController {
 
         answerCommentService.addComment(comment);
 
-        return "redirect:/plan/posts/" + postId;
+        return "redirect:/posts/" + postId;
     }
 
 }

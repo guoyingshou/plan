@@ -1,22 +1,5 @@
 package com.tissue.plan.web.spring.controllers;
 
-/**
-import com.tissue.plan.web.model.TopicForm;
-import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.web.model.MessageForm;
-import com.tissue.plan.web.model.CommentForm;
-import com.tissue.plan.web.model.AnswerForm;
-import com.tissue.plan.domain.Topic;
-import com.tissue.plan.domain.Plan;
-import com.tissue.plan.domain.Post;
-import com.tissue.plan.domain.Message;
-import com.tissue.plan.domain.Comment;
-import com.tissue.plan.domain.Answer;
-import com.tissue.plan.service.TopicService;
-import com.tissue.plan.service.PlanService;
-import com.tissue.plan.service.PostService;
-*/
-
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

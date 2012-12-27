@@ -2,19 +2,26 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 		   
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" p:basenames="common,application" p:defaultEncoding="utf-8"/>
+ 
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="preferFileSystemAccess" value="false" />
         <property name="templateLoaderPaths" value="/WEB-INF/ftl/, classpath:/freemarker/"/>
 	    <property name="defaultEncoding" value="utf-8"/>
         <property name="freemarkerVariables">
             <map>
-                <entry key="lang" value="zh_CN" />    
+                <entry key="locale" value="zh_CN" />    
             </map>
         </property>
     </bean>
@@ -26,8 +33,13 @@
 	    <property name="suffix" value=".ftl"/>
     </bean>
     
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
-       
+    <mvc:resources mapping="/resources/**" location="/" />
+
+    <mvc:annotation-driven />
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" /> 
+    </mvc:interceptors>
+
     <import resource="plan-controller.xml" />
     <import resource="commons-controller.xml" />
 
