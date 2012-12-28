@@ -41,7 +41,7 @@ public class TopicReadController {
     @Autowired
     private PostService postService;
 
-    @ModelAttribute
+    @ModelAttribute("locale")
     public String setupLocale(Locale locale) {
         return locale.toString();
     }
@@ -60,23 +60,15 @@ public class TopicReadController {
      * Show topic.
      */
     @RequestMapping(value="/topics/{topicId}")
-    public String getTopic(@PathVariable("topicId") String topicId, Locale locale, Map model) {
+    public String getTopic(@PathVariable("topicId") String topicId, Map model) {
         return "topic";
     }
-
-    /**
-     * Show topic edit form.
-    @RequestMapping(value="/topics/{topicId}/edit")
-    public String showTopicForm(Locale locale, Map model) {
-        return "topicEditForm";
-    }
-     */
 
     /**
      * Get paged posts by topicId.
      */
     @RequestMapping(value="/topics/{topicId}/posts")
-    public String getTopic(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Locale locale, Map model) {
+    public String getTopic(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
