@@ -32,7 +32,7 @@ public class PostReadController {
     @Autowired
     protected PostService postService;
 
-    @ModelAttribute
+    @ModelAttribute("locale")
     public String setupLocale(Locale locale) {
         return locale.toString();
     }
@@ -69,11 +69,10 @@ public class PostReadController {
 
     /**
      * show post edit form.
-     */
     @RequestMapping(value="/posts/{postId}/edit")
     public String showPostEditForm(@PathVariable("postId") String postId, Map model, Locale locale) {
         return "postEditForm";
     }
-
+     */
 
 }

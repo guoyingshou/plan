@@ -1,29 +1,34 @@
-<#import "tissue.ftl" as tissue />
-<#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
+<#import "tissue.ftl" as tissue />
+<#import "topicGadgets.ftl" as topicGadgets />
+<#import "planGadgets.ftl" as planGadgets />
+<#import "postGadgets.ftl" as postGadgets />
+<#import "formGadgets.ftl" as formGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
-<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css"] in tissue>
+<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css", "/tissue/css/pop.css"] in tissue>
 
 <@tissue.layout "question">
     <div id="logo">
-        <#assign topic = post.plan.topic in tissue />
-        <@tissue.topicLogo />
+        <#assign topic = post.plan.topic in topicGadgets />
+        <@topicGadgets.topicLogo />
     </div>
 
     <div id="contentWrapper">
         <div id="sidebar">
-            <#assign activePlan = topic.activePlan in tissue />
-            <@tissue.showActivePlan />
+            <#assign activePlan = topic.activePlan in planGadgets />
+            <@planGadgets.showActivePlan />
         </div>
         <div id="content">
             <div id="contentInner">
-               <@gadgets.showQuestionDetail />
+               <@postGadgets.showQuestionDetail />
             </div>
         </div>
-
     </div>
+
+    <@formGadgets.postEditForm />
+    <@formGadgets.oneItemForm />
 </@tissue.layout>
 
 

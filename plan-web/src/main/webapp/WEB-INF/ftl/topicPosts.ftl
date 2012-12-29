@@ -1,6 +1,9 @@
-<#import "tissue.ftl" as tissue />
-<#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
+<#import "tissue.ftl" as tissue />
+<#import "topicGadgets.ftl" as topicGadgets />
+<#import "planGadgets.ftl" as planGadgets />
+<#import "postGadgets.ftl" as postGadgets />
+<#import "utilGadgets.ftl" as utilGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
@@ -9,28 +12,28 @@
 <@tissue.layout "topic">
 
     <div id="logo">
-        <@tissue.topicLogo />
+        <@topicGadgets.topicLogo />
     </div>
 
     <div id="contentWrapper">
         <div id="sidebar">
 
             <#if topic.activePlan??>
-                <#assign activePlan = topic.activePlan in tissue />
+                <#assign activePlan = topic.activePlan in planGadgets />
             </#if>
-            <@tissue.showActivePlan />
+            <@planGadgets.showActivePlan />
 
             <#--
-            <@tissue.showDeadPlans />
+            <@planGadgets.showDeadPlans />
             -->
         </div>
 
        <div id="content">
            <div id="contentInner">
                <#if posts??>
-                   <@gadgets.showPostList posts />
+                   <@postGadgets.showPostList posts />
                </#if>
-               <@gadgets.showPager />
+               <@utilGadgets.showPager />
            </div>
        </div>
     </div>

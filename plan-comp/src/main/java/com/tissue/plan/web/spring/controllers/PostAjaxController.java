@@ -57,6 +57,7 @@ public class PostAjaxController {
         post.setId(postId);
         post.setTitle(form.getTitle());
         post.setContent(form.getContent());
+        post.setType(form.getType());
 
         postService.updatePost(post);
 

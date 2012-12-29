@@ -1,6 +1,9 @@
-<#import "tissue.ftl" as tissue />
-<#import "gadgets.ftl" as gadgets />
 <#import "spring.ftl" as spring />
+<#import "tissue.ftl" as tissue />
+<#import "topicGadgets.ftl" as topicGadgets />
+<#import "planGadgets.ftl" as planGadgets />
+<#import "postGadgets.ftl" as postGadgets />
+<#import "formGadgets.ftl" as formGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
@@ -8,37 +11,24 @@
 
 <@tissue.layout "post detail">
     <div id="logo">
-        <#assign topic = post.plan.topic in tissue />
-        <@tissue.topicLogo />
+        <#assign topic = post.plan.topic in topicGadgets />
+        <@topicGadgets.topicLogo />
     </div>
 
     <div id="contentWrapper">
         <div id="sidebar">
-            <#assign activePlan = topic.activePlan in tissue />
-            <@tissue.showActivePlan />
+            <#assign activePlan = topic.activePlan in planGadgets />
+            <@planGadgets.showActivePlan />
         </div>
         <div id="content">
             <div id="contentInner">
-               <@gadgets.showPostDetail />
+               <@postGadgets.showPostDetail />
             </div>
         </div>
     </div>
 
-    <div id="dia" style="display: none">
-        <form>
-            <ul>
-                <li>
-                    <textarea id="editor" name="content"></textarea>
-                </li>
-                <li>
-                    <input type="submit" value="submit"/>
-                </li>
-            </ul>
-        </form>
-        <div>
-            <a href="#" class="cancel">cancel</a>
-        </div>
-    </div>
+    <@formGadgets.oneItemForm />
+    <@formGadgets.postEditForm />
 
 </@tissue.layout>
 
