@@ -59,4 +59,18 @@ public class AnswerCommentDaoImpl implements AnswerCommentDao {
         return comment;
     }
 
+    public void update(AnswerComment comment) {
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            ODocument commentDoc = db.load(new ORecordId(OrientIdentityUtil.decode(comment.getId())));
+            commentDoc.field("content", comment.getContent());
+            commentDoc.save();
+        }
+        finally {
+            db.close();
+        }
+    }
+
+
 }

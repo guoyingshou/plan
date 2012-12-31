@@ -10,9 +10,15 @@ import com.tissue.domain.plan.Plan;
 import com.tissue.domain.plan.Post;
 import com.tissue.domain.plan.PostMessage;
 import com.tissue.domain.plan.PostMessageComment;
+import com.tissue.domain.plan.QuestionComment;
+import com.tissue.domain.plan.Answer;
+import com.tissue.domain.plan.AnswerComment;
 import com.tissue.plan.service.PostService;
 import com.tissue.plan.service.PostMessageService;
 import com.tissue.plan.service.PostMessageCommentService;
+import com.tissue.plan.service.QuestionCommentService;
+import com.tissue.plan.service.AnswerService;
+import com.tissue.plan.service.AnswerCommentService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +52,21 @@ public class PostAjaxController {
     @Autowired
     protected PostMessageCommentService postMessageCommentService;
 
-    /**
+    @Autowired
+    protected QuestionCommentService questionCommentService;
+
+    @Autowired
+    protected AnswerService answerService;
+
+    @Autowired
+    protected AnswerCommentService answerCommentService;
+
+/**
      * Update a post.
      * The post can be of any type.
      */
     @RequestMapping(value="/posts/{postId}", method=POST)
+    @ResponseBody
     public String updatePost(@PathVariable("postId") String postId, PostForm form, Map model) {
 
         Post post = new Post();
@@ -60,10 +76,7 @@ public class PostAjaxController {
         post.setType(form.getType());
 
         postService.updatePost(post);
-
-        model.put("post", post);
-
-        return "fragments/updatePost";
+        return "ok";
     }
 
     /**
@@ -86,8 +99,8 @@ public class PostAjaxController {
         message.setPost(post);
 
         PostMessage postMessage = postMessageService.addMessage(message);
-        model.put("postMessage", postMessage);
 
+        model.put("postMessage", postMessage);
         return "fragments/newMessage";
     }
  
@@ -96,6 +109,7 @@ public class PostAjaxController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{msgId}", method=POST)
+    @ResponseBody
     public String updateMessage(@PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
         System.out.println("msgId: " + msgId);
         System.out.println("content: " + content);
@@ -105,9 +119,7 @@ public class PostAjaxController {
         postMessage.setContent(content);
         postMessageService.updatePostMessage(postMessage);
 
-        model.put("postMessage", postMessage);
-
-        return "fragments/updateMessage";
+        return "ok";
     }
 
     /**
@@ -139,6 +151,7 @@ public class PostAjaxController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messageComments/{commentId}", method=POST)
+    @ResponseBody
     public String updateMessageComment(@PathVariable("commentId") String commentId, @RequestParam("content") String content, Map model) {
 
         PostMessageComment comment = new PostMessageComment();
@@ -146,8 +159,130 @@ public class PostAjaxController {
         comment.setContent(content);
         postMessageCommentService.updateComment(comment);
 
-        model.put("postMessageComment", comment);
-        return "fragments/updatePostMessageComment";
+        return "ok";
     }
+
+    /**
+     * ------------------question ----------------------
+     */
+
+    /**
+     * Add a comment to a specific question(a kind of post).
+     */
+    @RequestMapping(value="/posts/{postId}/questionComments", method=POST)
+    public String addQuestionComment(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
+
+        QuestionComment comment = new QuestionComment();
+        comment.setContent(content);
+        comment.setCreateTime(new Date());
+
+        User user = new User();
+        user.setId(SecurityUtil.getUserId());
+        comment.setUser(user);
+
+        Post post = new Post();
+        post.setId(postId);
+        comment.setQuestion(post);
+
+        comment = questionCommentService.addQuestionComment(comment);
+
+        model.put("questionComment", comment);
+        return "fragments/newQuestionComment";
+    }
+ 
+    /**
+     * Update a QuestionComment.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/questionComments/{commentId}", method=POST)
+    @ResponseBody
+    public String updateQuestionComment(@PathVariable("commentId") String commentId, @RequestParam("content") String content, Map model) {
+
+        QuestionComment comment = new QuestionComment();
+        comment.setId(commentId);
+        comment.setContent(content);
+        questionCommentService.updateQuestionComment(comment);
+
+        return "ok";
+    }
+
+    /**
+     * Add an answer to a specific post.
+     * The post's type can only be 'question'.
+     */
+    @RequestMapping(value="/posts/{postId}/answers", method=POST)
+    public String addAnswer(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
+
+        Answer answer = new Answer();
+        answer.setContent(content);
+        answer.setCreateTime(new Date());
+
+        User user = new User();
+        user.setId(SecurityUtil.getUserId());
+        answer.setUser(user);
+
+        Post post = new Post();
+        post.setId(postId);
+        answer.setQuestion(post);
+
+        answer = answerService.addAnswer(answer);
+        
+        model.put("answer", answer);
+        return "fragments/newAnswer";
+    }
+
+    /**
+     * Update an answer.
+     */
+    @RequestMapping(value="/answers/{answerId}", method=POST)
+    @ResponseBody
+    public String updateAnswer(@PathVariable("answerId") String answerId, @RequestParam("content") String content, Map model) {
+
+        Answer answer = new Answer();
+        answer.setId(answerId);
+        answer.setContent(content);
+        answerService.updateAnswer(answer);
+
+        return "ok";
+    }
+
+    /**
+     * Add a comment to the answer of a specific question.
+     */
+    @RequestMapping(value="/answers/{answerId}/comments", method=POST)
+    public String addAnswerComment(@PathVariable("answerId") String answerId, @RequestParam("content") String content, Map model) {
+
+        AnswerComment comment = new AnswerComment();
+        comment.setContent(content);
+        comment.setCreateTime(new Date());
+
+        User user = new User();
+        user.setId(SecurityUtil.getUserId());
+        comment.setUser(user);
+
+        Answer answer = new Answer();
+        answer.setId(answerId);
+        comment.setAnswer(answer);
+
+        comment = answerCommentService.addComment(comment);
+        model.put("comment", comment);
+        return "fragments/newAnswerComment";
+    }
+
+    /**
+     * Update an answer comment.
+     */
+    @RequestMapping(value="/answerComments/{commentId}", method=POST)
+    @ResponseBody
+    public String updateAnswerComment(@PathVariable("commentId") String commentId, @RequestParam("content") String content, Map model) {
+
+        AnswerComment comment = new AnswerComment();
+        comment.setId(commentId);
+        comment.setContent(content);
+        answerCommentService.updateComment(comment);
+
+        return "ok";
+    }
+
 
 }

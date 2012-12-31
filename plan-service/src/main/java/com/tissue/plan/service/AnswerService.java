@@ -19,11 +19,15 @@ public class AnswerService {
     @Autowired
     private EventDao eventDao;
 
-
-    public void addAnswer(Answer answer) {
+    public Answer addAnswer(Answer answer) {
         answer = answerDao.create(answer);
         Event event = EventFactory.createEvent(answer);
         eventDao.addEvent(event);
+
+        return answer;
     }
 
+    public void updateAnswer(Answer answer) {
+        answerDao.update(answer);
+    }
 }

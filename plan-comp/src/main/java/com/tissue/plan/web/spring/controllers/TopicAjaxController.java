@@ -10,6 +10,7 @@ import com.tissue.plan.service.TopicService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +34,7 @@ public class TopicAjaxController {
      * Update topic.
      */
     @RequestMapping(value="/topics/{topicId}", method=POST)
+    @ResponseBody
     public String updateTopic(@PathVariable("topicId") String topicId, TopicForm form, Map model) throws Exception {
 
         Topic topic = new Topic();
@@ -52,9 +54,12 @@ public class TopicAjaxController {
 
         topicService.updateTopic(topic);
 
+        return "ok";
+
+        /**
         model.put("topic", topic);
-        
         return "fragments/updateTopic";
+        */
     }
 
 

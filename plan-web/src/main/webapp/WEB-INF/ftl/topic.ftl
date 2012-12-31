@@ -6,7 +6,7 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
-<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css", "/tissue/css/pop.css"] in tissue>
+<#assign mystyles=["/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/pop.css"] in tissue>
 
 <@tissue.layout "topic">
 
@@ -28,18 +28,14 @@
         </div>
 
        <div id="content">
-           <div id="contentInner">
-               <div>
-                   <div class="topic-content">${topic.content}</div>
-                   <div class="topic-tags"><#list topic.tags as tag>${tag}&nbsp;</#list></div>
-               </div>
-               <a class="topic-edit" data-action="<@spring.url '/topics/${topic.id}' />" href="#">edit</a>
-           </div>
+           <div class="topic-content">${topic.content}</div>
+           <div class="topic-tags"><#list topic.tags as tag>${tag}&nbsp;</#list></div>
+           <a class="topic-edit" data-action="<@spring.url '/topics/${topic.id}' />" href="#">edit</a>
 
            <script type="text/javascript">
                $(document).on('click', 'a.topic-edit', function(e) {
                    e.preventDefault();
-                   $(this).prev().editTopicDialog($(this).data("action"));
+                   $(this).closest('div#content').editTopicDialog($(this).data("action"));
                });
            </script>
        </div>

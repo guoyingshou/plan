@@ -18,10 +18,15 @@ public class AnswerCommentService {
     @Autowired
     private EventDao eventDao;
 
-    public void addComment(AnswerComment comment) {
+    public AnswerComment addComment(AnswerComment comment) {
         comment = answerCommentDao.create(comment);
         Event event = EventFactory.createEvent(comment);
         eventDao.addEvent(event);
+
+        return comment;
      }
 
+    public void updateComment(AnswerComment comment) {
+        answerCommentDao.update(comment);
+    }
 }

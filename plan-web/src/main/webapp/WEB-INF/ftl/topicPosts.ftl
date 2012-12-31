@@ -7,7 +7,7 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
-<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css", "/tissue/css/pop.css"] in tissue>
+<#assign mystyles=["/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/pop.css"] in tissue>
 
 <@tissue.layout "topic">
 
@@ -29,12 +29,10 @@
         </div>
 
        <div id="content">
-           <div id="contentInner">
-               <#if posts??>
-                   <@postGadgets.showPostList posts />
-               </#if>
+           <#if posts??>
+               <@postGadgets.showPostList posts />
                <@utilGadgets.showPager />
-           </div>
+           </#if>
        </div>
     </div>
 

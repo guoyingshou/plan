@@ -61,4 +61,16 @@ public class AnswerDaoImpl implements AnswerDao {
         }
     }
 
+    public void update(Answer answer) {
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(answer.getId())));
+            doc.field("content", answer.getContent());
+            doc.save();
+        }
+        finally {
+            db.close();
+        }
+    }
+
 }

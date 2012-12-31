@@ -10,4 +10,6 @@ public interface QuestionCommentDao {
      */
     QuestionComment create(QuestionComment comment);
 
+    void update(QuestionComment comment);
+
 }

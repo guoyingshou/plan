@@ -7,7 +7,7 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
 
-<#assign mystyles=["/tissue/css/content-2cols.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/postForm.css", "/tissue/css/pop.css"] in tissue>
+<#assign mystyles=["/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/post.css", "/tissue/css/pop.css"] in tissue>
 
 <@tissue.layout "question">
     <div id="logo">
@@ -21,9 +21,7 @@
             <@planGadgets.showActivePlan />
         </div>
         <div id="content">
-            <div id="contentInner">
-               <@postGadgets.showQuestionDetail />
-            </div>
+           <@postGadgets.showQuestionDetail />
         </div>
     </div>
 
