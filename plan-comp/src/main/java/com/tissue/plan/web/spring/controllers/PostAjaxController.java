@@ -111,13 +111,25 @@ public class PostAjaxController {
     @RequestMapping(value="/messages/{msgId}", method=POST)
     @ResponseBody
     public String updateMessage(@PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
-        System.out.println("msgId: " + msgId);
-        System.out.println("content: " + content);
 
         PostMessage postMessage = new PostMessage();
         postMessage.setId(msgId);
         postMessage.setContent(content);
         postMessageService.updatePostMessage(postMessage);
+
+        return "ok";
+    }
+
+    /**
+     * Delete a message.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/messages/{msgId}/delete", method=POST)
+    @ResponseBody
+    public String deleteMessage(@PathVariable("msgId") String msgId, Map model) {
+
+        System.out.println("delete: " + msgId);
+        //postMessageService.updatePostMessage(postMessage);
 
         return "ok";
     }
@@ -163,6 +175,21 @@ public class PostAjaxController {
     }
 
     /**
+     * Delete a PostMessageComment.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/messageComments/{commentId}/delete", method=POST)
+    @ResponseBody
+    public String deleteMessageComment(@PathVariable("commentId") String commentId, Map model) {
+
+        System.out.println("deleted: " + commentId);
+
+        //postMessageCommentService.updateComment(comment);
+
+        return "ok";
+    }
+
+    /**
      * ------------------question ----------------------
      */
 
@@ -192,7 +219,6 @@ public class PostAjaxController {
  
     /**
      * Update a QuestionComment.
-     * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/questionComments/{commentId}", method=POST)
     @ResponseBody
@@ -205,6 +231,17 @@ public class PostAjaxController {
 
         return "ok";
     }
+
+    /**
+     * Delete a QuestionComment.
+     */
+    @RequestMapping(value="/questionComments/{commentId}/delete", method=POST)
+    @ResponseBody
+    public String deleteQuestionComment(@PathVariable("commentId") String commentId, Map model) {
+        System.out.println("deleted: " + commentId);
+        return "ok";
+    }
+
 
     /**
      * Add an answer to a specific post.
@@ -247,6 +284,18 @@ public class PostAjaxController {
     }
 
     /**
+     * Delete an answer.
+     */
+    @RequestMapping(value="/answers/{answerId}/delete", method=POST)
+    @ResponseBody
+    public String deleteAnswer(@PathVariable("answerId") String answerId, Map model) {
+
+        System.out.println("answer: " + answerId + " deleted");
+        return "ok";
+    }
+
+
+    /**
      * Add a comment to the answer of a specific question.
      */
     @RequestMapping(value="/answers/{answerId}/comments", method=POST)
@@ -281,6 +330,17 @@ public class PostAjaxController {
         comment.setContent(content);
         answerCommentService.updateComment(comment);
 
+        return "ok";
+    }
+
+    /**
+     * Delete an answer comment.
+     */
+    @RequestMapping(value="/answerComments/{commentId}/delete", method=POST)
+    @ResponseBody
+    public String deleteAnswerComment(@PathVariable("commentId") String commentId, Map model) {
+
+        System.out.println("deleted: " + commentId);
         return "ok";
     }
 

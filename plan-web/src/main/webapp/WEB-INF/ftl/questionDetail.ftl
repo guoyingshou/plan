@@ -27,6 +27,8 @@
 
     <@formGadgets.postEditForm />
     <@formGadgets.oneItemForm />
+    <@formGadgets.confirmForm />
+
 </@tissue.layout>
 
 
