@@ -147,6 +147,7 @@ public class PostAjaxController {
 
         User user = new User();
         user.setId(SecurityUtil.getUserId());
+        user.setDisplayName(SecurityUtil.getDisplayName());
         comment.setUser(user);
 
         PostMessage msg = new PostMessage();

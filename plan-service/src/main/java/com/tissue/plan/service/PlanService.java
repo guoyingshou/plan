@@ -42,9 +42,11 @@ public class PlanService {
         plan = planDao.create(plan);
         topicDao.addPlan(plan);
 
+        /**
         //generate event
         Event event = EventFactory.createEvent(plan);
         eventDao.addEvent(event);
+        */
 
         return plan;
     }

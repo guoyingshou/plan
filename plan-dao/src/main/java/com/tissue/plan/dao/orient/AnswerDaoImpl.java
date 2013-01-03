@@ -37,12 +37,24 @@ public class AnswerDaoImpl implements AnswerDao {
 
         OGraphDatabase db = dataSource.getDB();
         try {
+
+            ODocument doc = AnswerConverter.convertAnswer(answer);
+            doc.save();
+
+            String ridAnswer = doc.getIdentity().toString();
+            String ridUser = OrientIdentityUtil.decode(answer.getUser().getId());
+
+            String sql = "create edge Publish from " + ridUser + " to " + ridAnswer + " set label = 'answer', createTime = sysdate()";
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute(ridUser, ridAnswer);
+
             String record = OrientIdentityUtil.decode(answer.getQuestion().getId());
             ORecordId postRecordId = new ORecordId(record);
 
-            ODocument doc = AnswerConverter.convertAnswer(answer);
+            /**
             doc.field("post", postRecordId);
             doc.save();
+            */
 
             ODocument postDoc = db.load(postRecordId);
             Set<ODocument> answersDoc = postDoc.field("answers", Set.class);
@@ -53,12 +65,13 @@ public class AnswerDaoImpl implements AnswerDao {
             postDoc.field("answers", answersDoc);
             postDoc.save();
 
-            answer = AnswerConverter.buildAnswerWithoutChild(doc);
-            return answer;
+            answer.setId(OrientIdentityUtil.encode(ridAnswer));
         }
         finally {
             db.close();
         }
+
+        return answer;
     }
 
     public void update(Answer answer) {

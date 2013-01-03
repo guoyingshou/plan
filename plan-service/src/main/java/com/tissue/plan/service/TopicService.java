@@ -37,9 +37,11 @@ public class TopicService {
     public Topic addTopic(Topic topic) {
         topic = topicDao.create(topic);
 
+        /**
         //generate event
         Event event = EventFactory.createEvent(topic);
         eventDao.addEvent(event);
+        */
 
         return topic;
     }

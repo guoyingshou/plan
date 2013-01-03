@@ -21,8 +21,10 @@ public class AnswerService {
 
     public Answer addAnswer(Answer answer) {
         answer = answerDao.create(answer);
+        /**
         Event event = EventFactory.createEvent(answer);
         eventDao.addEvent(event);
+        */
 
         return answer;
     }

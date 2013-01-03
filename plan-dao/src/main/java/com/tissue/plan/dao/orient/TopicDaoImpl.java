@@ -47,7 +47,16 @@ public class TopicDaoImpl implements TopicDao {
         try {
             ODocument doc = TopicConverter.convertTopic(topic);
             doc.save();
-            topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
+
+            String ridTopic = doc.getIdentity().toString();
+            String ridUser = OrientIdentityUtil.decode(topic.getUser().getId());
+
+            String sql = "create edge Publish from " + ridUser + " to " + ridTopic + " set label = 'topic', createTime = sysdate()";
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute(ridUser, ridTopic);
+
+            String topicId = OrientIdentityUtil.encode(ridTopic);
+            topic.setId(topicId);
         }
         catch(Exception exc) {
             //to do

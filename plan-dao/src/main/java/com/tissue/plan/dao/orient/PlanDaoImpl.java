@@ -46,8 +46,19 @@ public class PlanDaoImpl implements PlanDao {
         try {
             ODocument doc = PlanConverter.convertPlan(plan);
             doc.save();
-            
-            plan = PlanConverter.buildPlan(doc);
+
+            String ridPlan = doc.getIdentity().toString();
+            String ridUser = OrientIdentityUtil.decode(plan.getUser().getId());
+
+            String sql = "create edge Publish from " + ridUser + " to " + ridPlan + " set label = 'plan', createTime = sysdate()";
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute(ridUser, ridPlan);
+
+            //plan = PlanConverter.buildPlan(doc);
+
+            String planId = OrientIdentityUtil.encode(ridPlan);
+            plan.setId(planId);
+
         }
         catch(Exception exc) {
             //to do

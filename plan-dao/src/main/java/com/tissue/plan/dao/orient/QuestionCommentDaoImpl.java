@@ -38,6 +38,13 @@ public class QuestionCommentDaoImpl implements QuestionCommentDao {
             ODocument commentDoc = QuestionCommentConverter.convertQuestionComment(comment);
             commentDoc.save();
 
+            String ridComment = commentDoc.getIdentity().toString();
+            String ridUser = OrientIdentityUtil.decode(comment.getUser().getId());
+
+            String sql = "create edge Publish from " + ridUser + " to " + ridComment + " set label = 'questionComment', createTime = sysdate()";
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute(ridUser, ridComment);
+
             //update question adding this comment
             String record = OrientIdentityUtil.decode(comment.getQuestion().getId());
             ORecordId questionRecordId = new ORecordId(record);
@@ -50,8 +57,8 @@ public class QuestionCommentDaoImpl implements QuestionCommentDao {
             questionDoc.field("comments", commentsDoc);
             questionDoc.save();
 
-            comment = QuestionCommentConverter.buildQuestionCommentWithParent(commentDoc);
-
+            comment.setId(OrientIdentityUtil.encode(ridComment));
+            //comment = QuestionCommentConverter.buildQuestionCommentWithParent(commentDoc);
         }
         finally {
             db.close();

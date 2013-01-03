@@ -20,9 +20,10 @@ public class AnswerCommentService {
 
     public AnswerComment addComment(AnswerComment comment) {
         comment = answerCommentDao.create(comment);
+        /**
         Event event = EventFactory.createEvent(comment);
         eventDao.addEvent(event);
-
+        */
         return comment;
      }
 

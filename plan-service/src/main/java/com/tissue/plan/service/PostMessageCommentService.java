@@ -20,8 +20,10 @@ public class PostMessageCommentService {
 
     public PostMessageComment addComment(PostMessageComment comment) {
         comment = postMessageCommentDao.create(comment);
+        /**
         Event event = EventFactory.createEvent(comment);
         eventDao.addEvent(event);
+        */
 
         return comment;
     }

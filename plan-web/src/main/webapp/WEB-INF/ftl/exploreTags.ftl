@@ -19,11 +19,9 @@
         <div id="content">
             <div id="contentInner">
                 <#if tags??>
-                <ul>
                 <#list tags as tag>
-                    <li><a href="/group/exploreTags/${tag}">${tag}</a></li>
+                    <span><a href="/group/exploreTags/${tag}">${tag}</a></span>
                 </#list>
-                </ul>
                 </#if>
             </div>
         </div>

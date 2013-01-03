@@ -42,7 +42,16 @@ public class PostDaoImpl implements PostDao {
         try {
             ODocument doc = PostConverter.convert(post);
             doc.save();
-            post = PostConverter.buildPost(doc);
+
+            String ridPost = doc.getIdentity().toString();
+            String ridUser = OrientIdentityUtil.decode(post.getUser().getId());
+
+            String sql = "create edge Publish from " + ridUser + " to " + ridPost + " set label = 'post', createTime = sysdate()";
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute(ridUser, ridPost);
+
+            String postId = OrientIdentityUtil.encode(ridPost);
+            post.setId(postId);
         }
         catch(Exception exc) {
             exc.printStackTrace();
@@ -73,13 +82,19 @@ public class PostDaoImpl implements PostDao {
 
     public Post getPost(String id) {
         Post post = null;
+
+        String sql = "select from " + OrientIdentityUtil.decode(id);
         OGraphDatabase db = dataSource.getDB();
         try {
-            ORecordId recordId = new ORecordId(OrientIdentityUtil.decode(id));
-            ODocument postDoc = db.load(recordId);
-            post = PostConverter.buildPost(postDoc);
+            OSQLSynchQuery<ODocument> q = new OSQLSynchQuery(sql);
+            List<ODocument> result = db.query(q.setFetchPlan("*:-1"));
+            if(result.size() > 0) {
+                ODocument doc = result.get(0);
+                post = PostConverter.buildPost(doc);
+            }
         }
         catch(Exception exc) {
+            //to do
             exc.printStackTrace();
         }
         finally {

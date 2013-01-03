@@ -24,7 +24,6 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.id.ORecordId;
 import com.orientechnologies.orient.core.sql.query.OSQLSynchQuery;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
-//import com.orientechnologies.orient.core.tx.OTransaction;
 
 @Component
 public class PostMessageDaoImpl implements PostMessageDao {
@@ -38,9 +37,15 @@ public class PostMessageDaoImpl implements PostMessageDao {
     public PostMessage create(PostMessage message) {
         OGraphDatabase db = dataSource.getDB();
         try {
-
             ODocument doc = PostMessageConverter.convertPostMessage(message);
             doc.save();
+
+            String ridMessage = doc.getIdentity().toString();
+            String ridUser = OrientIdentityUtil.decode(message.getUser().getId());
+
+            String sql = "create edge Publish from " + ridUser + " to " + ridMessage + " set label = 'postMessage', createTime = sysdate()";
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute(ridUser, ridMessage);
 
             String record = OrientIdentityUtil.decode(message.getPost().getId());
             ORecordId postRecordId = new ORecordId(record);
@@ -53,7 +58,8 @@ public class PostMessageDaoImpl implements PostMessageDao {
             postDoc.field("messages", postMessagesDoc);
             postDoc.save();
 
-            message = PostMessageConverter.buildPostMessageWithoutChild(doc);
+            message.setId(OrientIdentityUtil.encode(ridMessage));
+            //message = PostMessageConverter.buildPostMessageWithoutChild(doc);
         }
         finally {
             db.close();

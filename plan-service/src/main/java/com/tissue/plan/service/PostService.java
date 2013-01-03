@@ -38,9 +38,11 @@ public class PostService {
     public Post addPost(Post post) {
         post = postDao.create(post);
 
+        /**
         //generate event
         Event event = EventFactory.createEvent(post);
         eventDao.addEvent(event);
+        */
 
         return post;
     }

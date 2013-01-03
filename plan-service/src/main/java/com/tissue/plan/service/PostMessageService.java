@@ -20,8 +20,10 @@ public class PostMessageService {
 
     public PostMessage addMessage(PostMessage message) {
         message = postMessageDao.create(message);
+        /**
         Event event = EventFactory.createEvent(message);
         eventDao.addEvent(event);
+        */
 
         return message;
         //return message.getId();
