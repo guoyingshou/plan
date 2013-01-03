@@ -25,9 +25,11 @@
         </div>
     </div>
 
+    <#if viewer??>
     <@formGadgets.oneItemForm />
     <@formGadgets.postEditForm />
     <@formGadgets.confirmForm />
+    </#if>
 
 </@tissue.layout>
 

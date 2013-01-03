@@ -100,28 +100,6 @@ public class PlanDaoImpl implements PlanDao {
             List<ODocument> result = db.query(query);
 
             for(ODocument doc : result) {
-                /**
-                Plan plan = new Plan();
-                plan.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
-
-                Integer duration = doc.field("duration", Integer.class);
-                Date createTime = doc.field("createTime", Date.class);
-
-                ODocument userDoc = doc.field("user");
-                String username = userDoc.field("username", String.class);
-                User user = new User();
-                user.setUsername(username);
-
-                Topic topic = new Topic();
-                topic.setId(topicId);
-
-                plan.setDuration(duration);
-                plan.setCreateTime(createTime);
-
-                plan.setUser(user);
-                plan.setTopic(topic);
-                */
-
                 Plan plan = PlanConverter.buildPlan(doc);
                 plans.add(plan);
             }
@@ -138,15 +116,18 @@ public class PlanDaoImpl implements PlanDao {
 
     public void addMember(String planId, String userId) {
 
-        String sql = "update " + OrientIdentityUtil.decode(planId) + " add members = " + OrientIdentityUtil.decode(userId);
-        String sqlUpdate = "update " + OrientIdentityUtil.decode(planId) + " increment count = 1";
+        String ridUser = OrientIdentityUtil.decode(userId);
+        String ridPlan = OrientIdentityUtil.decode(planId);
+
+        String sql = "create edge member from " + ridUser + " to " + ridPlan + " set label='member', createTime=sysdate()";
+        String sqlUpdate = "update " + ridPlan + " increment count = 1";
 
         OGraphDatabase db = dataSource.getDB();
         try {
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute();
 
-            //workaround for not able to order by members.size()
+            //workaround for not being able to order by members.size()
             OCommandSQL cmdUpdate = new OCommandSQL(sqlUpdate);
             db.command(cmdUpdate).execute();
         }
@@ -154,59 +135,5 @@ public class PlanDaoImpl implements PlanDao {
             db.close();
         }
     }
-
-
-
-
-
-
-
-
-
-
-    public Plan getPlanMinium(String planId) {
-        Plan result = null;
-
-        /**
-        DBObject query = new BasicDBObject();
-        query.put("_id", new ObjectId(planId));
-
-        DBObject keys = new BasicDBObject();
-        keys.put("createTime", 1);
-        keys.put("username", 1);
-        keys.put("duration", 1);
-        keys.put("topic", 1);
-
-        DBObject found = getCollection().findOne(query, keys);
-
-        if(found != null) {
-            result = mapper.convertValue(found, Plan.class); 
-            result.setId(planId);
-        }
-        */
-
-        return result;
-    }
-
-    /**
-    public User updateUser(String userid, User user) {
-
-        DBObject query = new BasicDBObject();
-        query.put("_id", new ObjectId(userid));
-
-        DBObject obj = new BasicDBObject();
-
-        DBObject updater = mapper.convertValue(user, BasicDBObject.class);
-        updater.put("updated", new Date());
-
-        obj.put("$set", updater);
-
-        getCollection().update(query, obj, true, false);
-
-        DBObject result = getCollection().findOne(query);
-
-        return mapper.convertValue(result, UserImpl.class);
-    }
-    */
 
 }

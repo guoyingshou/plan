@@ -50,8 +50,8 @@ public class ExploreController {
     @RequestMapping("/explore")
     public String explore(Map model) {
 
-        List<Topic> trendingTopics = topicService.getTrendingTopics();
-        List<Topic> featuredTopics = topicService.getFeaturedTopics();
+        List<Topic> trendingTopics = topicService.getTrendingTopics(15);
+        List<Topic> featuredTopics = topicService.getFeaturedTopics(15);
         model.put("trendingTopics", trendingTopics);
         model.put("featuredTopics", featuredTopics);
 
@@ -97,7 +97,7 @@ public class ExploreController {
 
     @RequestMapping("/exploreTimeline")
     public String exploreTimeline(Map model) {
-        List<Event> events = eventService.getLatestEvents();
+        List<Event> events = eventService.getLatestEvents(25);
         model.put("events", events);
         return "exploreTimeline";
     }

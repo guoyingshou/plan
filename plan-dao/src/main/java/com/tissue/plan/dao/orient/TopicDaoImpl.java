@@ -66,12 +66,10 @@ public class TopicDaoImpl implements TopicDao {
     public void update(Topic topic) {
         OGraphDatabase db = dataSource.getDB();
         try {
-            //ODocument doc = TopicConverter.convertTopic(topic);
             ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(topic.getId())));
             doc.field("content", topic.getContent());
             doc.field("tags", topic.getTags());
             doc.save();
-            //topic.setId(OrientIdentityUtil.encode(doc.getIdentity().toString()));
         }
         catch(Exception exc) {
             //to do
@@ -80,8 +78,6 @@ public class TopicDaoImpl implements TopicDao {
         finally {
             db.close();
         }
-
-        //return topic;
     }
 
     /**
@@ -141,11 +137,10 @@ public class TopicDaoImpl implements TopicDao {
     /**
      * Get topics with the largest members.
      */
-    public List<Topic> getTrendingTopics() {
+    public List<Topic> getTrendingTopics(int num) {
         List<Topic> topics = new ArrayList();
 
-        String qstr = "select topic, count from plan order by count desc limit 2";
-        System.out.println(qstr);
+        String qstr = "select topic, count from plan order by count desc limit " + num;
 
         OGraphDatabase db = dataSource.getDB();
         try {
@@ -170,11 +165,10 @@ public class TopicDaoImpl implements TopicDao {
     /**
      * Get featured topics.
      */
-    public List<Topic> getFeaturedTopics() {
+    public List<Topic> getFeaturedTopics(int num) {
         List<Topic> topics = new ArrayList();
 
-        String qstr = "select from topic where type = 'featured' order by createTime desc limit 15";
-        System.out.println(qstr);
+        String qstr = "select from topic where type = 'featured' order by createTime desc limit " + num;
 
         OGraphDatabase db = dataSource.getDB();
         try {
@@ -392,6 +386,5 @@ public class TopicDaoImpl implements TopicDao {
         finally {
             db.close();
         }
-
     }
 }

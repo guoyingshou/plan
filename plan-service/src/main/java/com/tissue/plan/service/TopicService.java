@@ -56,12 +56,12 @@ public class TopicService {
         return topicDao.getTopicByPlanId(planId);
     }
 
-    public List<Topic> getTrendingTopics() {
-        return topicDao.getTrendingTopics();
+    public List<Topic> getTrendingTopics(int num) {
+        return topicDao.getTrendingTopics(num);
     }
 
-    public List<Topic> getFeaturedTopics() {
-        return topicDao.getFeaturedTopics();
+    public List<Topic> getFeaturedTopics(int num) {
+        return topicDao.getFeaturedTopics(num);
     }
 
     public long getTopicsCount() {

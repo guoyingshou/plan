@@ -28,19 +28,25 @@
         </div>
 
        <div id="content">
+
            <div class="topic-content">${topic.content}</div>
            <div class="topic-tags"><#list topic.tags as tag>${tag}&nbsp;</#list></div>
-           <a class="topic-edit" data-action="<@spring.url '/topics/${topic.id}' />" href="#">edit</a>
+           <div>${topic.user.displayName} published: ${topic.createTime?datetime}</div>
 
+           <#if viewer?? && topic.isOwner(viewer.id) >
+           <a class="topic-edit" data-action="<@spring.url '/topics/${topic.id}' />" href="#">edit</a>
            <script type="text/javascript">
                $(document).on('click', 'a.topic-edit', function(e) {
                    e.preventDefault();
                    $(this).closest('div#content').editTopicDialog($(this).data("action"));
                });
            </script>
+           </#if>
        </div>
     </div>
 
+    <#if viewer?? && topic.isOwner(viewer.id)>
     <@formGadgets.topicEditForm />
+    </#if>
 
 </@tissue.layout>
