@@ -51,7 +51,7 @@ public class TopicDaoImpl implements TopicDao {
             String ridTopic = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(topic.getUser().getId());
 
-            String sql = "create edge Publish from " + ridUser + " to " + ridTopic + " set label = 'topic', createTime = sysdate()";
+            String sql = "create edge EdgeCreate from " + ridUser + " to " + ridTopic + " set label = 'topic', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute(ridUser, ridTopic);
 
@@ -149,7 +149,7 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> getTrendingTopics(int num) {
         List<Topic> topics = new ArrayList();
 
-        String qstr = "select topic, count from plan order by count desc limit " + num;
+        String qstr = "select topic, count from Plan order by count desc limit " + num;
 
         OGraphDatabase db = dataSource.getDB();
         try {
@@ -177,7 +177,7 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> getFeaturedTopics(int num) {
         List<Topic> topics = new ArrayList();
 
-        String qstr = "select from topic where type = 'featured' order by createTime desc limit " + num;
+        String qstr = "select from Topic where type = 'featured' order by createTime desc limit " + num;
 
         OGraphDatabase db = dataSource.getDB();
         try {
@@ -206,7 +206,7 @@ public class TopicDaoImpl implements TopicDao {
 
         OGraphDatabase db = dataSource.getDB();
         try {
-            result = db.countClass("topic");
+            result = db.countClass("Topic");
         }
         catch(Exception exc) {
             //to do
@@ -224,7 +224,7 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> getPagedTopics(int page, int size) {
         List<Topic> topics = new ArrayList();
 
-        String qstr = "select from topic order by createTime desc skip " + ((page -1) * size) + " limit " + size;
+        String qstr = "select from Topic order by createTime desc skip " + ((page -1) * size) + " limit " + size;
 
         OGraphDatabase db = dataSource.getDB();
         try {
@@ -251,7 +251,7 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> getTopics() {
         List<Topic> topics = new ArrayList();
 
-        String qstr = "select from topic order by createTime desc";
+        String qstr = "select from Topic order by createTime desc";
 
         OGraphDatabase db = dataSource.getDB();
         try {
@@ -278,13 +278,13 @@ public class TopicDaoImpl implements TopicDao {
     public List<String> getTopicTags() {
         OTrackedList<String> tags = null;
 
-        String qstr = "select set(tags) from topic";
+        String qstr = "select set(tags) from Topic";
 
         OGraphDatabase db = dataSource.getDB();
         try {
             OSQLSynchQuery query = new OSQLSynchQuery(qstr);
             List<ODocument> docs = db.query(query);
-            if(docs != null) {
+            if((docs != null) && (docs.size() > 0)) {
                 tags = docs.get(0).field("set");
             }
         }
@@ -301,7 +301,7 @@ public class TopicDaoImpl implements TopicDao {
     public long getTopicsCountByTag(String tag) {
         long result = 0L;
 
-        String qstr = "select count(*) from topic where tags in ?";
+        String qstr = "select count(*) from Topic where tags in ?";
 
         OGraphDatabase db = dataSource.getDB();
         try {
@@ -325,7 +325,7 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> getPagedTopicsByTag(String tag, int page, int size) {
         List<Topic> topics = new ArrayList();
 
-        String qstr = "select from topic where tags in ? order by createTime desc skip " + 
+        String qstr = "select from Topic where tags in ? order by createTime desc skip " + 
                        (page - 1) * size +
                        " limit " + size;
 
@@ -351,7 +351,7 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> getTopicsByTag(String tag) {
         List<Topic> topics = new ArrayList();
 
-        String qstr = "select from topic where tags in ? order by createTime desc";
+        String qstr = "select from Topic where tags in ? order by createTime desc";
 
         OGraphDatabase db = dataSource.getDB();
         try {

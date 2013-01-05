@@ -46,7 +46,7 @@ public class PostDaoImpl implements PostDao {
             String ridPost = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(post.getUser().getId());
 
-            String sql = "create edge Publish from " + ridUser + " to " + ridPost + " set label = 'post', createTime = sysdate()";
+            String sql = "create edge EdgePublish from " + ridUser + " to " + ridPost + " set label = 'post', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute(ridUser, ridPost);
 
@@ -118,7 +118,7 @@ public class PostDaoImpl implements PostDao {
     }
 
     private List<Post> getPostsByTopicId(OGraphDatabase db, String topicId) {
-        String postQstr = "select from post where plan.topic in " + OrientIdentityUtil.decode(topicId);
+        String postQstr = "select from Post where plan.topic in " + OrientIdentityUtil.decode(topicId);
         OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
 
         List<ODocument> postsDoc = db.query(q);
@@ -141,7 +141,7 @@ public class PostDaoImpl implements PostDao {
     }
 
     private List<Post> getPagedPostsByTopicId(OGraphDatabase db, String topicId, int page, int size) {
-        String sql = "select from post where plan.topic in " + 
+        String sql = "select from Post where plan.topic in " + 
                       OrientIdentityUtil.decode(topicId) + 
                       " order by createTime desc skip " + 
                       ((page - 1) * size) + 
@@ -157,7 +157,7 @@ public class PostDaoImpl implements PostDao {
     public long getPostsCountByTopicId(String topicId) {
         long result = 0;
 
-        String sql = "select count(*) from post where plan.topic in " + OrientIdentityUtil.decode(topicId);
+        String sql = "select count(*) from Post where plan.topic in " + OrientIdentityUtil.decode(topicId);
         OGraphDatabase db = dataSource.getDB();
         try {
             OSQLSynchQuery q = new OSQLSynchQuery(sql);
@@ -177,7 +177,7 @@ public class PostDaoImpl implements PostDao {
     public long getPostsCountByTopicIdAndType(String topicId, String type) {
         long result = 0;
 
-        String sql = "select count(*) from post where plan.topic in ? and type = ?";
+        String sql = "select count(*) from Post where plan.topic in ? and type = ?";
         OGraphDatabase db = dataSource.getDB();
         try {
             OSQLSynchQuery q = new OSQLSynchQuery(sql);
@@ -208,7 +208,7 @@ public class PostDaoImpl implements PostDao {
     }
 
     public List<Post> getPostsByTopicIdAndType(OGraphDatabase db, String topicId, String type) {
-        String postQstr = "select from post where plan.topic in ? and type = ?";
+        String postQstr = "select from Post where plan.topic in ? and type = ?";
         OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
 
         List<ODocument> postsDoc = db.command(q).execute(OrientIdentityUtil.decode(topicId), type);
@@ -231,7 +231,7 @@ public class PostDaoImpl implements PostDao {
     }
 
     public List<Post> getPagedPostsByTopicIdAndType(OGraphDatabase db, String topicId, String type, int page, int size) {
-        String postQstr = "select from post where plan.topic in ? and type = ? order by createTime desc skip " + 
+        String postQstr = "select from Post where plan.topic in ? and type = ? order by createTime desc skip " + 
                            (page - 1) * size +
                            " limit " + size;
         OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
@@ -244,7 +244,7 @@ public class PostDaoImpl implements PostDao {
     public long getPostsCountByPlanId(String planId) {
         long result = 0;
 
-        String sql = "select count(*) from post where plan in ?";
+        String sql = "select count(*) from Post where plan in ?";
         OGraphDatabase db = dataSource.getDB();
         try {
             OSQLSynchQuery q = new OSQLSynchQuery(sql);
@@ -273,7 +273,7 @@ public class PostDaoImpl implements PostDao {
     }
 
     public List<Post> getPagedPostsByPlanId(OGraphDatabase db, String planId, int page, int size) {
-        String postQstr = "select from post where plan in ? order by createTime desc skip " +
+        String postQstr = "select from Post where plan in ? order by createTime desc skip " +
                            (page - 1) * size + 
                            " limit " + size;
         OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
@@ -296,7 +296,7 @@ public class PostDaoImpl implements PostDao {
     }
 
     public List<Post> getPostsByPlanId(OGraphDatabase db, String planId) {
-        String postQstr = "select from post where plan in ?";
+        String postQstr = "select from Post where plan in ?";
         OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
         List<ODocument> postsDoc = db.command(q).execute(OrientIdentityUtil.decode(planId));
         List<Post> posts = PostConverter.buildPosts(postsDoc);
@@ -308,7 +308,7 @@ public class PostDaoImpl implements PostDao {
     public long getPostsCountByUserId(String userId) {
         long result = 0;
 
-        String sql = "select count(*) from post where user in ?";
+        String sql = "select count(*) from Post where user in ?";
         OGraphDatabase db = dataSource.getDB();
         try {
             OSQLSynchQuery q = new OSQLSynchQuery(sql);
@@ -339,7 +339,7 @@ public class PostDaoImpl implements PostDao {
     }
 
     public List<Post> getPagedPostsByUserId(OGraphDatabase db, String userId, int page, int size) {
-        String postQstr = "select from post where user in ? order by createTime desc skip " +
+        String postQstr = "select from Post where user in ? order by createTime desc skip " +
                            (page - 1) * size +
                            " limit " + size;
         OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
@@ -362,7 +362,7 @@ public class PostDaoImpl implements PostDao {
     }
 
     public List<Post> getPostsByUserId(OGraphDatabase db, String userId) {
-        String postQstr = "select from post where user in ?";
+        String postQstr = "select from Post where user in ?";
         OSQLSynchQuery q = new OSQLSynchQuery(postQstr);
         List<ODocument> postsDoc = db.command(q).execute(OrientIdentityUtil.decode(userId));
         List<Post> posts = PostConverter.buildPosts(postsDoc);

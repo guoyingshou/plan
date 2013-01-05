@@ -50,7 +50,7 @@ public class PlanDaoImpl implements PlanDao {
             String ridPlan = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(plan.getUser().getId());
 
-            String sql = "create edge Publish from " + ridUser + " to " + ridPlan + " set label = 'plan', createTime = sysdate()";
+            String sql = "create edge EdgeHost from " + ridUser + " to " + ridPlan + " set label = 'plan', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute(ridUser, ridPlan);
 
@@ -98,7 +98,7 @@ public class PlanDaoImpl implements PlanDao {
     }
 
     public List<Plan> getPlans(String topicId) {
-        StringBuilder plansByTopicId = new StringBuilder("select from plan where topic = ");
+        StringBuilder plansByTopicId = new StringBuilder("select from VertexPlan where topic = ");
 
         List<Plan> plans = new ArrayList();
 
@@ -130,7 +130,7 @@ public class PlanDaoImpl implements PlanDao {
         String ridUser = OrientIdentityUtil.decode(userId);
         String ridPlan = OrientIdentityUtil.decode(planId);
 
-        String sql = "create edge member from " + ridUser + " to " + ridPlan + " set label='member', createTime=sysdate()";
+        String sql = "create edge EdgeJoin from " + ridUser + " to " + ridPlan + " set label='member', createTime=sysdate()";
         String sqlUpdate = "update " + ridPlan + " increment count = 1";
 
         OGraphDatabase db = dataSource.getDB();

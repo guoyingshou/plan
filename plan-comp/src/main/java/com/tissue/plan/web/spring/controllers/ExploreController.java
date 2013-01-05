@@ -97,8 +97,8 @@ public class ExploreController {
 
     @RequestMapping("/exploreTimeline")
     public String exploreTimeline(Map model) {
-        List<Event> events = eventService.getLatestEvents(25);
-        model.put("events", events);
+        //List<Event> events = eventService.getLatestEvents(25);
+        //model.put("events", events);
         return "exploreTimeline";
     }
 

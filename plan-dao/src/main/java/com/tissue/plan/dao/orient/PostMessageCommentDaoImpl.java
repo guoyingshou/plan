@@ -41,7 +41,7 @@ public class PostMessageCommentDaoImpl implements PostMessageCommentDao {
             String ridComment = commentDoc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(comment.getUser().getId());
 
-            String sql = "create edge Publish from " + ridUser + " to " + ridComment + " set label = 'postMessageComment', createTime = sysdate()";
+            String sql = "create edge EdgePublish from " + ridUser + " to " + ridComment + " set label = 'postMessageComment', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute(ridUser, ridComment);
 
@@ -81,6 +81,5 @@ public class PostMessageCommentDaoImpl implements PostMessageCommentDao {
 
         return comment;
     }
-
 
 }
