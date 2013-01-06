@@ -44,7 +44,7 @@ public class AnswerDaoImpl implements AnswerDao {
             String ridAnswer = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(answer.getUser().getId());
 
-            String sql = "create edge EdgePublish from " + ridUser + " to " + ridAnswer + " set label = 'answer', createTime = sysdate()";
+            String sql = "create edge EdgePublish from " + ridUser + " to " + ridAnswer + " set label = 'publish', target = 'answer', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute(ridUser, ridAnswer);
 

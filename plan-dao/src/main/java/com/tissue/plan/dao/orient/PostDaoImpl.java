@@ -46,7 +46,14 @@ public class PostDaoImpl implements PostDao {
             String ridPost = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(post.getUser().getId());
 
-            String sql = "create edge EdgePublish from " + ridUser + " to " + ridPost + " set label = 'post', createTime = sysdate()";
+            String sql = "create edge EdgePublish from " + 
+                          ridUser + 
+                          " to " + 
+                          ridPost + 
+                          " set label = 'post', target = '" + 
+                          post.getType() + 
+                          "', createTime = sysdate()";
+
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute(ridUser, ridPost);
 

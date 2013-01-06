@@ -57,10 +57,6 @@ public class PostReadController {
     @RequestMapping(value="/posts/{postId}")
     public String getPost(@PathVariable("postId") String postId, @ModelAttribute("post") Post post, Map model, Locale locale) {
 
-        String lang = locale.toLanguageTag();
-        if(lang != null) 
-            model.put("lang", lang);
-
         if("question".equals(post.getType())) {
             return "questionDetail";
         }

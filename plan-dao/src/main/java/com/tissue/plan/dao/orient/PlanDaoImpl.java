@@ -50,11 +50,9 @@ public class PlanDaoImpl implements PlanDao {
             String ridPlan = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(plan.getUser().getId());
 
-            String sql = "create edge EdgeHost from " + ridUser + " to " + ridPlan + " set label = 'plan', createTime = sysdate()";
+            String sql = "create edge EdgeHost from " + ridUser + " to " + ridPlan + " set label = 'host', target = 'plan', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute(ridUser, ridPlan);
-
-            //plan = PlanConverter.buildPlan(doc);
 
             String planId = OrientIdentityUtil.encode(ridPlan);
             plan.setId(planId);
@@ -98,7 +96,7 @@ public class PlanDaoImpl implements PlanDao {
     }
 
     public List<Plan> getPlans(String topicId) {
-        StringBuilder plansByTopicId = new StringBuilder("select from VertexPlan where topic = ");
+        StringBuilder plansByTopicId = new StringBuilder("select from Plan where topic = ");
 
         List<Plan> plans = new ArrayList();
 
