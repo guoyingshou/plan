@@ -1,6 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.commons.service.EventService;
+//import com.tissue.commons.service.EventService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,15 @@ import java.util.Map;
 @Controller
 public class TestController {
 
+    /**
     @Autowired
     private EventService eventService;
+    */
 
     @RequestMapping(value="/t3")
     public String test3(@RequestParam("tid") String tid, Map model) {
 
-        eventService.test(tid);
+        //eventService.test(tid);
 
         return "t3";
     }

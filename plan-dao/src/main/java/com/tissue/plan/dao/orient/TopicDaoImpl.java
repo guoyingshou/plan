@@ -51,9 +51,9 @@ public class TopicDaoImpl implements TopicDao {
             String ridTopic = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(topic.getUser().getId());
 
-            String sql = "create edge EdgeCreate from " + ridUser + " to " + ridTopic + " set label = 'create', target = 'topic', createTime = sysdate()";
+            String sql = "create edge EdgeCreate from " + ridUser + " to " + ridTopic + " set label = 'create', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
-            db.command(cmd).execute(ridUser, ridTopic);
+            db.command(cmd).execute();
 
             String topicId = OrientIdentityUtil.encode(ridTopic);
             topic.setId(topicId);

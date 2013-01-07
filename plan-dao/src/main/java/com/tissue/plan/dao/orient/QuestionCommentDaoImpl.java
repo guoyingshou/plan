@@ -41,12 +41,17 @@ public class QuestionCommentDaoImpl implements QuestionCommentDao {
             String ridComment = commentDoc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(comment.getUser().getId());
 
-            String sql = "create edge EdgePublish from " + ridUser + " to " + ridComment + " set label = 'publish', target = 'questionComment', createTime = sysdate()";
+            String sql = "create edge EdgeQuestionComment from " + ridUser + " to " + ridComment + " set label = 'questionComment', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
-            db.command(cmd).execute(ridUser, ridComment);
+            db.command(cmd).execute();
 
-            //update question adding this comment
-            String record = OrientIdentityUtil.decode(comment.getQuestion().getId());
+            String ridQuestion = OrientIdentityUtil.decode(comment.getQuestion().getId());
+            String sql2 = "update " + ridQuestion + " add comments = " + ridComment;
+            cmd = new OCommandSQL(sql2);
+            db.command(cmd).execute();
+
+            /**
+
             ORecordId questionRecordId = new ORecordId(record);
             ODocument questionDoc = db.load(questionRecordId);
             Set<ODocument> commentsDoc = questionDoc.field("comments");
@@ -56,9 +61,9 @@ public class QuestionCommentDaoImpl implements QuestionCommentDao {
             commentsDoc.add(commentDoc);
             questionDoc.field("comments", commentsDoc);
             questionDoc.save();
+            */
 
             comment.setId(OrientIdentityUtil.encode(ridComment));
-            //comment = QuestionCommentConverter.buildQuestionCommentWithParent(commentDoc);
         }
         finally {
             db.close();

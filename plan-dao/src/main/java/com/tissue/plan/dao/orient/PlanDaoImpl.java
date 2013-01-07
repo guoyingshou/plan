@@ -4,12 +4,12 @@ import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.converter.PlanConverter;
 
-import com.tissue.domain.social.Event;
+//import com.tissue.domain.social.Event;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Topic;
 import com.tissue.domain.plan.Plan;
 
-import com.tissue.commons.dao.social.EventDao;
+//import com.tissue.commons.dao.social.EventDao;
 import com.tissue.plan.dao.PlanDao;
 
 import java.util.Date;
@@ -37,8 +37,10 @@ public class PlanDaoImpl implements PlanDao {
     @Autowired
     private OrientDataSource dataSource;
 
+    /**
     @Autowired
     private EventDao eventDao;
+    */
 
     public Plan create(Plan plan) {
 
@@ -50,7 +52,7 @@ public class PlanDaoImpl implements PlanDao {
             String ridPlan = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(plan.getUser().getId());
 
-            String sql = "create edge EdgeHost from " + ridUser + " to " + ridPlan + " set label = 'host', target = 'plan', createTime = sysdate()";
+            String sql = "create edge EdgeHost from " + ridUser + " to " + ridPlan + " set label = 'host', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
             db.command(cmd).execute(ridUser, ridPlan);
 

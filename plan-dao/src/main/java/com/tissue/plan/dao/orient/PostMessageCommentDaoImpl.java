@@ -41,24 +41,16 @@ public class PostMessageCommentDaoImpl implements PostMessageCommentDao {
             String ridComment = commentDoc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(comment.getUser().getId());
 
-            String sql = "create edge EdgePublish from " + ridUser + " to " + ridComment + " set label = 'publish', target = 'postMessageComment', createTime = sysdate()";
+            String sql = "create edge EdgePostMessageComment from " + ridUser + " to " + ridComment + " set label = 'postMessageComment', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
-            db.command(cmd).execute(ridUser, ridComment);
+            db.command(cmd).execute();
 
-            //update message adding this comment
-            String record = OrientIdentityUtil.decode(comment.getPostMessage().getId());
-            ORecordId messageRecordId = new ORecordId(record);
-            ODocument messageDoc = db.load(messageRecordId);
-            Set<ODocument> commentsDoc = messageDoc.field("comments");
-            if(commentsDoc == null) {
-                commentsDoc = new HashSet();
-            }
-            commentsDoc.add(commentDoc);
-            messageDoc.field("comments", commentsDoc);
-            messageDoc.save();
+            String ridPostMessage = OrientIdentityUtil.decode(comment.getPostMessage().getId());
+            String sql2 = "update " + ridPostMessage + " add comments = " + ridComment;
+            cmd = new OCommandSQL(sql2);
+            db.command(cmd).execute();
 
             comment.setId(OrientIdentityUtil.encode(ridComment));
-            //comment = PostMessageCommentConverter.buildPostMessageCommentWithParent(commentDoc);
         }
         finally {
             db.close();

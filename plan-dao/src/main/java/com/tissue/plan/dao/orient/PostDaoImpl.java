@@ -4,11 +4,9 @@ import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.converter.PostConverter;
 
-import com.tissue.domain.social.Event;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Post;
 
-import com.tissue.commons.dao.social.EventDao;
 import com.tissue.plan.dao.PostDao;
 
 import java.util.Date;
@@ -34,9 +32,6 @@ public class PostDaoImpl implements PostDao {
     @Autowired
     private OrientDataSource dataSource;
 
-    @Autowired
-    private EventDao eventDao;
-
     public Post create(Post post) {
         OGraphDatabase db = dataSource.getDB();
         try {
@@ -46,16 +41,26 @@ public class PostDaoImpl implements PostDao {
             String ridPost = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(post.getUser().getId());
 
-            String sql = "create edge EdgePublish from " + 
+            String sqlpost = "create edge EdgePost from " + 
                           ridUser + 
                           " to " + 
                           ridPost + 
-                          " set label = 'post', target = '" + 
-                          post.getType() + 
-                          "', createTime = sysdate()";
+                          " set label = 'post', createTime = sysdate()";
 
-            OCommandSQL cmd = new OCommandSQL(sql);
-            db.command(cmd).execute(ridUser, ridPost);
+            String sqlquestion = "create edge EdgeQuestion from " + 
+                          ridUser + 
+                          " to " + 
+                          ridPost + 
+                          " set label = 'question', createTime = sysdate()";
+
+            OCommandSQL cmd = null;
+            if("question".equals(post.getType())) {
+                cmd = new OCommandSQL(sqlquestion);
+            }
+            else {
+                cmd = new OCommandSQL(sqlpost);
+            }
+            db.command(cmd).execute();
 
             String postId = OrientIdentityUtil.encode(ridPost);
             post.setId(postId);

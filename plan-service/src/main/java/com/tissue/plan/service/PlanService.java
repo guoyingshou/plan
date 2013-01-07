@@ -2,12 +2,12 @@ package com.tissue.plan.service;
 
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Plan;
-import com.tissue.domain.social.Event;
+//import com.tissue.domain.social.Event;
 import com.tissue.plan.dao.PlanDao;
 import com.tissue.plan.dao.TopicDao;
 import com.tissue.profile.dao.UserDao;
-import com.tissue.commons.dao.social.EventDao;
-import com.tissue.commons.util.EventFactory;
+//import com.tissue.commons.dao.social.EventDao;
+//import com.tissue.commons.util.EventFactory;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
@@ -26,8 +26,10 @@ public class PlanService {
     @Autowired
     private TopicDao topicDao;
 
+    /**
     @Autowired
     private EventDao eventDao;
+    */
 
     @Autowired
     private UserDao userDao;
@@ -58,10 +60,12 @@ public class PlanService {
     public void addMember(String planId, String userId) {
         planDao.addMember(planId, userId);
 
+        /**
         Plan plan = planDao.getPlan(planId);
         User user = userDao.getUserById(userId);
         Event event = EventFactory.createEvent(plan, user);
         eventDao.addEvent(event);
+        */
     }
 
 }

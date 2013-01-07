@@ -41,21 +41,14 @@ public class AnswerCommentDaoImpl implements AnswerCommentDao {
             String ridComment = commentDoc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(comment.getUser().getId());
 
-            String sql = "create edge EdgePublish from " + ridUser + " to " + ridComment + " set label = 'publish', target = 'answerComment', createTime = sysdate()";
+            String sql = "create edge EdgeAnswerComment from " + ridUser + " to " + ridComment + " set label = 'answerComment', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
-            db.command(cmd).execute(ridUser, ridComment);
+            db.command(cmd).execute();
 
-            //update answer adding this comment
-            String record = OrientIdentityUtil.decode(comment.getAnswer().getId());
-            ORecordId answerRecordId = new ORecordId(record);
-            ODocument answerDoc = db.load(answerRecordId);
-            Set<ODocument> commentsDoc = answerDoc.field("comments");
-            if(commentsDoc == null) {
-                commentsDoc = new HashSet();
-            }
-            commentsDoc.add(commentDoc);
-            answerDoc.field("comments", commentsDoc);
-            answerDoc.save();
+            String ridAnswer = OrientIdentityUtil.decode(comment.getAnswer().getId());
+            String sql2 = "update " + ridAnswer + " add comments = " + ridComment;
+            cmd = new OCommandSQL(sql2);
+            db.command(cmd).execute();
 
             comment.setId(OrientIdentityUtil.encode(ridComment));
         }

@@ -43,20 +43,14 @@ public class PostMessageDaoImpl implements PostMessageDao {
             String ridMessage = doc.getIdentity().toString();
             String ridUser = OrientIdentityUtil.decode(message.getUser().getId());
 
-            String sql = "create edge EdgePublish from " + ridUser + " to " + ridMessage + " set label = 'publish', target = 'postMessage', createTime = sysdate()";
+            String sql = "create edge EdgePostMessage from " + ridUser + " to " + ridMessage + " set label = 'postMessage', createTime = sysdate()";
             OCommandSQL cmd = new OCommandSQL(sql);
-            db.command(cmd).execute(ridUser, ridMessage);
+            db.command(cmd).execute();
 
-            String record = OrientIdentityUtil.decode(message.getPost().getId());
-            ORecordId postRecordId = new ORecordId(record);
-            ODocument postDoc = db.load(postRecordId);
-            Set<ODocument> postMessagesDoc = postDoc.field("messages", Set.class);
-            if(postMessagesDoc == null) {
-                postMessagesDoc = new HashSet();
-            }
-            postMessagesDoc.add(doc);
-            postDoc.field("messages", postMessagesDoc);
-            postDoc.save();
+            String ridPost = OrientIdentityUtil.decode(message.getPost().getId());
+            String sql2 = "update " + ridPost + " add messages = " + ridMessage;
+            cmd = new OCommandSQL(sql2);
+            db.command(cmd).execute();
 
             message.setId(OrientIdentityUtil.encode(ridMessage));
         }
