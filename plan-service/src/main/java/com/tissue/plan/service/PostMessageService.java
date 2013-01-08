@@ -15,23 +15,15 @@ public class PostMessageService {
     @Autowired
     private PostMessageDao postMessageDao;
 
-    /**
-    @Autowired
-    private EventDao eventDao;
-    */
-
     public PostMessage addMessage(PostMessage message) {
-        message = postMessageDao.create(message);
-        /**
-        Event event = EventFactory.createEvent(message);
-        eventDao.addEvent(event);
-        */
-
-        return message;
-        //return message.getId();
+        return postMessageDao.create(message);
     }
 
     public void updatePostMessage(PostMessage message) {
         postMessageDao.update(message);
+    }
+
+    public void deletePostMessage(String messageId) {
+        postMessageDao.delete(messageId);
     }
 }

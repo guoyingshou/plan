@@ -12,4 +12,5 @@ public interface QuestionCommentDao {
 
     void update(QuestionComment comment);
 
+    void delete(String commentId);
 }

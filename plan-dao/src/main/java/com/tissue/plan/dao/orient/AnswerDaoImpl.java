@@ -64,15 +64,32 @@ public class AnswerDaoImpl implements AnswerDao {
     }
 
     public void update(Answer answer) {
+        String ridAnswer = OrientIdentityUtil.decode(answer.getId());
+        String sql = "update " + ridAnswer + " set content = '" + answer.getContent() + "'";
+
         OGraphDatabase db = dataSource.getDB();
         try {
-            ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(answer.getId())));
-            doc.field("content", answer.getContent());
-            doc.save();
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
         }
         finally {
             db.close();
         }
     }
+
+    public void delete(String answerId) {
+        String ridAnswer = OrientIdentityUtil.decode(answerId);
+        String sql = "update " + ridAnswer + " set status = 'deleted'";
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
+        }
+        finally {
+            db.close();
+        }
+    }
+
 
 }

@@ -11,4 +11,6 @@ public interface AnswerCommentDao {
     AnswerComment create(AnswerComment comment);
 
     void update(AnswerComment comment);
+
+    void delete(String commentId);
 }

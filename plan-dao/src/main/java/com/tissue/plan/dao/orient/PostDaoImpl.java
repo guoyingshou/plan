@@ -75,13 +75,14 @@ public class PostDaoImpl implements PostDao {
     }
 
     public Post update(Post post) {
+        String ridPost = OrientIdentityUtil.decode(post.getId());
+        String sql = "update " + ridPost + " set title = '" + post.getTitle() + "', content = '" + post.getContent() + "'";
+
         OGraphDatabase db = dataSource.getDB();
         try {
-            ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(post.getId())));
-            doc.field("title", post.getTitle());
-            doc.field("content", post.getContent());
-            doc.save();
-            post = PostConverter.buildPost(doc);
+
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
         }
         catch(Exception exc) {
             exc.printStackTrace();

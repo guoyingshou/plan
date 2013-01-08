@@ -10,5 +10,6 @@ public interface PostMessageDao {
      */
     PostMessage create(PostMessage message);
     void update(PostMessage message);
+    void delete(String messageId);
 
 }

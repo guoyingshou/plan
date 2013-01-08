@@ -73,8 +73,18 @@ public class TopicDaoImpl implements TopicDao {
      * Update a topic.
      */
     public void update(Topic topic) {
+        /**
+        String ridTopic = OrientIdentityUtil.decode(topic.getId());
+        String sql = "update " + ridTopic + " set content = " + topic.getContent() + ", tags = " + topic.getTags();
+        */
+
         OGraphDatabase db = dataSource.getDB();
         try {
+            /**
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
+            */
+
             ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(topic.getId())));
             doc.field("content", topic.getContent());
             doc.field("tags", topic.getTags());

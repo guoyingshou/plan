@@ -61,11 +61,28 @@ public class AnswerCommentDaoImpl implements AnswerCommentDao {
 
     public void update(AnswerComment comment) {
 
+        String ridComment = OrientIdentityUtil.decode(comment.getId());
+        String sql = "update " + ridComment + " set content = '" + comment.getContent() + "'";
+
         OGraphDatabase db = dataSource.getDB();
         try {
-            ODocument commentDoc = db.load(new ORecordId(OrientIdentityUtil.decode(comment.getId())));
-            commentDoc.field("content", comment.getContent());
-            commentDoc.save();
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
+        }
+        finally {
+            db.close();
+        }
+    }
+
+    public void delete(String commentId) {
+
+        String ridComment = OrientIdentityUtil.decode(commentId);
+        String sql = "update " + ridComment + " set status = 'deleted'";
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
         }
         finally {
             db.close();

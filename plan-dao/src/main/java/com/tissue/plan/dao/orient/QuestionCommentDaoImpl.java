@@ -50,19 +50,6 @@ public class QuestionCommentDaoImpl implements QuestionCommentDao {
             cmd = new OCommandSQL(sql2);
             db.command(cmd).execute();
 
-            /**
-
-            ORecordId questionRecordId = new ORecordId(record);
-            ODocument questionDoc = db.load(questionRecordId);
-            Set<ODocument> commentsDoc = questionDoc.field("comments");
-            if(commentsDoc == null) {
-                commentsDoc = new HashSet();
-            }
-            commentsDoc.add(commentDoc);
-            questionDoc.field("comments", commentsDoc);
-            questionDoc.save();
-            */
-
             comment.setId(OrientIdentityUtil.encode(ridComment));
         }
         finally {
@@ -73,16 +60,31 @@ public class QuestionCommentDaoImpl implements QuestionCommentDao {
     }
 
     public void update(QuestionComment comment) {
+        String ridComment = OrientIdentityUtil.decode(comment.getId());
+        String sql = "update " + ridComment + " set content = '" + comment.getContent() + "'"; 
+
         OGraphDatabase db = dataSource.getDB();
         try {
-            ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(comment.getId())));
-            doc.field("content", comment.getContent());
-            doc.save();
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
         }
         finally {
             db.close();
         }
     }
 
+    public void delete(String commentId) {
+        String ridComment = OrientIdentityUtil.decode(commentId);
+        String sql = "update " + ridComment + " set status = 'deleted'";
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
+        }
+        finally {
+            db.close();
+        }
+    }
 
 }

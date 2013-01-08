@@ -11,4 +11,7 @@ public interface AnswerDao {
     Answer create(Answer answer);
 
     void update(Answer answer);
+
+    void delete(String answerId);
+
 }

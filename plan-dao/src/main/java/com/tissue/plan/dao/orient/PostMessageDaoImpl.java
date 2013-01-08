@@ -61,15 +61,34 @@ public class PostMessageDaoImpl implements PostMessageDao {
     }
 
     public void update(PostMessage message) {
+
+        String ridMessage = OrientIdentityUtil.decode(message.getId());
+        String sql = "update " + ridMessage + " set content = '" + message.getContent() + "'";
+
         OGraphDatabase db = dataSource.getDB();
         try {
-            ODocument doc = db.load(new ORecordId(OrientIdentityUtil.decode(message.getId())));
-            doc.field("content", message.getContent());
-            doc.save();
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
         }
         finally {
             db.close();
         }
+    }
+
+    public void delete(String messageId) {
+
+        String ridMessage = OrientIdentityUtil.decode(messageId);
+        String sql = "update " + ridMessage + " set status = 'deleted'";
+
+        OGraphDatabase db = dataSource.getDB();
+        try {
+            OCommandSQL cmd = new OCommandSQL(sql);
+            db.command(cmd).execute();
+        }
+        finally {
+            db.close();
+        }
+ 
     }
 
 }
