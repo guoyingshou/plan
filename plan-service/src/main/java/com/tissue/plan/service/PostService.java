@@ -1,13 +1,10 @@
 package com.tissue.plan.service;
 
-//import com.tissue.domain.social.Event;
 import com.tissue.domain.profile.User;
 import com.tissue.domain.plan.Post;
 import com.tissue.domain.plan.PostMessage;
 import com.tissue.plan.dao.PostDao;
 import com.tissue.plan.dao.PostMessageDao;
-//import com.tissue.commons.dao.social.EventDao;
-//import com.tissue.commons.util.EventFactory;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,26 +24,13 @@ public class PostService {
     private PostMessageDao postMessageDao;
 
     /**
-    @Autowired
-    private EventDao eventDao;
-    */
-
-    /**
      * Save a post.
      * 
      * @param post
      * @return the newly added post
      */
     public Post addPost(Post post) {
-        post = postDao.create(post);
-
-        /**
-        //generate event
-        Event event = EventFactory.createEvent(post);
-        eventDao.addEvent(event);
-        */
-
-        return post;
+        return postDao.create(post);
     }
 
     public Post updatePost(Post post) {

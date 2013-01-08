@@ -74,29 +74,6 @@ public class PostWriteController {
     @RequestMapping(value="/plans/{planId}/posts", method=POST)
     public String addPost(@PathVariable("planId") String planId, PostForm form, Map model) {
 
-        if("concept".equals(form.getType())) {
-            String id = addConcept(planId, form);
-            return "redirect:/posts/" + id;
-        }
-
-        if("note".equals(form.getType())) {
-            String id = addNote(planId, form);
-            return "redirect:/posts/" + id;
-        }
-
-        if("tutorial".equals(form.getType())) {
-            String id = addTutorial(planId, form);
-            return "redirect:/posts/" + id;
-        }
-
-        if("question".equals(form.getType())) {
-            String id = addQuestion(planId, form);
-            return "redirect:/posts/" + id;
-        }
-
-        return "error";
-
-        /**
         Post post = new Post();
         post.setTitle(form.getTitle());
         post.setContent(form.getContent());
@@ -114,95 +91,53 @@ public class PostWriteController {
         post.setPlan(plan);
         post.setUser(user);
 
-        post = postService.addPost(post);
 
-        return "redirect:/posts/" + post.getId();
-        */
+        if("concept".equals(form.getType())) {
+            String id = addConcept(post);
+            return "redirect:/posts/" + id;
+        }
+
+        if("note".equals(form.getType())) {
+            String id = addNote(post);
+            return "redirect:/posts/" + id;
+        }
+
+        if("tutorial".equals(form.getType())) {
+            String id = addTutorial(post);
+            return "redirect:/posts/" + id;
+        }
+
+        if("question".equals(form.getType())) {
+            String id = addQuestion(post);
+            return "redirect:/posts/" + id;
+        }
+
+        return "error";
+
     }
 
-    private String addConcept(String planId, PostForm form) {
-        Concept concept = new Concept();
-        concept.setTitle(form.getTitle());
-        concept.setContent(form.getContent());
-        concept.setType(form.getType());
-
-        concept.setCreateTime(new Date());
-
-        Plan plan = new Plan();
-        plan.setId(planId);
-        concept.setPlan(plan);
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-        concept.setUser(user);
-
+    private String addConcept(Post post) {
+        Concept concept = new Concept(post);
         concept = conceptService.addConcept(concept);
         return concept.getId();
     }
 
-    private String addNote(String planId, PostForm form) {
-        Note note = new Note();
-        note.setTitle(form.getTitle());
-        note.setContent(form.getContent());
-        note.setType(form.getType());
-
-        note.setCreateTime(new Date());
-
-        Plan plan = new Plan();
-        plan.setId(planId);
-        note.setPlan(plan);
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-        note.setUser(user);
-
+    private String addNote(Post post) {
+        Note note = new Note(post);
         note = noteService.addNote(note);
         return note.getId();
     }
 
-    private String addTutorial(String planId, PostForm form) {
-        Tutorial tutorial = new Tutorial();
-        tutorial.setTitle(form.getTitle());
-        tutorial.setContent(form.getContent());
-        tutorial.setType(form.getType());
-
-        tutorial.setCreateTime(new Date());
-
-        Plan plan = new Plan();
-        plan.setId(planId);
-        tutorial.setPlan(plan);
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-        tutorial.setUser(user);
-
+    private String addTutorial(Post post) {
+        Tutorial tutorial = new Tutorial(post);
         tutorial = tutorialService.addTutorial(tutorial);
         return tutorial.getId();
     }
 
-    private String addQuestion(String planId, PostForm form) {
-        Question question = new Question();
-        question.setTitle(form.getTitle());
-        question.setContent(form.getContent());
-        question.setType(form.getType());
-
-        question.setCreateTime(new Date());
-
-        Plan plan = new Plan();
-        plan.setId(planId);
-        question.setPlan(plan);
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-        question.setUser(user);
-
+    private String addQuestion(Post post) {
+        Question question = new Question(post);
         question = questionService.addQuestion(question);
         return question.getId();
     }
-
 
 }
