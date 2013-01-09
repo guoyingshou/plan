@@ -1,14 +1,12 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Post;
+import com.tissue.core.plan.PostMessage;
+import com.tissue.core.plan.PostMessageComment;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.domain.profile.User;
-
 import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.web.model.MessageForm;
-
-import com.tissue.domain.plan.Post;
-import com.tissue.domain.plan.PostMessage;
-import com.tissue.domain.plan.PostMessageComment;
 import com.tissue.plan.service.PostMessageCommentService;
 
 import org.springframework.stereotype.Controller;

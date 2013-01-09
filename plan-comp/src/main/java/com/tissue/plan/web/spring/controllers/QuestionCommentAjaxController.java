@@ -1,10 +1,9 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Post;
+import com.tissue.core.plan.QuestionComment;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.domain.profile.User;
-
-import com.tissue.domain.plan.Post;
-import com.tissue.domain.plan.QuestionComment;
 import com.tissue.plan.service.QuestionCommentService;
 
 import org.springframework.stereotype.Controller;

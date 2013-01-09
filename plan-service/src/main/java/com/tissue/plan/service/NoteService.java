@@ -1,8 +1,8 @@
 package com.tissue.plan.service;
 
-import com.tissue.domain.profile.User;
-import com.tissue.domain.plan.Note;
-import com.tissue.plan.dao.NoteDao;
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Note;
+import com.tissue.core.plan.dao.NoteDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

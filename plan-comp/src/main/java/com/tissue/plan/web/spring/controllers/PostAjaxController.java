@@ -1,9 +1,9 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Post;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.domain.profile.User;
 import com.tissue.plan.web.model.PostForm;
-import com.tissue.domain.plan.Post;
 import com.tissue.plan.service.PostService;
 
 import org.springframework.stereotype.Controller;

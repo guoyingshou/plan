@@ -1,6 +1,6 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.Post;
+import com.tissue.core.plan.Post;
 import java.util.List;
 
 public interface PostDao {

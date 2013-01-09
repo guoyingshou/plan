@@ -1,7 +1,7 @@
 package com.tissue.plan.service;
 
-import com.tissue.domain.plan.PostMessageComment;
-import com.tissue.plan.dao.PostMessageCommentDao;
+import com.tissue.core.plan.PostMessageComment;
+import com.tissue.core.plan.dao.PostMessageCommentDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

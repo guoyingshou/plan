@@ -1,30 +1,11 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Plan;
+import com.tissue.core.plan.Post;
+import com.tissue.core.plan.Answer;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.domain.profile.User;
-
-/**
-import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.web.model.MessageForm;
-*/
-
-import com.tissue.domain.plan.Plan;
-import com.tissue.domain.plan.Post;
-/**
-import com.tissue.domain.plan.PostMessage;
-import com.tissue.domain.plan.PostMessageComment;
-import com.tissue.domain.plan.QuestionComment;
-*/
-import com.tissue.domain.plan.Answer;
-/**
-import com.tissue.domain.plan.AnswerComment;
-import com.tissue.plan.service.PostService;
-import com.tissue.plan.service.PostMessageService;
-import com.tissue.plan.service.PostMessageCommentService;
-import com.tissue.plan.service.QuestionCommentService;
-*/
 import com.tissue.plan.service.AnswerService;
-//import com.tissue.plan.service.AnswerCommentService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;

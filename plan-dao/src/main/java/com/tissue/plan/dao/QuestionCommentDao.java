@@ -1,6 +1,6 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.QuestionComment;
+import com.tissue.core.plan.QuestionComment;
 import java.util.List;
 
 public interface QuestionCommentDao {

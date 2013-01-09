@@ -1,7 +1,5 @@
 package com.tissue.plan.web.spring.controllers;
 
-//import com.tissue.commons.service.EventService;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

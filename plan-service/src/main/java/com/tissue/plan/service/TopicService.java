@@ -1,13 +1,10 @@
 package com.tissue.plan.service;
 
-//import com.tissue.domain.social.Event;
-import com.tissue.domain.profile.User;
-import com.tissue.domain.plan.Topic;
-import com.tissue.domain.plan.Plan;
-import com.tissue.plan.dao.TopicDao;
-import com.tissue.plan.dao.PlanDao;
-//import com.tissue.commons.dao.social.EventDao;
-//import com.tissue.commons.util.EventFactory;
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Topic;
+import com.tissue.core.plan.Plan;
+import com.tissue.core.plan.dao.TopicDao;
+import com.tissue.core.plan.dao.PlanDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

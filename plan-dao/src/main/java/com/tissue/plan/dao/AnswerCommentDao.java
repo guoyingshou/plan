@@ -1,7 +1,7 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.Answer;
-import com.tissue.domain.plan.AnswerComment;
+import com.tissue.core.plan.Answer;
+import com.tissue.core.plan.AnswerComment;
 
 public interface AnswerCommentDao {
 

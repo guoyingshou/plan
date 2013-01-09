@@ -1,6 +1,6 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.Note;
+import com.tissue.core.plan.Note;
 import java.util.List;
 
 public interface NoteDao {

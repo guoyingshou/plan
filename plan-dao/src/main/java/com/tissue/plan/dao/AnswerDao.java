@@ -1,6 +1,6 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.Answer;
+import com.tissue.core.plan.Answer;
 import java.util.List;
 
 public interface AnswerDao {

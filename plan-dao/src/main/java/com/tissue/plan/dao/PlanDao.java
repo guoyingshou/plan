@@ -1,6 +1,6 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.Plan;
+import com.tissue.core.plan.Plan;
 import java.util.List;
 
 public interface PlanDao {

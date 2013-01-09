@@ -1,19 +1,17 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Plan;
+import com.tissue.core.plan.Post;
+import com.tissue.core.plan.Concept;
+import com.tissue.core.plan.Note;
+import com.tissue.core.plan.Tutorial;
+import com.tissue.core.plan.Question;
+import com.tissue.core.plan.PostMessage;
+import com.tissue.core.plan.PostMessageComment;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.domain.profile.User;
-
 import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.web.model.MessageForm;
-
-import com.tissue.domain.plan.Plan;
-import com.tissue.domain.plan.Post;
-import com.tissue.domain.plan.Concept;
-import com.tissue.domain.plan.Note;
-import com.tissue.domain.plan.Tutorial;
-import com.tissue.domain.plan.Question;
-import com.tissue.domain.plan.PostMessage;
-import com.tissue.domain.plan.PostMessageComment;
 import com.tissue.plan.service.PostService;
 import com.tissue.plan.service.ConceptService;
 import com.tissue.plan.service.NoteService;

@@ -3,10 +3,8 @@ package com.tissue.plan.dao.orient;
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.converter.PostConverter;
-
-import com.tissue.domain.profile.User;
-import com.tissue.domain.plan.Concept;
-
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Concept;
 import com.tissue.plan.dao.ConceptDao;
 
 import java.util.Date;

@@ -1,10 +1,8 @@
 package com.tissue.plan.service;
 
-import com.tissue.domain.profile.User;
-import com.tissue.domain.plan.Concept;
-//import com.tissue.domain.plan.PostMessage;
-import com.tissue.plan.dao.ConceptDao;
-//import com.tissue.plan.dao.PostMessageDao;
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Concept;
+import com.tissue.core.plan.dao.ConceptDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

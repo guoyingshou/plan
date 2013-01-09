@@ -1,12 +1,10 @@
 package com.tissue.plan.web.spring.controllers;
 
-//import com.tissue.domain.social.Event;
-import com.tissue.domain.plan.Topic;
-import com.tissue.plan.service.TopicService;
-//import com.tissue.commons.service.EventService;
+import com.tissue.core.plan.Topic;
 import com.tissue.commons.security.core.userdetails.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
+import com.tissue.plan.service.TopicService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

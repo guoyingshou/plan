@@ -1,6 +1,6 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.Concept;
+import com.tissue.core.plan.Concept;
 import java.util.List;
 
 public interface ConceptDao {

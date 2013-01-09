@@ -1,6 +1,6 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.PostMessage;
+import com.tissue.core.plan.PostMessage;
 import java.util.List;
 
 public interface PostMessageDao {

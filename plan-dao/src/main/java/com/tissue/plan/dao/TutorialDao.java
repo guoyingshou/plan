@@ -1,6 +1,6 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.Tutorial;
+import com.tissue.core.plan.Tutorial;
 import java.util.List;
 
 public interface TutorialDao {

@@ -1,8 +1,8 @@
 package com.tissue.plan.service;
 
-import com.tissue.domain.profile.User;
-import com.tissue.domain.plan.Question;
-import com.tissue.plan.dao.QuestionDao;
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Question;
+import com.tissue.core.plan.dao.QuestionDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

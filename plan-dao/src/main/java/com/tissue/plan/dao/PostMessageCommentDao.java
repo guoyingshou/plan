@@ -1,7 +1,7 @@
 package com.tissue.plan.dao;
 
-import com.tissue.domain.plan.PostMessage;
-import com.tissue.domain.plan.PostMessageComment;
+import com.tissue.core.plan.PostMessage;
+import com.tissue.core.plan.PostMessageComment;
 
 public interface PostMessageCommentDao {
 

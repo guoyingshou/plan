@@ -3,11 +3,9 @@ package com.tissue.plan.dao.orient;
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.converter.PostMessageConverter;
-
-import com.tissue.domain.profile.User;
-import com.tissue.domain.plan.Post;
-import com.tissue.domain.plan.PostMessage;
-
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Post;
+import com.tissue.core.plan.PostMessage;
 import com.tissue.plan.dao.PostMessageDao;
 
 import java.util.Date;

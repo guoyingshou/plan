@@ -3,13 +3,9 @@ package com.tissue.plan.dao.orient;
 import com.tissue.core.util.OrientDataSource;
 import com.tissue.core.util.OrientIdentityUtil;
 import com.tissue.core.converter.PlanConverter;
-
-//import com.tissue.domain.social.Event;
-import com.tissue.domain.profile.User;
-import com.tissue.domain.plan.Topic;
-import com.tissue.domain.plan.Plan;
-
-//import com.tissue.commons.dao.social.EventDao;
+import com.tissue.core.profile.User;
+import com.tissue.core.plan.Topic;
+import com.tissue.core.plan.Plan;
 import com.tissue.plan.dao.PlanDao;
 
 import java.util.Date;
