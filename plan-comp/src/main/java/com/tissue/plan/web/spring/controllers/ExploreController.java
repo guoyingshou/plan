@@ -1,7 +1,7 @@
 package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.plan.Topic;
-import com.tissue.commons.security.core.userdetails.UserDetailsImpl;
+import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.plan.service.TopicService;
