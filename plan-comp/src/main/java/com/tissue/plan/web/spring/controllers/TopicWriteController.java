@@ -29,7 +29,6 @@ public class TopicWriteController {
 
     /**
      * Show topic create form.
-     */
     @RequestMapping(value="/topics")
     public String showTopicForm(Locale locale, Map model) {
 
@@ -37,9 +36,10 @@ public class TopicWriteController {
         if(lang != null) 
             model.put("lang", lang);
 
-        model.put("user", SecurityUtil.getUser());
+        model.put("user", SecurityUtil.getViewer());
         return "topicForm";
     }
+     */
 
     /**
      * Add new topic.
@@ -52,7 +52,7 @@ public class TopicWriteController {
         topic.setContent(form.getContent());
 
         User user = new User();
-        user.setId(SecurityUtil.getUserId());
+        user.setId(SecurityUtil.getViewerId());
         topic.setUser(user);
 
         Date date = new Date();
@@ -67,32 +67,5 @@ public class TopicWriteController {
         
         return "redirect:/topics/" + topic.getId() + "/posts";
     }
-
-    /**
-     * Update topic.
-    @RequestMapping(value="/topics/{topicId}", method=POST)
-    public String updateTopic(@PathVariable("topicId") String topicId, TopicForm form, Map model) throws Exception {
-
-        Topic topic = new Topic();
-        topic.setId(topicId);
-        topic.setContent(form.getContent());
-
-        User user = new User();
-        user.setId(SecurityUtil.getUserId());
-        topic.setUser(user);
-
-        Date date = new Date();
-        topic.setUpdateTime(date);
-
-        String tags = form.getTags();
-        String[] splits = tags.split("\\s");
-        topic.setTags(new HashSet(Arrays.asList(splits)));
-
-        topicService.updateTopic(topic);
-        
-        return "redirect:/plan/topics/" + topicId;
-    }
-     */
-
 
 }

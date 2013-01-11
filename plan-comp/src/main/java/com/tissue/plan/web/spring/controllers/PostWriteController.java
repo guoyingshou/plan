@@ -83,7 +83,7 @@ public class PostWriteController {
         plan.setId(planId);
 
         User user = new User();
-        user.setId(SecurityUtil.getUserId());
+        user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
 
         post.setPlan(plan);

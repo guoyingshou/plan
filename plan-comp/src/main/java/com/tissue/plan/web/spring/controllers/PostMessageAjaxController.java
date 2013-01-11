@@ -36,7 +36,7 @@ public class PostMessageAjaxController {
         message.setCreateTime(new Date());
 
         User user = new User();
-        user.setId(SecurityUtil.getUserId());
+        user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
         message.setUser(user);
 

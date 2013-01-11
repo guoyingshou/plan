@@ -37,7 +37,7 @@ public class AnswerAjaxController {
         answer.setCreateTime(new Date());
 
         User user = new User();
-        user.setId(SecurityUtil.getUserId());
+        user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
         answer.setUser(user);
 

@@ -39,7 +39,7 @@ public class PostReadController {
 
     @ModelAttribute("viewer")
     public UserDetailsImpl prefetchViewer() {
-        return SecurityUtil.getUser();
+        return SecurityUtil.getViewer();
     }
  
     @ModelAttribute("post")

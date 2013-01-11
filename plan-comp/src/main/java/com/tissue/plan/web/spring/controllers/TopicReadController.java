@@ -51,7 +51,7 @@ public class TopicReadController {
 
     @ModelAttribute("viewer")
     public UserDetailsImpl prefetchViewer() {
-        return SecurityUtil.getUser();
+        return SecurityUtil.getViewer();
     }
 
     /**

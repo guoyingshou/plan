@@ -35,7 +35,7 @@ public class QuestionCommentAjaxController {
         comment.setCreateTime(new Date());
 
         User user = new User();
-        user.setId(SecurityUtil.getUserId());
+        user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
         comment.setUser(user);
 

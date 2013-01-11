@@ -94,8 +94,10 @@ public class PostService {
         return postDao.getPagedPostsByUserId(userId, page, size);
     }
 
+    /**
     public List<Post> getPostsByUserId(String userId) {
         return postDao.getPostsByUserId(userId);
     }
+    */
 
 }

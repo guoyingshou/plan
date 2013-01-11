@@ -40,7 +40,7 @@ public class TopicAjaxController {
         topic.setContent(form.getContent());
 
         User user = new User();
-        user.setId(SecurityUtil.getUserId());
+        user.setId(SecurityUtil.getViewerId());
         topic.setUser(user);
 
         Date date = new Date();

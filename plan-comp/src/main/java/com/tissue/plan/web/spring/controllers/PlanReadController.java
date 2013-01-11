@@ -44,7 +44,7 @@ public class PlanReadController {
 
     @ModelAttribute("viewer")
     public UserDetailsImpl prefetchViewer() {
-        return SecurityUtil.getUser();
+        return SecurityUtil.getViewer();
     }
 
     /**
