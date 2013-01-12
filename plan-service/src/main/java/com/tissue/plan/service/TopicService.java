@@ -1,6 +1,6 @@
 package com.tissue.plan.service;
 
-import com.tissue.core.profile.User;
+import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.dao.TopicDao;

@@ -2,9 +2,9 @@
 <#import "exploreGadgets.ftl" as exploreGadgets />
 <#import "spring.ftl" as spring />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 
-<#assign mystyles=["/tissue/css/explore.css", "/tissue/css/pop.css"] in tissue>
+<#assign mystyles=["/tissue/css/explore.css"] in tissue>
 
 <@tissue.layout "explore">
     <div id="logo">

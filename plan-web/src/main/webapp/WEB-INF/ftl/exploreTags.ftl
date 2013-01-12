@@ -2,8 +2,8 @@
 <#import "tissue.ftl" as tissue />
 <#import "exploreGadgets.ftl" as exploreGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
-<#assign mystyles=["/tissue/css/explore.css", "/tissue/css/pop.css"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
+<#assign mystyles=["/tissue/css/explore.css"] in tissue>
 
 
 <@tissue.layout "topics">

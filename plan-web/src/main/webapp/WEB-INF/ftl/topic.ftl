@@ -4,9 +4,9 @@
 <#import "planGadgets.ftl" as planGadgets />
 <#import "formGadgets.ftl" as formGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/pop.js"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 
-<#assign mystyles=["/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/pop.css"] in tissue>
+<#assign mystyles=["/tissue/css/topic.css", "/tissue/css/plan.css"] in tissue>
 
 <@tissue.layout "topic">
 
