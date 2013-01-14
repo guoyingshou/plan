@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.plan.Topic;
 import com.tissue.core.security.UserDetailsImpl;
+import com.tissue.commons.ViewerSetter;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.plan.service.TopicService;
@@ -27,16 +28,12 @@ import java.util.Date;
 import java.security.Principal;
 
 @Controller
-public class ExploreController {
+public class ExploreController extends ViewerSetter {
 
     @Autowired
     private TopicService topicService;
 
     /**
-    @Autowired
-    private EventService eventService;
-    */
-
     @ModelAttribute("viewer")
     public UserDetailsImpl prefetchViewer() {
         return SecurityUtil.getViewer();
@@ -46,6 +43,7 @@ public class ExploreController {
     public String setupLocale(Locale locale) {
         return locale.toString();
     }
+    */
 
     @RequestMapping("/explore")
     public String explore(Map model) {

@@ -5,6 +5,7 @@ import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
 import com.tissue.core.security.UserDetailsImpl;
+import com.tissue.commons.ViewerSetter;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.plan.web.model.TopicForm;
@@ -31,7 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Controller
-public class TopicReadController {
+public class TopicReadController extends ViewerSetter {
 
     @Autowired
     private TopicService topicService;
@@ -39,19 +40,24 @@ public class TopicReadController {
     @Autowired
     private PostService postService;
 
+    /**
     @ModelAttribute("locale")
     public String setupLocale(Locale locale) {
         return locale.toString();
     }
 
+    @ModelAttribute("viewer")
+    public User prefetchViewer() {
+        if(SecurityUtil.getViewer() == null) {
+            return null;    
+        }
+        return userService.getUserById(SecurityUtil.getViewerId(), true);
+    }
+    */
+ 
     @ModelAttribute("topic")
     public Topic prefetchTopic(@PathVariable("topicId") String topicId) {
         return topicService.getTopic(topicId);
-    }
-
-    @ModelAttribute("viewer")
-    public UserDetailsImpl prefetchViewer() {
-        return SecurityUtil.getViewer();
     }
 
     /**

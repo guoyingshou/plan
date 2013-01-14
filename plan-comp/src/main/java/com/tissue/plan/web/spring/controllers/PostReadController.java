@@ -3,6 +3,7 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Post;
 import com.tissue.core.security.UserDetailsImpl;
+import com.tissue.commons.ViewerSetter;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.service.TopicService;
 import com.tissue.plan.service.PostService;
@@ -24,7 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Controller
-public class PostReadController {
+public class PostReadController extends ViewerSetter {
 
     @Autowired
     protected TopicService topicService;
@@ -32,6 +33,7 @@ public class PostReadController {
     @Autowired
     protected PostService postService;
 
+    /**
     @ModelAttribute("locale")
     public String setupLocale(Locale locale) {
         return locale.toString();
@@ -41,6 +43,7 @@ public class PostReadController {
     public UserDetailsImpl prefetchViewer() {
         return SecurityUtil.getViewer();
     }
+    */
  
     @ModelAttribute("post")
     public Post prefetchPost(@PathVariable("postId") String postId, Map model) {
