@@ -1,10 +1,12 @@
 package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.plan.Topic;
+import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.ViewerSetter;
-import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.security.util.SecurityUtil;
+import com.tissue.commons.social.service.ActivityService;
 import com.tissue.plan.service.TopicService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +35,9 @@ public class ExploreController extends ViewerSetter {
     @Autowired
     private TopicService topicService;
 
-    /**
-    @ModelAttribute("viewer")
-    public UserDetailsImpl prefetchViewer() {
-        return SecurityUtil.getViewer();
-    }
+    @Autowired
+    private ActivityService activityService;
 
-    @ModelAttribute("locale")
-    public String setupLocale(Locale locale) {
-        return locale.toString();
-    }
-    */
 
     @RequestMapping("/explore")
     public String explore(Map model) {
@@ -95,8 +89,8 @@ public class ExploreController extends ViewerSetter {
 
     @RequestMapping("/exploreTimeline")
     public String exploreTimeline(Map model) {
-        //List<Event> events = eventService.getLatestEvents(25);
-        //model.put("events", events);
+        List<Activity> activities = activityService.getActivities(25);
+        model.put("activities", activities);
         return "exploreTimeline";
     }
 

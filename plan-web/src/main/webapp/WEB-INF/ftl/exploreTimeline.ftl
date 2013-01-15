@@ -1,7 +1,7 @@
 <#import "spring.ftl" as spring />
 <#import "tissue.ftl" as tissue />
 <#import "exploreGadgets.ftl" as exploreGadgets />
-<#import "eventGadgets.ftl" as eventGadgets />
+<#import "activityGadgets.ftl" as activityGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 <#assign mystyles=["/tissue/css/explore.css"] in tissue>
@@ -20,7 +20,7 @@
 
         <div id="content">
             <div id="contentInner">
-                <@eventGadgets.showLatestEvents />
+                <@activityGadgets.showActivities />
             </div>
         </div>
     </div>
