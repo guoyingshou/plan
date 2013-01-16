@@ -39,13 +39,7 @@ public class PlanService {
      */
     public Plan addPlan(Plan plan) {
         plan = planDao.create(plan);
-        topicDao.addPlan(plan);
-
-        /**
-        //generate event
-        Event event = EventFactory.createEvent(plan);
-        eventDao.addEvent(event);
-        */
+        //topicDao.addPlan(plan);
 
         return plan;
     }

@@ -52,9 +52,11 @@ public class PostService {
         return postDao.getPagedPostsByTopicId(topicId, page, size);
     }
 
+    /**
     public List<Post> getPostsByTopicId(String topicId) {
         return postDao.getPostsByTopicId(topicId);
     }
+    */
 
     public long getPostsCountByTopicIdAndType(String topicId, String type) {
         return postDao.getPostsCountByTopicIdAndType(topicId, type);
@@ -64,9 +66,11 @@ public class PostService {
         return postDao.getPagedPostsByTopicIdAndType(topicId, type, page, size);
     }
 
+    /**
     public List<Post> getPostsByTopicIdAndType(String topicId, String type) {
         return postDao.getPostsByTopicIdAndType(topicId, type);
     }
+    */
 
     public long getPostsCountByPlanId(String planId) {
         return postDao.getPostsCountByPlanId(planId);
@@ -76,9 +80,11 @@ public class PostService {
         return postDao.getPagedPostsByPlanId(planId, page, size);
     }
 
+    /**
     public List<Post> getPostsByPlanId(String planId) {
         return postDao.getPostsByPlanId(planId);
     }
+    */
 
     public void addMessage(PostMessage message) {
          postMessageDao.create(message);

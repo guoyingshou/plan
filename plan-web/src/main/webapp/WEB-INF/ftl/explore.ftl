@@ -30,6 +30,7 @@
                     </ul>
                 </div>
 
+<#--
                 <div class="feature">
                     <h2><@spring.message "i18n.explore.heading.featuredTopics" /></h2>
                     <ul>
@@ -41,6 +42,8 @@
                         </#list>
                     </ul>
                 </div>
+                -->
+
             </div>
         </div>
     </div>

@@ -23,26 +23,13 @@ public class TopicService {
     private PlanDao planDao;
 
     /**
-    @Autowired
-    private EventDao eventDao;
-    */
-
-    /**
      * Save a topic.
      * The title, content, userId attributes must be not null.
      * @param topic
      * @return the returned topic has id setup
      */
     public Topic addTopic(Topic topic) {
-        topic = topicDao.create(topic);
-
-        /**
-        //generate event
-        Event event = EventFactory.createEvent(topic);
-        eventDao.addEvent(event);
-        */
-
-        return topic;
+        return topicDao.create(topic);
     }
 
     public void updateTopic(Topic topic) {

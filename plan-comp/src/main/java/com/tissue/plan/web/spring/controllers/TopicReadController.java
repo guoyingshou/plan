@@ -40,21 +40,7 @@ public class TopicReadController extends ViewerSetter {
     @Autowired
     private PostService postService;
 
-    /**
-    @ModelAttribute("locale")
-    public String setupLocale(Locale locale) {
-        return locale.toString();
-    }
 
-    @ModelAttribute("viewer")
-    public User prefetchViewer() {
-        if(SecurityUtil.getViewer() == null) {
-            return null;    
-        }
-        return userService.getUserById(SecurityUtil.getViewerId(), true);
-    }
-    */
- 
     @ModelAttribute("topic")
     public Topic prefetchTopic(@PathVariable("topicId") String topicId) {
         return topicService.getTopic(topicId);

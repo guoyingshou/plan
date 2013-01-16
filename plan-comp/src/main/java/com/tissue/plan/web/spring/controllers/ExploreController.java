@@ -43,9 +43,10 @@ public class ExploreController extends ViewerSetter {
     public String explore(Map model) {
 
         List<Topic> trendingTopics = topicService.getTrendingTopics(15);
-        List<Topic> featuredTopics = topicService.getFeaturedTopics(15);
         model.put("trendingTopics", trendingTopics);
-        model.put("featuredTopics", featuredTopics);
+
+        //List<Topic> featuredTopics = topicService.getFeaturedTopics(15);
+        //model.put("featuredTopics", featuredTopics);
 
         return "explore";
     }
