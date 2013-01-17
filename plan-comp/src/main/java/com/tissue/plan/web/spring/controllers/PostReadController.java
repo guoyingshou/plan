@@ -33,18 +33,7 @@ public class PostReadController extends ViewerSetter {
     @Autowired
     protected PostService postService;
 
-    /**
-    @ModelAttribute("locale")
-    public String setupLocale(Locale locale) {
-        return locale.toString();
-    }
 
-    @ModelAttribute("viewer")
-    public UserDetailsImpl prefetchViewer() {
-        return SecurityUtil.getViewer();
-    }
-    */
- 
     @ModelAttribute("post")
     public Post prefetchPost(@PathVariable("postId") String postId, Map model) {
         Post post = postService.getPost(postId);
@@ -65,13 +54,5 @@ public class PostReadController extends ViewerSetter {
         }
         return "postDetail";
     }
-
-    /**
-     * show post edit form.
-    @RequestMapping(value="/posts/{postId}/edit")
-    public String showPostEditForm(@PathVariable("postId") String postId, Map model, Locale locale) {
-        return "postEditForm";
-    }
-     */
 
 }

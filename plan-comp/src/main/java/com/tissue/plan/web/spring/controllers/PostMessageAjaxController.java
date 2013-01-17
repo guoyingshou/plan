@@ -73,11 +73,7 @@ public class PostMessageAjaxController {
     @RequestMapping(value="/messages/{msgId}/delete", method=POST)
     @ResponseBody
     public String deleteMessage(@PathVariable("msgId") String msgId, Map model) {
-
-        System.out.println("delete: " + msgId);
-
         postMessageService.deletePostMessage(msgId);
-
         return "ok";
     }
 

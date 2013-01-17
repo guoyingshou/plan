@@ -19,11 +19,6 @@ public class TutorialService {
     private TutorialDao tutorialDao;
 
     /**
-    @Autowired
-    private PostMessageDao postMessageDao;
-    */
-
-    /**
      * Save a tutorial.
      * 
      * @param tutorial

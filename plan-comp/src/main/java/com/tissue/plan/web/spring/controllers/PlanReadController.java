@@ -33,18 +33,6 @@ public class PlanReadController extends ViewerSetter {
     @Autowired
     private PostService postService;
 
-    /**
-    @ModelAttribute("locale")
-    public String setupLocale(Locale locale) {
-        return locale.toString();
-    }
-
-    @ModelAttribute("viewer")
-    public UserDetailsImpl prefetchViewer() {
-        return SecurityUtil.getViewer();
-    }
-    */
-
     @ModelAttribute("topic")
     public Topic prefetchTopic(@PathVariable("planId") String planId) {
         return topicService.getTopicByPlanId(planId);
@@ -54,9 +42,9 @@ public class PlanReadController extends ViewerSetter {
      * Get paged posts by planId.
      */
     @RequestMapping(value="/plans/{planId}") 
-    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("topic") Topic topic) {
 
-        System.out.println("current plan: " + planId);
+        System.out.println(">>>>current plan: " + planId);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;

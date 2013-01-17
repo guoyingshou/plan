@@ -19,11 +19,6 @@ public class QuestionService {
     private QuestionDao questionDao;
 
     /**
-    @Autowired
-    private PostMessageDao postMessageDao;
-    */
-
-    /**
      * Save a question.
      * 
      * @param question

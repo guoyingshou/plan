@@ -64,7 +64,6 @@ public class PostWriteController {
     @Autowired
     protected PostMessageCommentService postMessageCommentService;
 
-
     /**
      * Add a post to the active plan.
      * The post can be any type.
@@ -88,7 +87,6 @@ public class PostWriteController {
 
         post.setPlan(plan);
         post.setUser(user);
-
 
         if("concept".equals(form.getType())) {
             String id = addConcept(post);

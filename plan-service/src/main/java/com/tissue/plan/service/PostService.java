@@ -28,10 +28,10 @@ public class PostService {
      * 
      * @param post
      * @return the newly added post
-     */
     public Post addPost(Post post) {
         return postDao.create(post);
     }
+     */
 
     public Post updatePost(Post post) {
         return postDao.update(post);
@@ -52,12 +52,6 @@ public class PostService {
         return postDao.getPagedPostsByTopicId(topicId, page, size);
     }
 
-    /**
-    public List<Post> getPostsByTopicId(String topicId) {
-        return postDao.getPostsByTopicId(topicId);
-    }
-    */
-
     public long getPostsCountByTopicIdAndType(String topicId, String type) {
         return postDao.getPostsCountByTopicIdAndType(topicId, type);
     }
@@ -65,12 +59,6 @@ public class PostService {
     public List<Post> getPagedPostsByTopicIdAndType(String topicId, String type, int page, int size) {
         return postDao.getPagedPostsByTopicIdAndType(topicId, type, page, size);
     }
-
-    /**
-    public List<Post> getPostsByTopicIdAndType(String topicId, String type) {
-        return postDao.getPostsByTopicIdAndType(topicId, type);
-    }
-    */
 
     public long getPostsCountByPlanId(String planId) {
         return postDao.getPostsCountByPlanId(planId);
@@ -80,17 +68,9 @@ public class PostService {
         return postDao.getPagedPostsByPlanId(planId, page, size);
     }
 
-    /**
-    public List<Post> getPostsByPlanId(String planId) {
-        return postDao.getPostsByPlanId(planId);
-    }
-    */
-
     public void addMessage(PostMessage message) {
          postMessageDao.create(message);
     }
-
-    //--------- by user
 
     public long getPostsCountByUserId(String userId) {
         return postDao.getPostsCountByUserId(userId);
@@ -99,11 +79,5 @@ public class PostService {
     public List<Post> getPagedPostsByUserId(String userId, int page, int size) {
         return postDao.getPagedPostsByUserId(userId, page, size);
     }
-
-    /**
-    public List<Post> getPostsByUserId(String userId) {
-        return postDao.getPostsByUserId(userId);
-    }
-    */
 
 }

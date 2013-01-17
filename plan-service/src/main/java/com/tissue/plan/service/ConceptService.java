@@ -19,11 +19,6 @@ public class ConceptService {
     private ConceptDao conceptDao;
 
     /**
-    @Autowired
-    private PostMessageDao postMessageDao;
-    */
-
-    /**
      * Save a concept.
      * 
      * @param concept
