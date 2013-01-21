@@ -20,7 +20,7 @@
             <div id="contentInner">
                 <#if tags??>
                 <#list tags as tag>
-                    <span><a href="/group/exploreTags/${tag}">${tag}</a></span>
+                    <span><a href="/group/tags/${tag}">${tag}</a></span>
                 </#list>
                 </#if>
             </div>

@@ -38,20 +38,34 @@ public class TopicReadController extends ViewerSetter {
     private TopicService topicService;
 
     @Autowired
+    private PlanService planService;
+
+    @Autowired
     private PostService postService;
 
 
+    /**
     @ModelAttribute("topic")
     public Topic prefetchTopic(@PathVariable("topicId") String topicId) {
         return topicService.getTopic(topicId);
     }
+    */
 
     /**
      * Show topic.
      */
     @RequestMapping(value="/topics/{topicId}")
     public String getTopic(@PathVariable("topicId") String topicId, Map model) {
-        return "topic";
+
+        /**
+        List<Plan> plans = planService.getPlansByTopicId(topicId);
+        topic.setPlans(plans);
+        */
+
+        Topic topic = topicService.getTopic(topicId);
+        model.put("topic", topic);
+
+        return "topicDetail";
     }
 
     /**
@@ -59,6 +73,9 @@ public class TopicReadController extends ViewerSetter {
      */
     @RequestMapping(value="/topics/{topicId}/posts")
     public String getTopic(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
+
+        Topic topic = topicService.getTopic(topicId);
+        model.put("topic", topic);
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -77,6 +94,9 @@ public class TopicReadController extends ViewerSetter {
      */
     @RequestMapping(value="/topics/{topicId}/{type}/posts")
     public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) throws Exception {
+
+        Topic topic = topicService.getTopic(topicId);
+        model.put("topic", topic);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;

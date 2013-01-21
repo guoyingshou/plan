@@ -34,20 +34,27 @@ public class PostReadController extends ViewerSetter {
     protected PostService postService;
 
 
+    /**
     @ModelAttribute("post")
     public Post prefetchPost(@PathVariable("postId") String postId, Map model) {
         Post post = postService.getPost(postId);
-        String topicId = post.getPlan().getTopic().getId();
-        Topic topic = topicService.getTopic(topicId);
+        Topic topic = postService.getTopicByPostId(postId);
         model.put("topic", topic);
         return post;
     }
+    */
 
     /**
      * Get specific post.
      */
     @RequestMapping(value="/posts/{postId}")
-    public String getPost(@PathVariable("postId") String postId, @ModelAttribute("post") Post post, Map model, Locale locale) {
+    public String getPost(@PathVariable("postId") String postId, Map model, Locale locale) {
+
+        Topic topic = topicService.getTopicByPostId(postId);
+        model.put("topic", topic);
+
+        Post post = postService.getPost(postId);
+        model.put("post", post);
 
         if("question".equals(post.getType())) {
             return "questionDetail";

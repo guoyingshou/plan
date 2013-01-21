@@ -1,8 +1,12 @@
 package com.tissue.plan.service;
 
 import com.tissue.core.social.User;
+import com.tissue.core.plan.Topic;
+import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
+import com.tissue.core.plan.dao.TopicDao;
+import com.tissue.core.plan.dao.PlanDao;
 import com.tissue.core.plan.dao.PostDao;
 import com.tissue.core.plan.dao.PostMessageDao;
 
@@ -16,6 +20,12 @@ import java.util.HashMap;
 
 @Component
 public class PostService {
+
+    @Autowired
+    private TopicDao topicDao;
+
+    @Autowired
+    private PlanDao planDao;
 
     @Autowired
     private PostDao postDao;
@@ -42,7 +52,24 @@ public class PostService {
      */
     public Post getPost(String postId) {
         return postDao.getPost(postId);
+
+        /**
+        Post post = postDao.getPost(postId);
+
+        Topic topic = topicDao.getTopicByPostId(postId);
+        List<Plan> plans = planDao.getPlansByTopicId(topic.getId());
+        topic.setPlans(plans);
+
+        post.getPlan().setTopic(topic);
+        return post;
+        */
     }
+
+    /**
+    public Topic getTopicByPostId(String postId) {
+        return postDao.getTopicByPostId(postId);
+    }
+    */
 
     public long getPostsCountByTopicId(String topicId) {
         return postDao.getPostsCountByTopicId(topicId);

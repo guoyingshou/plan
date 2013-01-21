@@ -28,20 +28,6 @@ public class TopicWriteController {
     private TopicService topicService;
 
     /**
-     * Show topic create form.
-    @RequestMapping(value="/topics")
-    public String showTopicForm(Locale locale, Map model) {
-
-        String lang = locale.toLanguageTag();
-        if(lang != null) 
-            model.put("lang", lang);
-
-        model.put("user", SecurityUtil.getViewer());
-        return "topicForm";
-    }
-     */
-
-    /**
      * Add new topic.
      */
     @RequestMapping(value="/topics", method=POST)

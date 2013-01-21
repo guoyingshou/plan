@@ -20,7 +20,7 @@
             <div id="contentInner">
                 <ul>
                 <#list topics as topic>
-                    <li><a href="/group/topics/${topic.id}">${topic.title}</a> Created By: <a href="/profile/users/${topic.user.id}">${topic.user.displayName}</a></li>
+                    <li><a href="/group/topics/${topic.id}">${topic.title}</a> Created By: <a href="/social/users/${topic.user.id}">${topic.user.displayName}</a></li>
                 </#list>
                 </ul>
                 <@utilGadgets.showPager />

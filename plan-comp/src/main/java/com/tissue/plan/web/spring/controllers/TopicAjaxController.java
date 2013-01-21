@@ -53,12 +53,6 @@ public class TopicAjaxController {
         topicService.updateTopic(topic);
 
         return "ok";
-
-        /**
-        model.put("topic", topic);
-        return "fragments/updateTopic";
-        */
     }
-
 
 }

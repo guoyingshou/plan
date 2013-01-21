@@ -40,18 +40,20 @@ public class ExploreController extends ViewerSetter {
 
 
     @RequestMapping("/explore")
-    public String explore(Map model) {
-
+    public String exploreTrending(Map model) {
         List<Topic> trendingTopics = topicService.getTrendingTopics(15);
         model.put("trendingTopics", trendingTopics);
-
-        //List<Topic> featuredTopics = topicService.getFeaturedTopics(15);
-        //model.put("featuredTopics", featuredTopics);
-
-        return "explore";
+        return "trending";
     }
 
-    @RequestMapping("/exploreTopics")
+    @RequestMapping("/featured")
+    public String exploreFeatured(Map model) {
+        List<Topic> featuredTopics = topicService.getFeaturedTopics(15);
+        model.put("featuredTopics", featuredTopics);
+        return "featured";
+    }
+
+    @RequestMapping("/topics")
     public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         page = (page == null) ? 1 : page;
@@ -63,17 +65,17 @@ public class ExploreController extends ViewerSetter {
         List<Topic> topics = topicService.getPagedTopics(page, size);
         model.put("topics", topics);
 
-        return "exploreTopics";
+        return "topics";
     }
 
-    @RequestMapping("/exploreTags")
+    @RequestMapping("/tags")
     public String exploreTags(Map model) {
         List<String> tags = topicService.getTopicTags();
         model.put("tags", tags);
-        return "exploreTags";
+        return "tags";
     }
 
-    @RequestMapping("/exploreTags/{tag}")
+    @RequestMapping("/tags/{tag}")
     public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         page = (page == null) ? 1 : page;
@@ -85,14 +87,16 @@ public class ExploreController extends ViewerSetter {
         List<Topic> topics = topicService.getPagedTopicsByTag(tag, page, size);
         model.put("topics", topics);
 
-        return "exploreTopics";
+        return "topics";
     }
 
-    @RequestMapping("/exploreTimeline")
+    /**
+    @RequestMapping("/timeline")
     public String exploreTimeline(Map model) {
         List<Activity> activities = activityService.getActivities(25);
         model.put("activities", activities);
-        return "exploreTimeline";
+        return "timeline";
     }
+    */
 
 }

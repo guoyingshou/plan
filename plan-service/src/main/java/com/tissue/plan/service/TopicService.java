@@ -44,6 +44,10 @@ public class TopicService {
         return topicDao.getTopicByPlanId(planId);
     }
 
+    public Topic getTopicByPostId(String postId) {
+        return topicDao.getTopicByPostId(postId);
+    }
+
     public List<Topic> getTrendingTopics(int num) {
         return topicDao.getTrendingTopics(num);
     }
@@ -60,9 +64,11 @@ public class TopicService {
         return topicDao.getPagedTopics(page, size);
     }
 
+    /**
     public List<Topic> getTopics() {
         return topicDao.getTopics();
     }
+    */
 
     public List<String> getTopicTags() {
         return topicDao.getTopicTags();
@@ -76,8 +82,10 @@ public class TopicService {
         return topicDao.getPagedTopicsByTag(tag, page, size);
     }
 
+    /**
     public List<Topic> getTopicsByTag(String tag) {
         return topicDao.getTopicsByTag(tag);
     }
+    */
 
 }

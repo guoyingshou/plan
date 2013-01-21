@@ -11,14 +11,23 @@
 
 <@tissue.layout "post detail">
     <div id="logo">
+        <#--
         <#assign topic = post.plan.topic in topicGadgets />
+        -->
         <@topicGadgets.topicLogo />
     </div>
 
     <div id="contentWrapper">
         <div id="sidebar">
-            <#assign activePlan = topic.activePlan in planGadgets />
-            <@planGadgets.showActivePlan />
+           <#--
+            <#if post.plan.topic.activePlan??>
+                <#assign activePlan = post.plan.topic.activePlan in planGadgets />
+            </#if>
+            -->
+            <#if topic.activePlan??>
+                <#assign activePlan = topic.activePlan in planGadgets />
+            </#if>
+             <@planGadgets.showActivePlan />
         </div>
         <div id="content">
            <@postGadgets.showPostDetail />
