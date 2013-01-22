@@ -43,24 +43,11 @@ public class TopicReadController extends ViewerSetter {
     @Autowired
     private PostService postService;
 
-
-    /**
-    @ModelAttribute("topic")
-    public Topic prefetchTopic(@PathVariable("topicId") String topicId) {
-        return topicService.getTopic(topicId);
-    }
-    */
-
     /**
      * Show topic.
      */
     @RequestMapping(value="/topics/{topicId}")
     public String getTopic(@PathVariable("topicId") String topicId, Map model) {
-
-        /**
-        List<Plan> plans = planService.getPlansByTopicId(topicId);
-        topic.setPlans(plans);
-        */
 
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);
@@ -86,7 +73,7 @@ public class TopicReadController extends ViewerSetter {
         List<Post> posts = postService.getPagedPostsByTopicId(topicId, page, size);
         model.put("posts", posts);
 
-        return "topicPosts";
+        return "posts";
     }
 
     /**
@@ -107,7 +94,7 @@ public class TopicReadController extends ViewerSetter {
         List<Post> posts = postService.getPagedPostsByTopicIdAndType(topicId, type, page, size);
         model.put("posts", posts);
 
-        return "topicPosts";
+        return "posts";
     }
 
 }

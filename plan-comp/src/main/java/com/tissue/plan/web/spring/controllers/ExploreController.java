@@ -38,18 +38,17 @@ public class ExploreController extends ViewerSetter {
     @Autowired
     private ActivityService activityService;
 
-
     @RequestMapping("/explore")
     public String exploreTrending(Map model) {
-        List<Topic> trendingTopics = topicService.getTrendingTopics(15);
-        model.put("trendingTopics", trendingTopics);
+        List<Topic> topics = topicService.getTrendingTopics(15);
+        model.put("topics", topics);
         return "trending";
     }
 
     @RequestMapping("/featured")
     public String exploreFeatured(Map model) {
-        List<Topic> featuredTopics = topicService.getFeaturedTopics(15);
-        model.put("featuredTopics", featuredTopics);
+        List<Topic> topics = topicService.getFeaturedTopics(15);
+        model.put("topics", topics);
         return "featured";
     }
 
@@ -89,14 +88,5 @@ public class ExploreController extends ViewerSetter {
 
         return "topics";
     }
-
-    /**
-    @RequestMapping("/timeline")
-    public String exploreTimeline(Map model) {
-        List<Activity> activities = activityService.getActivities(25);
-        model.put("activities", activities);
-        return "timeline";
-    }
-    */
 
 }

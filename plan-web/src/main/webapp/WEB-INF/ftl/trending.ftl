@@ -1,6 +1,7 @@
+<#import "spring.ftl" as spring />
 <#import "tissue.ftl" as tissue />
 <#import "exploreGadgets.ftl" as exploreGadgets />
-<#import "spring.ftl" as spring />
+<#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 
@@ -17,14 +18,7 @@
         </div>
 
         <div id="content">
-            <ul class="trending">
-                <#list trendingTopics as topic>
-                <li>
-                    <a href="/group/topics/${topic.id}">${topic.title}</a>
-                    Created By: <a href="/social/users/${topic.user.id}">${topic.user.displayName}</a>
-                </li>
-                </#list>
-            </ul>
+            <@topicGadgets.showTopics />
         </div>
     </div>
 </@tissue.layout>

@@ -33,17 +33,6 @@ public class PostReadController extends ViewerSetter {
     @Autowired
     protected PostService postService;
 
-
-    /**
-    @ModelAttribute("post")
-    public Post prefetchPost(@PathVariable("postId") String postId, Map model) {
-        Post post = postService.getPost(postId);
-        Topic topic = postService.getTopicByPostId(postId);
-        model.put("topic", topic);
-        return post;
-    }
-    */
-
     /**
      * Get specific post.
      */

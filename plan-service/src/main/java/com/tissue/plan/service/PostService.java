@@ -1,6 +1,5 @@
 package com.tissue.plan.service;
 
-import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
@@ -97,14 +96,6 @@ public class PostService {
 
     public void addMessage(PostMessage message) {
          postMessageDao.create(message);
-    }
-
-    public long getPostsCountByUserId(String userId) {
-        return postDao.getPostsCountByUserId(userId);
-    }
-
-    public List<Post> getPagedPostsByUserId(String userId, int page, int size) {
-        return postDao.getPagedPostsByUserId(userId, page, size);
     }
 
 }

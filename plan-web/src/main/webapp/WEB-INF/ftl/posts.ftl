@@ -30,7 +30,7 @@
 
        <div id="content">
            <#if posts??>
-               <@postGadgets.showPostList posts />
+               <@postGadgets.showPosts posts />
                <@utilGadgets.showPager />
            </#if>
        </div>

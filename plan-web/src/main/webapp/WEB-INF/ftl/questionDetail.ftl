@@ -11,7 +11,6 @@
 
 <@tissue.layout "question">
     <div id="logo">
-        <#assign topic = post.plan.topic in topicGadgets />
         <@topicGadgets.topicLogo />
     </div>
 

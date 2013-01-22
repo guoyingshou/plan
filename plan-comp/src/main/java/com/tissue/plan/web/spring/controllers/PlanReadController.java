@@ -33,16 +33,14 @@ public class PlanReadController extends ViewerSetter {
     @Autowired
     private PostService postService;
 
-    @ModelAttribute("topic")
-    public Topic prefetchTopic(@PathVariable("planId") String planId) {
-        return topicService.getTopicByPlanId(planId);
-    }
-
     /**
      * Get paged posts by planId.
      */
     @RequestMapping(value="/plans/{planId}") 
-    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("topic") Topic topic) {
+    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+
+        Topic topic = topicService.getTopicByPlanId(planId);
+        model.put("topic", topic);
 
         System.out.println(">>>>current plan: " + planId);
 
@@ -55,7 +53,7 @@ public class PlanReadController extends ViewerSetter {
         List<Post> posts = postService.getPagedPostsByPlanId(planId, page, size);
         model.put("posts", posts);
 
-        return "topicPosts";
+        return "posts";
     }
 
 
