@@ -1,6 +1,7 @@
 package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.plan.Topic;
+import com.tissue.core.social.User;
 import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.ViewerSetter;
@@ -38,10 +39,22 @@ public class ExploreController extends ViewerSetter {
     @Autowired
     private ActivityService activityService;
 
+    @ModelAttribute("users")
+    public List<User> getNewUsers() {
+        String viewerId = SecurityUtil.getViewerId();
+        if(viewerId == null) {
+            return userService.getNewUsers();
+        }
+        else {
+            return userService.getNewUsers(viewerId);
+        }
+    }
+
     @RequestMapping("/explore")
     public String exploreTrending(Map model) {
         List<Topic> topics = topicService.getTrendingTopics(15);
         model.put("topics", topics);
+
         return "trending";
     }
 

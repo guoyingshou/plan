@@ -1,6 +1,7 @@
 <#import "spring.ftl" as spring />
 <#import "tissue.ftl" as tissue />
 <#import "exploreGadgets.ftl" as exploreGadgets />
+<#import "personGadgets.ftl" as personGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
@@ -14,7 +15,7 @@
 
     <div id="contentWrapper">
         <div id="sidebar">
-
+            <@personGadgets.showUsers />
         </div>
 
         <div id="content">

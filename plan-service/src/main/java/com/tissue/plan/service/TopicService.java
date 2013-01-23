@@ -83,8 +83,8 @@ public class TopicService {
     }
 
     /**
-    public List<Topic> getTopicsByTag(String tag) {
-        return topicDao.getTopicsByTag(tag);
+    public List<Topic> getNewTopics(String excludingUserId, int limit) {
+        return topicDao.getNewTopics(excludingUserId, limit);
     }
     */
 
