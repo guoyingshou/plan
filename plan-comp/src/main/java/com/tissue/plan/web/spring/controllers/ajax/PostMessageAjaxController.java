@@ -1,4 +1,4 @@
-package com.tissue.plan.web.spring.controllers;
+package com.tissue.plan.web.spring.controllers.ajax;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;

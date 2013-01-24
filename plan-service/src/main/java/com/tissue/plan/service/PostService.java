@@ -32,16 +32,6 @@ public class PostService {
     @Autowired
     private PostMessageDao postMessageDao;
 
-    /**
-     * Save a post.
-     * 
-     * @param post
-     * @return the newly added post
-    public Post addPost(Post post) {
-        return postDao.create(post);
-    }
-     */
-
     public Post updatePost(Post post) {
         return postDao.update(post);
     }
@@ -51,24 +41,7 @@ public class PostService {
      */
     public Post getPost(String postId) {
         return postDao.getPost(postId);
-
-        /**
-        Post post = postDao.getPost(postId);
-
-        Topic topic = topicDao.getTopicByPostId(postId);
-        List<Plan> plans = planDao.getPlansByTopicId(topic.getId());
-        topic.setPlans(plans);
-
-        post.getPlan().setTopic(topic);
-        return post;
-        */
     }
-
-    /**
-    public Topic getTopicByPostId(String postId) {
-        return postDao.getTopicByPostId(postId);
-    }
-    */
 
     public long getPostsCountByTopicId(String topicId) {
         return postDao.getPostsCountByTopicId(topicId);

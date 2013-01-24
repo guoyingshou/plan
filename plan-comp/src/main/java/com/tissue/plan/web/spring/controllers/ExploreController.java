@@ -42,12 +42,7 @@ public class ExploreController extends ViewerSetter {
     @ModelAttribute("users")
     public List<User> getNewUsers() {
         String viewerId = SecurityUtil.getViewerId();
-        if(viewerId == null) {
-            return userService.getNewUsers();
-        }
-        else {
-            return userService.getNewUsers(viewerId);
-        }
+        return userService.getNewUsers(viewerId, 15);
     }
 
     @RequestMapping("/explore")
