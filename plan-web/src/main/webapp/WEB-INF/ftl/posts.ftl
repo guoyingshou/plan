@@ -18,13 +18,10 @@
     <div id="contentWrapper">
         <div id="sidebar">
 
-            <#if topic.activePlan??>
-                <#assign activePlan = topic.activePlan in planGadgets />
-            </#if>
-            <@planGadgets.showActivePlan />
+            <@planGadgets.showLiveGroup />
 
             <#--
-            <@planGadgets.showDeadPlans />
+            <@planGadgets.showArchivedGroup />
             -->
         </div>
 

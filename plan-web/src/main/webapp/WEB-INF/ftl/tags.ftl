@@ -1,7 +1,7 @@
 <#import "spring.ftl" as spring />
 <#import "tissue.ftl" as tissue />
 <#import "exploreGadgets.ftl" as exploreGadgets />
-<#import "personGadgets.ftl" as personGadgets />
+<#import "userGadgets.ftl" as userGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 <#assign mystyles=["/tissue/css/explore.css"] in tissue>
@@ -14,7 +14,7 @@
 
     <div id="contentWrapper">
         <div id="sidebar">
-            <@personGadgets.showUsers />
+            <@userGadgets.showUsers />
         </div>
 
         <div id="content">

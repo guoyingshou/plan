@@ -45,6 +45,13 @@ public class PostReadController extends ViewerSetter {
         Post post = postService.getPost(postId);
         model.put("post", post);
 
+        System.out.println(">>>>plan<<<" + post.getPlan());
+        System.out.println(">>>>isActivie?<<<" + post.getPlan().isActive());
+        String viewerId = SecurityUtil.getViewerId();
+        System.out.println(">>>>viewr id<<<" + viewerId);
+        System.out.println(">>>>isOwner?<<<" + post.getPlan().isOwner(viewerId));
+        System.out.println(">>>>isMember?<<<" + post.getPlan().isMember(viewerId));
+
         if("question".equals(post.getType())) {
             return "questionDetail";
         }

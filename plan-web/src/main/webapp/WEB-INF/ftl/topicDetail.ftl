@@ -16,22 +16,31 @@
 
     <div id="contentWrapper">
         <div id="sidebar">
-
-            <#if topic.activePlan??>
-                <#assign activePlan = topic.activePlan in planGadgets />
-            </#if>
-            <@planGadgets.showActivePlan />
+            <@planGadgets.showLiveGroup />
 
             <#--
-            <@planGadgets.showDeadPlans />
+            <@planGadgets.showArchivedGroup />
             -->
         </div>
 
        <div id="content">
 
-           <div class="topic-content">${topic.content}</div>
-           <div class="topic-tags"><#list topic.tags as tag>${tag}&nbsp;</#list></div>
-           <div>${topic.user.displayName} published: ${topic.createTime?datetime}</div>
+           <div class="topic-content">
+               ${topic.content}
+           </div>
+
+           <div data-icon="&#xe00a;">
+               <#list topic.tags as tag>${tag}&nbsp;</#list>
+           </div>
+
+           <div>
+               <span data-icon="&#xe002;">
+                   ${topic.user.displayName}
+               </span>
+               <span data-icon="&#xe006;">
+                   ${topic.createTime?datetime}
+               </span>
+           </div>
 
            <#if viewer?? && topic.isOwner(viewer.id) >
            <a class="topic-edit" data-action="<@spring.url '/topics/${topic.id}' />" href="#">edit</a>

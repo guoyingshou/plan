@@ -16,8 +16,7 @@
 
     <div id="contentWrapper">
         <div id="sidebar">
-            <#assign activePlan = topic.activePlan in planGadgets />
-            <@planGadgets.showActivePlan />
+            <@planGadgets.showLiveGroup />
         </div>
         <div id="content">
            <@postGadgets.showQuestionDetail />

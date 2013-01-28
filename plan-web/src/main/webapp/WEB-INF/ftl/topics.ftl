@@ -1,7 +1,7 @@
 <#import "spring.ftl" as spring />
 <#import "tissue.ftl" as tissue />
 <#import "exploreGadgets.ftl" as exploreGadgets />
-<#import "personGadgets.ftl" as personGadgets />
+<#import "userGadgets.ftl" as userGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "utilGadgets.ftl" as utilGadgets />
 
@@ -16,7 +16,7 @@
 
     <div id="contentWrapper">
         <div id="sidebar">
-            <@personGadgets.showUsers />
+            <@userGadgets.showUsers />
         </div>
 
         <div id="content">
