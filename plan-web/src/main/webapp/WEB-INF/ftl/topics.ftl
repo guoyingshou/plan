@@ -6,7 +6,7 @@
 <#import "utilGadgets.ftl" as utilGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
-<#assign mystyles=["/tissue/css/explore.css"] in tissue>
+<#assign mystyles=["/tissue/css/layout3.css", "/tissue/css/explore.css"] in tissue>
 
 
 <@tissue.layout "topics">
@@ -17,6 +17,10 @@
     <div id="contentWrapper">
         <div id="sidebar">
             <@userGadgets.showUsers />
+        </div>
+
+        <div id="mid">
+
         </div>
 
         <div id="content">

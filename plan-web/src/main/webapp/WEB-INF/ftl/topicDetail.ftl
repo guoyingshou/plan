@@ -1,12 +1,11 @@
 <#import "spring.ftl" as spring />
 <#import "tissue.ftl" as tissue />
 <#import "topicGadgets.ftl" as topicGadgets />
-<#import "planGadgets.ftl" as planGadgets />
 <#import "formGadgets.ftl" as formGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 
-<#assign mystyles=["/tissue/css/topic.css", "/tissue/css/plan.css"] in tissue>
+<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in tissue>
 
 <@tissue.layout "topic">
 
@@ -16,11 +15,8 @@
 
     <div id="contentWrapper">
         <div id="sidebar">
-            <@planGadgets.showLiveGroup />
-
-            <#--
-            <@planGadgets.showArchivedGroup />
-            -->
+            <@topicGadgets.showLiveGroup />
+            <@topicGadgets.showArchivedGroup />
         </div>
 
        <div id="content">
