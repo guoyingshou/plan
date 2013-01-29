@@ -71,4 +71,7 @@ public class PostService {
          postMessageDao.create(message);
     }
 
+    public List<Post> getLatestPosts(int limit) {
+         return postDao.getLatestPosts(limit);
+    }
 }

@@ -4,6 +4,7 @@
 <#import "userGadgets.ftl" as userGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "utilGadgets.ftl" as utilGadgets />
+<#import "postGadgets.ftl" as postGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 <#assign mystyles=["/tissue/css/layout3.css", "/tissue/css/explore.css"] in tissue>
@@ -20,7 +21,7 @@
         </div>
 
         <div id="mid">
-
+            <@postGadgets.showPosts newPosts />
         </div>
 
         <div id="content">

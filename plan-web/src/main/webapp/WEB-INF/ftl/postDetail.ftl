@@ -15,8 +15,8 @@
 
     <div id="contentWrapper">
         <div id="sidebar">
-           <@topicGadgets.showLiveGroup />
-           <@topicGadgets.showArchivedGroup />
+           <@topicGadgets.showLivePlan />
+           <@topicGadgets.showArchivedPlans />
         </div>
         <div id="content" class="post-detail">
            <@postGadgets.showPostDetail />
