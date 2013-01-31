@@ -9,7 +9,7 @@
 
 <@tissue.layout "topics">
     <div id="logo">
-        <@exploreGadgets.exploreLogo />
+        <@exploreGadgets.exploreLogo "tags"/>
     </div>
 
     <div id="contentWrapper">

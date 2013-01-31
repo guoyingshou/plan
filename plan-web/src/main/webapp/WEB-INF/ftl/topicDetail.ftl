@@ -10,7 +10,7 @@
 <@tissue.layout "topic">
 
     <div id="logo">
-        <@topicGadgets.topicLogo />
+        <@topicGadgets.topicLogo current/>
     </div>
 
     <div id="contentWrapper">

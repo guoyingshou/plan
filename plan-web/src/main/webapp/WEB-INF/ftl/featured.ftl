@@ -11,7 +11,7 @@
 
 <@tissue.layout "Trending">
     <div id="logo">
-        <@exploreGadgets.exploreLogo />
+        <@exploreGadgets.exploreLogo "featured" />
     </div>
 
     <div id="contentWrapper">

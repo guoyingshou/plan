@@ -48,6 +48,7 @@ public class TopicReadController extends ViewerSetter {
      */
     @RequestMapping(value="/topics/{topicId}")
     public String getTopic(@PathVariable("topicId") String topicId, Map model) {
+        model.put("current", "objective");
 
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);
@@ -81,6 +82,8 @@ public class TopicReadController extends ViewerSetter {
      */
     @RequestMapping(value="/topics/{topicId}/{type}/posts")
     public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) throws Exception {
+
+        model.put("current", type);
 
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);

@@ -58,6 +58,9 @@ public class ExploreController extends ViewerSetter {
 
     @RequestMapping("/explore")
     public String exploreTrending(Map model) {
+
+        //model.put("current", "explore");
+
         List<Topic> topics = topicService.getTrendingTopics(15);
         model.put("topics", topics);
 
@@ -66,6 +69,9 @@ public class ExploreController extends ViewerSetter {
 
     @RequestMapping("/featured")
     public String exploreFeatured(Map model) {
+
+        //model.put("current", "featured");
+
         List<Topic> topics = topicService.getFeaturedTopics(15);
         model.put("topics", topics);
         return "featured";
@@ -73,6 +79,8 @@ public class ExploreController extends ViewerSetter {
 
     @RequestMapping("/topics")
     public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
+
+        model.put("current", "topics");
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;
@@ -86,17 +94,10 @@ public class ExploreController extends ViewerSetter {
         return "topics";
     }
 
-    /**
-    @RequestMapping("/tags")
-    public String exploreTags(Map model) {
-        List<String> tags = topicService.getTopicTags();
-        model.put("tags", tags);
-        return "tags";
-    }
-    */
-
     @RequestMapping("/tags/{tag}")
     public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
+
+        model.put("current", "tags");
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;

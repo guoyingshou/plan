@@ -12,7 +12,7 @@
 
 <@tissue.layout "topics">
     <div id="logo">
-        <@exploreGadgets.exploreLogo />
+        <@exploreGadgets.exploreLogo current />
     </div>
 
     <div id="contentWrapper">
