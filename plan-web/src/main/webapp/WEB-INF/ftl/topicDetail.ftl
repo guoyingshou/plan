@@ -20,22 +20,21 @@
         </div>
 
        <div id="content">
-
-           <div class="topic-content">
-               ${topic.content}
+           <div class="ts">
+               <span>
+                   ${topic.user.displayName}
+               </span>
+               <span>
+                   ${topic.createTime?datetime}
+               </span>
            </div>
 
-           <div data-icon="&#xe00a;">
+           <div class="tags">
                <#list topic.tags as tag>${tag}&nbsp;</#list>
            </div>
 
-           <div>
-               <span data-icon="&#xe002;">
-                   ${topic.user.displayName}
-               </span>
-               <span data-icon="&#xe006;">
-                   ${topic.createTime?datetime}
-               </span>
+           <div class="content">
+               ${topic.content}
            </div>
 
            <#if viewer?? && topic.isOwner(viewer.id) >
