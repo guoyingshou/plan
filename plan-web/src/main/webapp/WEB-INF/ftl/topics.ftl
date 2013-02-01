@@ -9,8 +9,7 @@
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 <#assign mystyles=["/tissue/css/layout3.css"] in tissue>
 
-
-<@tissue.layout "topics">
+<@tissue.layout current>
     <div id="logo">
         <@exploreGadgets.exploreLogo current />
     </div>
@@ -27,7 +26,9 @@
         <div id="content">
             <div id="contentInner">
                 <@topicGadgets.showTopics />
-                <@utilGadgets.showPager />
+                <#if (current == 'topics') || (current == 'tags')>
+                    <@utilGadgets.showPager />
+                </#if>
             </div>
         </div>
    </div>

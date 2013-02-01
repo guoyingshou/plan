@@ -4,7 +4,7 @@ import com.tissue.core.plan.Topic;
 import com.tissue.core.social.User;
 import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
-import com.tissue.commons.ViewerSetter;
+import com.tissue.commons.ViewerUserSetter;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.social.service.ActivityService;
@@ -27,16 +27,18 @@ import java.util.Set;
 import java.util.Map;
 
 @Controller
-public class TagsController extends ViewerSetter {
+public class TagsController extends ViewerUserSetter {
 
     @Autowired
     private TopicService topicService;
 
+    /**
     @ModelAttribute("users")
     public List<User> getNewUsers() {
         String viewerId = SecurityUtil.getViewerId();
         return userService.getNewUsers(viewerId, 15);
     }
+    */
 
     @RequestMapping("/tags")
     public String exploreTags(Map model) {
@@ -44,22 +46,5 @@ public class TagsController extends ViewerSetter {
         model.put("tags", tags);
         return "tags";
     }
-
-    /**
-    @RequestMapping("/tags/{tag}")
-    public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
-
-        page = (page == null) ? 1 : page;
-        size = (size == null) ? 15 : size;
-        long total = topicService.getTopicsCountByTag(tag);
-        Pager pager = new Pager(total, page, size);
-        model.put("pager", pager);
-
-        List<Topic> topics = topicService.getPagedTopicsByTag(tag, page, size);
-        model.put("topics", topics);
-
-        return "topics";
-    }
-    */
 
 }

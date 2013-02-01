@@ -5,7 +5,7 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.social.User;
 import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
-import com.tissue.commons.ViewerSetter;
+import com.tissue.commons.ViewerUserSetter;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.social.service.ActivityService;
@@ -33,7 +33,7 @@ import java.util.Date;
 import java.security.Principal;
 
 @Controller
-public class ExploreController extends ViewerSetter {
+public class ExploreController extends ViewerUserSetter {
 
     @Autowired
     private TopicService topicService;
@@ -44,37 +44,39 @@ public class ExploreController extends ViewerSetter {
     @Autowired
     private ActivityService activityService;
 
+    /**
     @ModelAttribute("users")
     public List<User> getNewUsers() {
         String viewerId = SecurityUtil.getViewerId();
         return userService.getNewUsers(viewerId, 15);
     }
+    */
 
     @ModelAttribute("newPosts")
     public List<Post> getNewPosts() {
         return postService.getLatestPosts(15);
     }
 
-
     @RequestMapping("/explore")
     public String exploreTrending(Map model) {
 
-        //model.put("current", "explore");
+        model.put("current", "trending");
 
         List<Topic> topics = topicService.getTrendingTopics(15);
         model.put("topics", topics);
 
-        return "trending";
+        return "topics";
     }
 
     @RequestMapping("/featured")
     public String exploreFeatured(Map model) {
 
-        //model.put("current", "featured");
+        model.put("current", "featured");
 
         List<Topic> topics = topicService.getFeaturedTopics(15);
         model.put("topics", topics);
-        return "featured";
+
+        return "topics";
     }
 
     @RequestMapping("/topics")
