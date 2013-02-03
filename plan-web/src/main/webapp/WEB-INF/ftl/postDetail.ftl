@@ -6,7 +6,7 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
 
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css", "/tissue/css/plan.css", "/tissue/css/post.css"] in tissue>
+<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css", "/tissue/css/post.css"] in tissue>
 
 <@tissue.layout "post detail">
     <div id="logo">
