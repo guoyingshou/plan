@@ -6,6 +6,11 @@ import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.service.TopicService;
 
+
+import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -31,7 +37,11 @@ public class TopicWriteController {
      * Add new topic.
      */
     @RequestMapping(value="/topics", method=POST)
-    public String addTopic(TopicForm form, Map model) throws Exception {
+    public String addTopic(@Valid TopicForm form, BindingResult result, Map model) throws Exception {
+
+        if(result.hasErrors()) {
+            return "error";
+        }
 
         Topic topic = new Topic();
         topic.setTitle(form.getTitle());

@@ -37,15 +37,13 @@ public class PostReadController extends ViewerSetter {
      * Get specific post.
      */
     @RequestMapping(value="/posts/{postId}")
-    public String getPost(@PathVariable("postId") String postId, Map model, Locale locale) {
+    public String getPost(@PathVariable("postId") String postId, Map model) {
 
         Topic topic = topicService.getTopicByPostId(postId);
         model.put("topic", topic);
 
         Post post = postService.getPost(postId);
         model.put("post", post);
-
-        //String viewerId = SecurityUtil.getViewerId();
 
         if("question".equals(post.getType())) {
             return "questionDetail";

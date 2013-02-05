@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Plan;
+import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.Concept;
 import com.tissue.core.plan.Note;
@@ -12,6 +13,7 @@ import com.tissue.core.plan.PostMessageComment;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.web.model.MessageForm;
+import com.tissue.plan.service.TopicService;
 import com.tissue.plan.service.PostService;
 import com.tissue.plan.service.ConceptService;
 import com.tissue.plan.service.NoteService;
@@ -20,11 +22,13 @@ import com.tissue.plan.service.QuestionService;
 import com.tissue.plan.service.PostMessageService;
 import com.tissue.plan.service.PostMessageCommentService;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,6 +46,9 @@ import java.security.Principal;
 
 @Controller
 public class PostWriteController {
+
+    @Autowired
+    protected TopicService topicService;
 
     @Autowired
     protected PostService postService;
@@ -65,11 +72,25 @@ public class PostWriteController {
     protected PostMessageCommentService postMessageCommentService;
 
     /**
+     * show post form.
+     */
+    @RequestMapping(value="/plans/{planId}/posts/_new")
+    public String newPost(@PathVariable("planId") String planId, Map model) {
+        Topic topic = topicService.getTopicByPlanId(planId);
+        model.put("topic", topic);
+        return "postForm";
+    }
+
+    /**
      * Add a post to the active plan.
      * The post can be any type.
      */
     @RequestMapping(value="/plans/{planId}/posts", method=POST)
-    public String addPost(@PathVariable("planId") String planId, PostForm form, Map model) {
+    public String addPost(@PathVariable("planId") String planId, @Valid PostForm form, BindingResult result, Map model) {
+
+        if(result.hasErrors()) {
+            return "error";
+        }
 
         Post post = new Post();
         post.setTitle(form.getTitle());

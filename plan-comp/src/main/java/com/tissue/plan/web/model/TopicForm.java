@@ -3,17 +3,21 @@ package com.tissue.plan.web.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
-
-@JsonIgnoreProperties(ignoreUnknown=true)
-@JsonSerialize(include=Inclusion.NON_NULL)
 public class TopicForm implements Serializable {
 
+    @NotNull
+    @NotEmpty
     private String title;
+
+    @NotNull
+    @NotEmpty
     private String content;
+
+    @NotNull
+    @NotEmpty
     private String tags;
 
     public void setTitle(String title) {
