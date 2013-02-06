@@ -4,7 +4,7 @@
 <#import "postGadgets.ftl" as postGadgets />
 <#import "formGadgets.ftl" as formGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/post.js"] in tissue>
 
 <#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css", "/tissue/css/post.css"] in tissue>
 
