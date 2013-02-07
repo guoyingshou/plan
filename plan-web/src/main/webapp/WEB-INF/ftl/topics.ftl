@@ -24,12 +24,10 @@
         </div>
 
         <div id="content">
-            <div id="contentInner">
-                <@topicGadgets.showTopics />
-                <#if (current == 'topics') || (current == 'tags')>
-                    <@utilGadgets.showPager />
-                </#if>
-            </div>
+            <@topicGadgets.showTopics />
+            <#if (current == 'topics') || (current == 'tags')>
+                <@utilGadgets.showPager />
+            </#if>
         </div>
    </div>
 

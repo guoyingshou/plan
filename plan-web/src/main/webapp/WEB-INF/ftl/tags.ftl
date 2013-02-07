@@ -18,13 +18,11 @@
         </div>
 
         <div id="content">
-            <div id="contentInner">
-                <#if tags??>
-                <#list tags as tag>
-                    <span><a href="/group/tags/${tag}">${tag}</a></span>
-                </#list>
-                </#if>
-            </div>
+            <#if tags??>
+            <#list tags as tag>
+                <span><a href="/group/tags/${tag}">${tag}</a></span>
+            </#list>
+            </#if>
         </div>
     </div>
 
