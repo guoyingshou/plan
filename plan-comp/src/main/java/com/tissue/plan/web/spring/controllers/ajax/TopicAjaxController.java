@@ -6,6 +6,10 @@ import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.service.TopicService;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import javax.validation.Valid;
+//import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -31,12 +37,16 @@ public class TopicAjaxController {
     /**
      * Update topic.
      */
-    @RequestMapping(value="/topics/{topicId}", method=POST)
-    @ResponseBody
-    public String updateTopic(@PathVariable("topicId") String topicId, TopicForm form, Map model) throws Exception {
+    @RequestMapping(value="/topics/{topicId}/update", method=POST)
+    public HttpEntity<?> updateTopic(@PathVariable("topicId") String topicId, @Valid TopicForm form, BindingResult result, Map model) throws Exception {
+
+        if(result.hasErrors()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
 
         Topic topic = new Topic();
         topic.setId(topicId);
+        topic.setTitle(form.getTitle());
         topic.setContent(form.getContent());
 
         User user = new User();
@@ -52,7 +62,7 @@ public class TopicAjaxController {
 
         topicService.updateTopic(topic);
 
-        return "ok";
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 }

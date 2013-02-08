@@ -81,6 +81,7 @@
         </property>
         <property name="securityMetadataSource">
             <sec:filter-security-metadata-source path-type="regex">
+                <sec:intercept-url pattern="/.*/update" access="ROLE_user" />
                 <sec:intercept-url pattern="/*" access="ROLE_ANONYMOUS, ROLE_user" />
             </sec:filter-security-metadata-source>
         </property>
