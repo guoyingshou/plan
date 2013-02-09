@@ -72,16 +72,6 @@ public class PostWriteController {
     protected PostMessageCommentService postMessageCommentService;
 
     /**
-     * show post form.
-     */
-    @RequestMapping(value="/plans/{planId}/posts/_new")
-    public String newPost(@PathVariable("planId") String planId, Map model) {
-        Topic topic = topicService.getTopicByPlanId(planId);
-        model.put("topic", topic);
-        return "postForm";
-    }
-
-    /**
      * Add a post to the active plan.
      * The post can be any type.
      */

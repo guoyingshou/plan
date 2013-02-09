@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers.ajax;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
+import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.service.TopicService;
@@ -32,6 +33,9 @@ import java.util.Arrays;
 public class TopicAjaxController {
 
     @Autowired
+    private CommonService commonService;
+
+    @Autowired
     private TopicService topicService;
 
     /**
@@ -40,7 +44,9 @@ public class TopicAjaxController {
     @RequestMapping(value="/topics/{topicId}/update", method=POST)
     public HttpEntity<?> updateTopic(@PathVariable("topicId") String topicId, @Valid TopicForm form, BindingResult result, Map model) throws Exception {
 
-        if(result.hasErrors()) {
+        String viewerId = SecurityUtil.getViewerId();
+
+        if(result.hasErrors() || !commonService.isResourceExist(topicId) || !commonService.isOwner(viewerId, topicId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
@@ -50,7 +56,7 @@ public class TopicAjaxController {
         topic.setContent(form.getContent());
 
         User user = new User();
-        user.setId(SecurityUtil.getViewerId());
+        user.setId(viewerId);
         topic.setUser(user);
 
         Date date = new Date();

@@ -56,7 +56,6 @@ public class TopicReadController extends ViewerSetter {
         return "topicDetail";
     }
 
-
     /**
      * Get paged posts by topicId.
      */

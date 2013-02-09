@@ -34,6 +34,16 @@ public class PostReadController extends ViewerSetter {
     protected PostService postService;
 
     /**
+     * show post form.
+     */
+    @RequestMapping(value="/plans/{planId}/posts/_new")
+    public String newPost(@PathVariable("planId") String planId, Map model) {
+        Topic topic = topicService.getTopicByPlanId(planId);
+        model.put("topic", topic);
+        return "postForm";
+    }
+
+    /**
      * Get specific post.
      */
     @RequestMapping(value="/posts/{postId}")

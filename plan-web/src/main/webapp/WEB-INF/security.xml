@@ -59,7 +59,7 @@
     </bean>
 
     <bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-        <property name="loginFormUrl" value="/social/login"/>
+        <property name="loginFormUrl" value="http://www.tissue.com/social/login"/>
     </bean>
 
     <bean id="accessDeniedHandler" class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
@@ -82,6 +82,7 @@
         <property name="securityMetadataSource">
             <sec:filter-security-metadata-source path-type="regex">
                 <sec:intercept-url pattern="/.*/update" access="ROLE_user" />
+                <sec:intercept-url pattern="/.*/_new" access="ROLE_user" />
                 <sec:intercept-url pattern="/*" access="ROLE_ANONYMOUS, ROLE_user" />
             </sec:filter-security-metadata-source>
         </property>

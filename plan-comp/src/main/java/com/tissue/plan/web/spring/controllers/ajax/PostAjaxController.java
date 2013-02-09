@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers.ajax;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;
+import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.PostEditForm;
 import com.tissue.plan.service.PostService;
@@ -26,16 +27,21 @@ import java.util.Map;
 public class PostAjaxController {
 
     @Autowired
+    protected CommonService commonService;
+
+    @Autowired
     protected PostService postService;
 
     /**
      * Update a post.
      * The post can be of any type.
      */
-    @RequestMapping(value="/posts/{postId}", method=POST)
+    @RequestMapping(value="/posts/{postId}/update", method=POST)
     public HttpEntity<?> updatePost(@PathVariable("postId") String postId, @Valid PostEditForm form, BindingResult result, Map model) {
 
-        if(result.hasErrors()) {
+        String viewerId = SecurityUtil.getViewerId();
+        
+        if(result.hasErrors() || !commonService.isOwner(viewerId, postId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
