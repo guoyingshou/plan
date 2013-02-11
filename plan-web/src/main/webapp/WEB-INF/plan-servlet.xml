@@ -35,7 +35,15 @@
     
     <mvc:resources mapping="/resources/**" location="/" />
 
-    <mvc:annotation-driven />
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="com.tissue.commons.converter.TagsConverter" />
+            </list>
+        </property>
+    </bean>
+
+    <mvc:annotation-driven conversion-service="conversionService" />
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" /> 
     </mvc:interceptors>

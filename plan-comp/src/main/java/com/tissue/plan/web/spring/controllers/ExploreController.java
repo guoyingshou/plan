@@ -44,14 +44,6 @@ public class ExploreController extends ViewerUserSetter {
     @Autowired
     private ActivityService activityService;
 
-    /**
-    @ModelAttribute("users")
-    public List<User> getNewUsers() {
-        String viewerId = SecurityUtil.getViewerId();
-        return userService.getNewUsers(viewerId, 15);
-    }
-    */
-
     @ModelAttribute("newPosts")
     public List<Post> getNewPosts() {
         return postService.getLatestPosts(15);

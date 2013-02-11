@@ -3,6 +3,7 @@ package com.tissue.plan.service;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
+import com.tissue.core.plan.command.TopicCommand;
 import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
 
@@ -28,12 +29,12 @@ public class TopicService {
      * @param topic
      * @return the returned topic has id setup
      */
-    public Topic addTopic(Topic topic) {
-        return topicDao.create(topic);
+    public Topic addTopic(TopicCommand command) {
+        return topicDao.create(command);
     }
 
-    public void updateTopic(Topic topic) {
-        topicDao.update(topic);
+    public void updateTopic(TopicCommand command) {
+        topicDao.update(command);
     }
 
     public Topic getTopic(String topicId) {

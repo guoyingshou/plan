@@ -1,7 +1,6 @@
 <#import "spring.ftl" as spring />
 <#import "tissue.ftl" as tissue />
 <#import "topicGadgets.ftl" as topicGadgets />
-<#import "formGadgets.ftl" as formGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in tissue>
 
@@ -19,7 +18,7 @@
         </div>
 
        <div id="content">
-           <@topicGadgets.showTopicDetail />
+           <@topicGadgets.showTopicDetails />
        </div>
     </div>
 </@tissue.layout>

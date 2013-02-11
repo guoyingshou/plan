@@ -46,14 +46,14 @@ public class TopicReadController extends ViewerSetter {
     /**
      * Show topic.
      */
-    @RequestMapping(value="/topics/{topicId}")
+    @RequestMapping(value="/topics/{topicId}/objective")
     public String getTopic(@PathVariable("topicId") String topicId, Map model) {
         model.put("current", "objective");
 
         Topic topic = topicService.getTopic(topicId);
         model.put("topic", topic);
 
-        return "topicDetail";
+        return "topicDetails";
     }
 
     /**

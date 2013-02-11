@@ -6,6 +6,7 @@ import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.service.TopicService;
 
+import org.springframework.core.convert.ConversionService;
 import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Arrays;
+import java.util.List;
+import java.security.InvalidParameterException;
 
 @Controller
 public class TopicWriteController {
@@ -32,34 +35,25 @@ public class TopicWriteController {
     @Autowired
     private TopicService topicService;
 
+    @Autowired
+    private ConversionService conversionService;
+
+
     /**
      * Add new topic.
      */
     @RequestMapping(value="/topics", method=POST)
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model) throws Exception {
-
+        
         if(result.hasErrors()) {
-            return "error";
+            throw new InvalidParameterException("content error");
         }
-
-        Topic topic = new Topic();
-        topic.setTitle(form.getTitle());
-        topic.setContent(form.getContent());
 
         User user = new User();
         user.setId(SecurityUtil.getViewerId());
-        topic.setUser(user);
+        form.setUser(user);
 
-        Date date = new Date();
-        topic.setCreateTime(date);
-        topic.setUpdateTime(date);
-
-        String tags = form.getTags();
-        String[] splits = tags.split("\\s");
-        topic.setTags(new HashSet(Arrays.asList(splits)));
-
-        topic = topicService.addTopic(topic);
-        
+        Topic topic = topicService.addTopic(form);
         return "redirect:/topics/" + topic.getId() + "/posts";
     }
 

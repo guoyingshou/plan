@@ -5,7 +5,10 @@
     </encoder>
   </appender>
 
+  <!--
   <logger name="org.springframework.security" level="DEBUG"/>
+  -->
+  <logger name="org.springframework.core.convert" level="DEBUG"/>
 
   <root level="INFO">
     <appender-ref ref="STDOUT" />

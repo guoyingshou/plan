@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Sets;
 import javax.validation.Valid;
 //import java.security.InvalidParameterException;
 import java.util.Date;
@@ -50,23 +52,8 @@ public class TopicAjaxController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        Topic topic = new Topic();
-        topic.setId(topicId);
-        topic.setTitle(form.getTitle());
-        topic.setContent(form.getContent());
-
-        User user = new User();
-        user.setId(viewerId);
-        topic.setUser(user);
-
-        Date date = new Date();
-        topic.setUpdateTime(date);
-
-        String tags = form.getTags();
-        String[] splits = tags.split("\\s");
-        topic.setTags(new HashSet(Arrays.asList(splits)));
-
-        topicService.updateTopic(topic);
+        form.setId(topicId);
+        topicService.updateTopic(form);
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
