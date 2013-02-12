@@ -1,6 +1,7 @@
 <#import "spring.ftl" as spring />
 <#import "tissue.ftl" as tissue />
 <#import "topicGadgets.ftl" as topicGadgets />
+<#import "postGadgets.ftl" as postGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/post.js"] in tissue>
 
