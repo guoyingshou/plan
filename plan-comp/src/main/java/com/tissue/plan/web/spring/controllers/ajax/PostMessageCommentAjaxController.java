@@ -48,8 +48,8 @@ public class PostMessageCommentAjaxController {
         comment.setPostMessage(msg);
 
         comment = postMessageCommentService.addComment(comment);
-        model.put("postMessageComment", comment);
-        return "fragments/newPostMessageComment";
+        model.put("messageComment", comment);
+        return "fragments/newMessageComment";
     }
 
     /**

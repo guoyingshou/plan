@@ -1,9 +1,19 @@
 <#import '../spring.ftl' as spring />
+<#import '../utilGadgets.ftl' as utilGadgets />
 
 <li class="answer-comment-item">
-    <div>${comment.content}</div>
-    <div>${comment.user.displayName} published: ${comment.createTime?datetime}</div>
-    <a class="one-item-edit" data-action="<@spring.url '/answerComments/${comment.id}' />" href="#">edit</a>
-    <a class="del" data-action="<@spring.url '/answerComments/${comment.id}/delete' />" href="#">delete</a>
+    <div class="ts">
+        ${comment.user.displayName} 
+        [ <@utilGadgets.showTimeBefore comment.timeBefore /> ]
+    </div>
+    <div id="answer-comment-${comment.id}-content">${comment.content}</div>
+
+    <a class="item-edit" data-action="<@spring.url '/answerComments/${comment.id}'/>" data-target="#answer-comment-${comment.id}-content" href="#">
+        <@spring.message 'i18n.action.edit' />
+    </a>
+    <a class="del" data-action="<@spring.url '/answerComments/${comment.id}/delete' />" href="#">
+        <@spring.message 'i18n.action.delete' />
+    </a>
+
 </li>
  
