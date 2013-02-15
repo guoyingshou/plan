@@ -1,26 +1,24 @@
 package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.User;
-import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Topic;
+import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.Concept;
 import com.tissue.core.plan.Note;
 import com.tissue.core.plan.Tutorial;
 import com.tissue.core.plan.Question;
-import com.tissue.core.plan.PostMessage;
-import com.tissue.core.plan.PostMessageComment;
+import com.tissue.commons.IllegalAccessException;
+import com.tissue.commons.social.service.UserService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.web.model.MessageForm;
-import com.tissue.plan.service.TopicService;
+import com.tissue.plan.service.PlanService;
 import com.tissue.plan.service.PostService;
-import com.tissue.plan.service.ConceptService;
+/**
 import com.tissue.plan.service.NoteService;
 import com.tissue.plan.service.TutorialService;
 import com.tissue.plan.service.QuestionService;
-import com.tissue.plan.service.PostMessageService;
-import com.tissue.plan.service.PostMessageCommentService;
+*/
 
 import org.springframework.validation.BindingResult;
 import org.springframework.stereotype.Controller;
@@ -31,31 +29,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Set;
 import java.util.Map;
 import java.util.Date;
-import java.security.Principal;
+import java.util.Locale;
 
 @Controller
 public class PostWriteController {
 
     @Autowired
-    protected TopicService topicService;
+    protected UserService userService;
+
+    @Autowired
+    protected PlanService planService;
 
     @Autowired
     protected PostService postService;
 
-    @Autowired
-    protected ConceptService conceptService;
-
+    /**
     @Autowired
     protected NoteService noteService;
 
@@ -64,24 +56,42 @@ public class PostWriteController {
 
     @Autowired
     protected QuestionService questionService;
+    */
 
-    @Autowired
-    protected PostMessageService postMessageService;
+    @RequestMapping(value="/plans/{planId}/posts/_form")
+    public String newPost(@PathVariable("planId") String planId, Map model, Locale locale) {
+        model.put("locale", locale);
 
-    @Autowired
-    protected PostMessageCommentService postMessageCommentService;
+        User user = userService.getViewer(SecurityUtil.getViewerId());
+        model.put("viewer", user);
 
+        Topic topic = planService.getTopic(planId);
+        model.put("topic", topic);
+
+        return "postForm";
+    }
+ 
     /**
      * Add a post to the active plan.
      * The post can be any type.
      */
-    @RequestMapping(value="/plans/{planId}/posts", method=POST)
+    @RequestMapping(value="/plans/{planId}/posts/_new", method=POST)
     public String addPost(@PathVariable("planId") String planId, @Valid PostForm form, BindingResult result, Map model) {
 
         if(result.hasErrors()) {
-            return "error";
+            throw new IllegalAccessException("Don't be evil");
         }
 
+        Plan plan = new Plan();
+        plan.setId(planId);
+        form.setPlan(plan);
+
+        User user = new User();
+        user.setId(SecurityUtil.getViewerId());
+        //user.setDisplayName(SecurityUtil.getDisplayName());
+        form.setUser(user);
+
+        /**
         Post post = new Post();
         post.setTitle(form.getTitle());
         post.setContent(form.getContent());
@@ -91,38 +101,33 @@ public class PostWriteController {
 
         Plan plan = new Plan();
         plan.setId(planId);
+        post.setPlan(plan);
 
         User user = new User();
         user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
-
-        post.setPlan(plan);
         post.setUser(user);
 
+        String id = null;
         if("concept".equals(form.getType())) {
-            String id = addConcept(post);
-            return "redirect:/posts/" + id;
+            id = addConcept(post);
         }
-
         if("note".equals(form.getType())) {
-            String id = addNote(post);
-            return "redirect:/posts/" + id;
+            id = addNote(post);
         }
-
         if("tutorial".equals(form.getType())) {
-            String id = addTutorial(post);
-            return "redirect:/posts/" + id;
+            id = addTutorial(post);
         }
-
         if("question".equals(form.getType())) {
-            String id = addQuestion(post);
-            return "redirect:/posts/" + id;
+            id = addQuestion(post);
         }
+        */
 
-        return "error";
-
+        String id = postService.createPost(form);
+        return "redirect:/posts/" + id;
     }
 
+    /**
     private String addConcept(Post post) {
         Concept concept = new Concept(post);
         concept = conceptService.addConcept(concept);
@@ -146,5 +151,6 @@ public class PostWriteController {
         question = questionService.addQuestion(question);
         return question.getId();
     }
+    */
 
 }

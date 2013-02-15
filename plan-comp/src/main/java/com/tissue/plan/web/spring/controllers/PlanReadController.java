@@ -6,7 +6,7 @@ import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.ViewerSetter;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.plan.service.TopicService;
+import com.tissue.plan.service.PlanService;
 import com.tissue.plan.service.PostService;
 
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ import java.util.Locale;
 public class PlanReadController extends ViewerSetter {
 
     @Autowired
-    private TopicService topicService;
+    private PlanService planService;
 
     @Autowired
     private PostService postService;
@@ -39,7 +39,7 @@ public class PlanReadController extends ViewerSetter {
     @RequestMapping(value="/plans/{planId}") 
     public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
-        Topic topic = topicService.getTopicByPlanId(planId);
+        Topic topic = planService.getTopic(planId);
         model.put("topic", topic);
 
         System.out.println(">>>>current plan: " + planId);

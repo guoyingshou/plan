@@ -41,6 +41,7 @@ public class TopicService {
         return topicDao.getTopic(topicId);
     }
 
+    /**
     public Topic getTopicByPlanId(String planId) {
         return topicDao.getTopicByPlanId(planId);
     }
@@ -48,6 +49,7 @@ public class TopicService {
     public Topic getTopicByPostId(String postId) {
         return topicDao.getTopicByPostId(postId);
     }
+    */
 
     public List<Topic> getTrendingTopics(int num) {
         return topicDao.getTrendingTopics(num);

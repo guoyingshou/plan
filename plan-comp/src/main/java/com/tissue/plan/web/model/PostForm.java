@@ -1,12 +1,18 @@
 package com.tissue.plan.web.model;
 
+import com.tissue.core.social.User;
+import com.tissue.core.plan.Plan;
+import com.tissue.core.plan.command.PostCommand;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class PostForm implements Serializable {
+public class PostForm implements PostCommand, Serializable {
+
+    String id;
 
     @NotNull
     @NotEmpty
@@ -19,8 +25,21 @@ public class PostForm implements Serializable {
     @NotNull
     private String type;
 
+    private Plan plan;
+    private User user;
+
+    /**
     private String planId;
     private String topicId;
+    */
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public void setTitle(String title) {
         this.title = title;
@@ -46,20 +65,20 @@ public class PostForm implements Serializable {
         return type;
     }
 
-    public void setPlanId(String planId) {
-        this.planId = planId;
+    public void setPlan(Plan plan) {
+        this.plan= plan;
     }
 
-    public String getPlanId() {
-        return planId;
+    public Plan getPlan() {
+        return plan;
     }
 
-    public void setTopicId(String topicId) {
-        this.topicId = topicId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getTopicId() {
-        return topicId;
+    public User getUser() {
+        return user;
     }
 
 }

@@ -5,7 +5,6 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.ViewerSetter;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.plan.service.TopicService;
 import com.tissue.plan.service.PostService;
 
 import org.springframework.stereotype.Controller;
@@ -28,20 +27,7 @@ import java.util.Map;
 public class PostReadController extends ViewerSetter {
 
     @Autowired
-    protected TopicService topicService;
-
-    @Autowired
     protected PostService postService;
-
-    /**
-     * show post form.
-     */
-    @RequestMapping(value="/plans/{planId}/posts/_new")
-    public String newPost(@PathVariable("planId") String planId, Map model) {
-        Topic topic = topicService.getTopicByPlanId(planId);
-        model.put("topic", topic);
-        return "postForm";
-    }
 
     /**
      * Get specific post.
@@ -49,7 +35,7 @@ public class PostReadController extends ViewerSetter {
     @RequestMapping(value="/posts/{postId}")
     public String getPost(@PathVariable("postId") String postId, Map model) {
 
-        Topic topic = topicService.getTopicByPostId(postId);
+        Topic topic = postService.getTopic(postId);
         model.put("topic", topic);
 
         Post post = postService.getPost(postId);

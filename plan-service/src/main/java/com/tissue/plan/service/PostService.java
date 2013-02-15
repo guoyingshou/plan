@@ -4,8 +4,7 @@ import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
-import com.tissue.core.plan.dao.TopicDao;
-import com.tissue.core.plan.dao.PlanDao;
+import com.tissue.core.plan.command.PostCommand;
 import com.tissue.core.plan.dao.PostDao;
 import com.tissue.core.plan.dao.PostMessageDao;
 
@@ -21,16 +20,18 @@ import java.util.HashMap;
 public class PostService {
 
     @Autowired
-    private TopicDao topicDao;
-
-    @Autowired
-    private PlanDao planDao;
-
-    @Autowired
     private PostDao postDao;
 
     @Autowired
     private PostMessageDao postMessageDao;
+
+    /**
+     * @param postCommand 
+     * @return id of the newly created post
+     */
+    public String createPost(PostCommand postCommand) {
+        return postDao.create(postCommand);
+    }
 
     public Post updatePost(Post post) {
         return postDao.update(post);
@@ -73,5 +74,9 @@ public class PostService {
 
     public List<Post> getLatestPosts(int limit) {
          return postDao.getLatestPosts(limit);
+    }
+
+    public Topic getTopic(String postId) {
+         return postDao.getTopic(postId);
     }
 }

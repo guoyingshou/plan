@@ -1,5 +1,6 @@
 package com.tissue.plan.service;
 
+import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.dao.PlanDao;
 
@@ -30,4 +31,7 @@ public class PlanService {
         planDao.addMember(planId, userId);
     }
 
+    public Topic getTopic(String planId) {
+        return planDao.getTopic(planId);
+    }
 }
