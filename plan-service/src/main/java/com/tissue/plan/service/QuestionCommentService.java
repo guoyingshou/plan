@@ -1,5 +1,6 @@
 package com.tissue.plan.service;
 
+import com.tissue.core.command.QuestionCommentCommand;
 import com.tissue.core.plan.QuestionComment;
 import com.tissue.core.plan.dao.QuestionCommentDao;
 
@@ -12,11 +13,11 @@ public class QuestionCommentService {
     @Autowired
     private QuestionCommentDao questionCommentDao;
 
-    public QuestionComment addQuestionComment(QuestionComment comment) {
+    public String addQuestionComment(QuestionCommentCommand comment) {
         return questionCommentDao.create(comment);
     }
 
-    public void updateQuestionComment(QuestionComment comment) {
+    public void updateQuestionComment(QuestionCommentCommand comment) {
         questionCommentDao.update(comment);
     }
 

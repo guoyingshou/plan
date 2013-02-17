@@ -1,5 +1,6 @@
 package com.tissue.plan.service;
 
+import com.tissue.core.command.AnswerCommand;
 import com.tissue.core.plan.Answer;
 import com.tissue.core.plan.dao.AnswerDao;
 
@@ -12,11 +13,11 @@ public class AnswerService {
     @Autowired
     private AnswerDao answerDao;
 
-    public Answer addAnswer(Answer answer) {
+    public String addAnswer(AnswerCommand answer) {
         return answerDao.create(answer);
     }
 
-    public void updateAnswer(Answer answer) {
+    public void updateAnswer(AnswerCommand answer) {
         answerDao.update(answer);
     }
 

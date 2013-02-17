@@ -6,7 +6,6 @@ import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.service.TopicService;
 
-import org.springframework.core.convert.ConversionService;
 import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -35,14 +34,10 @@ public class TopicWriteController {
     @Autowired
     private TopicService topicService;
 
-    @Autowired
-    private ConversionService conversionService;
-
-
     /**
      * Add new topic.
      */
-    @RequestMapping(value="/topics", method=POST)
+    @RequestMapping(value="/topics/_new", method=POST)
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model) throws Exception {
         
         if(result.hasErrors()) {
@@ -53,8 +48,8 @@ public class TopicWriteController {
         user.setId(SecurityUtil.getViewerId());
         form.setUser(user);
 
-        Topic topic = topicService.addTopic(form);
-        return "redirect:/topics/" + topic.getId() + "/posts";
+        String topicId = topicService.addTopic(form);
+        return "redirect:/topics/" + topicId + "/posts";
     }
 
 }

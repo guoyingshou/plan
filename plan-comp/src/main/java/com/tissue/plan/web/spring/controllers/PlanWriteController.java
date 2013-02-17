@@ -50,7 +50,7 @@ public class PlanWriteController {
         user.setId(SecurityUtil.getViewerId());
         plan.setUser(user);
 
-        plan = planService.addPlan(plan);
+        //plan = planService.addPlan(plan);
 
         return "redirect:/topics/" + topicId + "/posts";
     }

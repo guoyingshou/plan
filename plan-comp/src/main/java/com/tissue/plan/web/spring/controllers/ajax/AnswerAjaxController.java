@@ -32,6 +32,7 @@ public class AnswerAjaxController {
     @RequestMapping(value="/posts/{postId}/answers", method=POST)
     public String addAnswer(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
 
+        /**
         Answer answer = new Answer();
         answer.setContent(content);
         answer.setCreateTime(new Date());
@@ -48,6 +49,7 @@ public class AnswerAjaxController {
         answer = answerService.addAnswer(answer);
         
         model.put("answer", answer);
+        */
         return "fragments/newAnswer";
     }
 
@@ -58,10 +60,12 @@ public class AnswerAjaxController {
     @ResponseBody
     public String updateAnswer(@PathVariable("answerId") String answerId, @RequestParam("content") String content, Map model) {
 
+        /**
         Answer answer = new Answer();
         answer.setId(answerId);
         answer.setContent(content);
         answerService.updateAnswer(answer);
+        */
 
         return "ok";
     }

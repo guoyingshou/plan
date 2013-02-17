@@ -1,5 +1,6 @@
 package com.tissue.plan.service;
 
+import com.tissue.core.command.PlanCommand;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.dao.PlanDao;
@@ -19,7 +20,7 @@ public class PlanService {
      * @param plan
      * @return the newly add plan
      */
-    public Plan addPlan(Plan plan) {
+    public String addPlan(PlanCommand plan) {
         return planDao.create(plan);
     }
 

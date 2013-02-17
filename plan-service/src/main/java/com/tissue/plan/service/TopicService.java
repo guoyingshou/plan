@@ -1,9 +1,9 @@
 package com.tissue.plan.service;
 
+import com.tissue.core.command.TopicCommand;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
-import com.tissue.core.plan.command.TopicCommand;
 import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
 
@@ -27,9 +27,9 @@ public class TopicService {
      * Save a topic.
      * The title, content, userId attributes must be not null.
      * @param topic
-     * @return the returned topic has id setup
+     * @return id of the topic created.
      */
-    public Topic addTopic(TopicCommand command) {
+    public String addTopic(TopicCommand command) {
         return topicDao.create(command);
     }
 
@@ -40,16 +40,6 @@ public class TopicService {
     public Topic getTopic(String topicId) {
         return topicDao.getTopic(topicId);
     }
-
-    /**
-    public Topic getTopicByPlanId(String planId) {
-        return topicDao.getTopicByPlanId(planId);
-    }
-
-    public Topic getTopicByPostId(String postId) {
-        return topicDao.getTopicByPostId(postId);
-    }
-    */
 
     public List<Topic> getTrendingTopics(int num) {
         return topicDao.getTrendingTopics(num);

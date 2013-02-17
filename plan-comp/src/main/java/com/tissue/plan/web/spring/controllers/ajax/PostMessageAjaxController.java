@@ -44,6 +44,7 @@ public class PostMessageAjaxController {
             throw new InvalidParameterException("not member or owner");
         }
 
+        /**
         PostMessage message = new PostMessage();
         message.setContent(content);
         message.setCreateTime(new Date());
@@ -60,6 +61,7 @@ public class PostMessageAjaxController {
         PostMessage postMessage = postMessageService.addMessage(message);
 
         model.put("postMessage", postMessage);
+        */
         return "fragments/newMessage";
     }
  
@@ -75,10 +77,12 @@ public class PostMessageAjaxController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
+        /**
         PostMessage postMessage = new PostMessage();
         postMessage.setId(msgId);
         postMessage.setContent(content);
         postMessageService.updatePostMessage(postMessage);
+        */
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

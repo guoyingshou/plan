@@ -34,6 +34,7 @@ public class PostMessageCommentAjaxController {
     @RequestMapping(value="/messages/{msgId}/comments", method=POST)
     public String addMessageComment(@PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
 
+        /**
         PostMessageComment comment = new PostMessageComment();
         comment.setContent(content);
         comment.setCreateTime(new Date());
@@ -49,6 +50,7 @@ public class PostMessageCommentAjaxController {
 
         comment = postMessageCommentService.addComment(comment);
         model.put("messageComment", comment);
+        */
         return "fragments/newMessageComment";
     }
 
@@ -60,10 +62,12 @@ public class PostMessageCommentAjaxController {
     @ResponseBody
     public String updateMessageComment(@PathVariable("commentId") String commentId, @RequestParam("content") String content, Map model) {
 
+        /**
         PostMessageComment comment = new PostMessageComment();
         comment.setId(commentId);
         comment.setContent(content);
         postMessageCommentService.updateComment(comment);
+        */
 
         return "ok";
     }

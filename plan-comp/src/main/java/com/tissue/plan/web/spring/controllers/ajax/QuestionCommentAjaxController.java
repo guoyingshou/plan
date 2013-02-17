@@ -30,6 +30,7 @@ public class QuestionCommentAjaxController {
     @RequestMapping(value="/posts/{postId}/questionComments", method=POST)
     public String addQuestionComment(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
 
+        /**
         QuestionComment comment = new QuestionComment();
         comment.setContent(content);
         comment.setCreateTime(new Date());
@@ -46,6 +47,7 @@ public class QuestionCommentAjaxController {
         comment = questionCommentService.addQuestionComment(comment);
 
         model.put("questionComment", comment);
+        */
         return "fragments/newQuestionComment";
     }
  
@@ -56,10 +58,12 @@ public class QuestionCommentAjaxController {
     @ResponseBody
     public String updateQuestionComment(@PathVariable("commentId") String commentId, @RequestParam("content") String content, Map model) {
 
+        /**
         QuestionComment comment = new QuestionComment();
         comment.setId(commentId);
         comment.setContent(content);
         questionCommentService.updateQuestionComment(comment);
+        */
 
         return "ok";
     }

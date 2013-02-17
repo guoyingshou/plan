@@ -1,10 +1,11 @@
 package com.tissue.plan.service;
 
+import com.tissue.core.command.PostCommand;
+import com.tissue.core.command.PostMessageCommand;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
-import com.tissue.core.plan.command.PostCommand;
 import com.tissue.core.plan.dao.PostDao;
 import com.tissue.core.plan.dao.PostMessageDao;
 
@@ -33,8 +34,8 @@ public class PostService {
         return postDao.create(postCommand);
     }
 
-    public Post updatePost(Post post) {
-        return postDao.update(post);
+    public void updatePost(PostCommand post) {
+        postDao.update(post);
     }
 
     /**
@@ -68,7 +69,7 @@ public class PostService {
         return postDao.getPagedPostsByPlanId(planId, page, size);
     }
 
-    public void addMessage(PostMessage message) {
+    public void addMessage(PostMessageCommand message) {
          postMessageDao.create(message);
     }
 

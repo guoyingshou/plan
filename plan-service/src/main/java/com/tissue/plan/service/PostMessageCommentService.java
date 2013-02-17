@@ -1,5 +1,6 @@
 package com.tissue.plan.service;
 
+import com.tissue.core.command.PostMessageCommentCommand;
 import com.tissue.core.plan.PostMessageComment;
 import com.tissue.core.plan.dao.PostMessageCommentDao;
 
@@ -12,13 +13,12 @@ public class PostMessageCommentService {
     @Autowired
     private PostMessageCommentDao postMessageCommentDao;
 
-    public PostMessageComment addComment(PostMessageComment comment) {
+    public String addComment(PostMessageCommentCommand comment) {
         return postMessageCommentDao.create(comment);
     }
 
-    public String updateComment(PostMessageComment comment) {
-        comment = postMessageCommentDao.update(comment);
-        return comment.getId();
+    public void updateComment(PostMessageCommentCommand comment) {
+        postMessageCommentDao.update(comment);
     }
 
     public void deleteComment(String commentId) {

@@ -35,6 +35,8 @@ public class PostReadController extends ViewerSetter {
     @RequestMapping(value="/posts/{postId}")
     public String getPost(@PathVariable("postId") String postId, Map model) {
 
+        postId = "#" + postId;
+
         Topic topic = postService.getTopic(postId);
         model.put("topic", topic);
 

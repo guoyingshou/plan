@@ -52,9 +52,11 @@ public class TopicAjaxController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
+        /**
         form.setId(topicId);
         topicService.updateTopic(form);
 
+        */
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 

@@ -44,6 +44,7 @@ public class PostAjaxController {
         if(result.hasErrors() || !commonService.isOwner(viewerId, postId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+        /**
 
         Post post = new Post();
         post.setId(postId);
@@ -52,6 +53,7 @@ public class PostAjaxController {
         //post.setType(form.getType());
 
         postService.updatePost(post);
+        */
         return HttpEntity.EMPTY;
     }
 

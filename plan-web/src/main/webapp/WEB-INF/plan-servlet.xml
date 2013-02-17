@@ -36,11 +36,17 @@
     
     <mvc:resources mapping="/resources/**" location="/" />
 
+    <!--
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
-        <property name="converters">
-            <list>
-                <bean class="com.tissue.commons.converter.TagsConverter" />
-            </list>
+    -->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatters">
+            <set>
+                <!--
+                <bean class="com.tissue.core.spring.converters.TagsConverter" />
+                -->
+                <bean class="com.tissue.core.spring.formatters.IDAnnotationFormatterFactory" />
+            </set>
         </property>
     </bean>
 

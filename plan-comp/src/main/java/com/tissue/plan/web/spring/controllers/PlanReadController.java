@@ -39,6 +39,8 @@ public class PlanReadController extends ViewerSetter {
     @RequestMapping(value="/plans/{planId}") 
     public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
+        planId = "#" + planId;
+
         Topic topic = planService.getTopic(planId);
         model.put("topic", topic);
 
