@@ -35,7 +35,7 @@ public class PostMessageCommentAjaxController {
      * Add a comment to the message of a specific post.
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/messages/{msgId}/comments", method=POST)
+    @RequestMapping(value="/messages/{msgId}/comments/_create", method=POST)
     public String addMessageComment(@PathVariable("msgId") String msgId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model) {
 
         User user = new User();
@@ -56,7 +56,7 @@ public class PostMessageCommentAjaxController {
      * Update a PostMessageComment.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/messageComments/{commentId}", method=POST)
+    @RequestMapping(value="/messageComments/{commentId}/_update", method=POST)
     public HttpEntity<?> updateMessageComment(@PathVariable("commentId") String commentId, @Valid PostMessageCommentForm form, BindingResult result, Map model) {
 
         form.setId("#"+commentId);
@@ -69,7 +69,7 @@ public class PostMessageCommentAjaxController {
      * Delete a PostMessageComment.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/messageComments/{commentId}/delete", method=POST)
+    @RequestMapping(value="/messageComments/{commentId}/_delete", method=POST)
     public HttpEntity<?> deleteMessageComment(@PathVariable("commentId") String commentId, Map model) {
         postMessageCommentService.deleteComment("#"+commentId);
         return new ResponseEntity(HttpStatus.ACCEPTED);

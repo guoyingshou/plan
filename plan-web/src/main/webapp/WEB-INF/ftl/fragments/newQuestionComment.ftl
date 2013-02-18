@@ -9,10 +9,10 @@
 
     <div id="question-comment-${questionComment.id?replace("#", "")?replace(":", "-")}-content">${questionComment.content}</div>
 
-    <a class="item-edit" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}' />" data-target="#question-comment-${questionComment.id?replace("#", "")?replace(":", "-")}-content" href="#">
+    <a class="item-edit" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_update' />" data-target="#question-comment-${questionComment.id?replace("#", "")?replace(":", "-")}-content" href="#">
         <@spring.message 'i18n.action.edit' />
     </a>
-    <a class="del" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/delete' />" href="#">
+    <a class="del" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
         <@spring.message 'i18n.action.delete' />
     </a>
     

@@ -33,7 +33,7 @@ public class QuestionCommentAjaxController {
     /**
      * Add a comment to a specific question(a kind of post).
      */
-    @RequestMapping(value="/posts/{postId}/questionComments", method=POST)
+    @RequestMapping(value="/posts/{postId}/questionComments/_create", method=POST)
     public String addQuestionComment(@PathVariable("postId") String postId, @Valid QuestionCommentForm form, BindingResult result, Map model) {
 
         User user = new User();
@@ -54,7 +54,7 @@ public class QuestionCommentAjaxController {
     /**
      * Update a QuestionComment.
      */
-    @RequestMapping(value="/questionComments/{commentId}", method=POST)
+    @RequestMapping(value="/questionComments/{commentId}/_update", method=POST)
     public HttpEntity<?> updateQuestionComment(@PathVariable("commentId") String commentId, @Valid QuestionCommentForm form, BindingResult result, Map model) {
 
         form.setId("#"+commentId);
@@ -66,7 +66,7 @@ public class QuestionCommentAjaxController {
     /**
      * Delete a QuestionComment.
      */
-    @RequestMapping(value="/questionComments/{commentId}/delete", method=POST)
+    @RequestMapping(value="/questionComments/{commentId}/_delete", method=POST)
     public HttpEntity<?> deleteQuestionComment(@PathVariable("commentId") String commentId, Map model) {
         questionCommentService.deleteQuestionComment("#"+commentId);
         return new ResponseEntity(HttpStatus.ACCEPTED);

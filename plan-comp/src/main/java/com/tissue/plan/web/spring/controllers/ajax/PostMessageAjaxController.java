@@ -39,7 +39,7 @@ public class PostMessageAjaxController {
      * Add a message to a specific post.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/posts/{postId}/messages", method=POST)
+    @RequestMapping(value="/posts/{postId}/messages/_create", method=POST)
     public String addMessage(@PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model) {
 
         postId = "#" + postId;
@@ -67,7 +67,7 @@ public class PostMessageAjaxController {
      * Update a message.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/messages/{msgId}", method=POST)
+    @RequestMapping(value="/messages/{msgId}/_update", method=POST)
     public HttpEntity<?> updateMessage(@PathVariable("msgId") String msgId, @Valid PostMessageForm form, BindingResult result) {
 
         String viewerId = SecurityUtil.getViewerId();
@@ -85,7 +85,7 @@ public class PostMessageAjaxController {
      * Delete a message.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/messages/{msgId}/delete", method=POST)
+    @RequestMapping(value="/messages/{msgId}/_delete", method=POST)
     public HttpEntity<?> deleteMessage(@PathVariable("msgId") String msgId, Map model) {
 
         String viewerId = SecurityUtil.getViewerId();

@@ -33,7 +33,7 @@ public class AnswerCommentAjaxController {
     /**
      * Add a comment to the answer of a specific question.
      */
-    @RequestMapping(value="/answers/{answerId}/comments", method=POST)
+    @RequestMapping(value="/answers/{answerId}/comments/_create", method=POST)
     public String addAnswerComment(@PathVariable("answerId") String answerId, @Valid AnswerCommentForm form, BindingResult result, Map model) {
 
         User user = new User();
@@ -53,7 +53,7 @@ public class AnswerCommentAjaxController {
     /**
      * Update an answer comment.
      */
-    @RequestMapping(value="/answerComments/{commentId}", method=POST)
+    @RequestMapping(value="/answerComments/{commentId}/_update", method=POST)
     public HttpEntity<?> updateAnswerComment(@PathVariable("commentId") String commentId, @Valid AnswerCommentForm form, BindingResult result, Map model) {
 
         form.setId("#"+commentId);
@@ -65,7 +65,7 @@ public class AnswerCommentAjaxController {
     /**
      * Delete an answer comment.
      */
-    @RequestMapping(value="/answerComments/{commentId}/delete", method=POST)
+    @RequestMapping(value="/answerComments/{commentId}/_delete", method=POST)
     public HttpEntity<?> deleteAnswerComment(@PathVariable("commentId") String commentId) {
         answerCommentService.deleteComment("#"+commentId);
         return new ResponseEntity(HttpStatus.ACCEPTED);

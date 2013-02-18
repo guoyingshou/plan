@@ -3,8 +3,8 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in tissue>
-
 <#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in tissue>
+<#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
 <@tissue.layout "topic">
     <div id="logo">

@@ -36,7 +36,7 @@ public class PostAjaxController {
      * Update a post.
      * The post can be of any type.
      */
-    @RequestMapping(value="/posts/{postId}/update", method=POST)
+    @RequestMapping(value="/posts/{postId}/_update", method=POST)
     public HttpEntity<?> updatePost(@PathVariable("postId") String postId, @Valid PostForm form, BindingResult result) {
 
         String viewerId = SecurityUtil.getViewerId();

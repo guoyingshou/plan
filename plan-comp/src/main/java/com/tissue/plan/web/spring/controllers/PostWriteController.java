@@ -8,7 +8,7 @@ import com.tissue.core.plan.Concept;
 import com.tissue.core.plan.Note;
 import com.tissue.core.plan.Tutorial;
 import com.tissue.core.plan.Question;
-import com.tissue.commons.IllegalAccessException;
+import com.tissue.commons.exceptions.IllegalAccessException;
 import com.tissue.commons.social.service.UserService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.PostForm;
@@ -60,7 +60,7 @@ public class PostWriteController {
      * Add a post to the active plan.
      * The post can be any type.
      */
-    @RequestMapping(value="/plans/{planId}/posts/_new", method=POST)
+    @RequestMapping(value="/plans/{planId}/posts/_create", method=POST)
     public String addPost(@PathVariable("planId") String planId, @Valid PostForm form, BindingResult result, Map model) {
 
         if(result.hasErrors()) {
@@ -83,5 +83,21 @@ public class PostWriteController {
         String id = postService.createPost(form).replace("#", "");
         return "redirect:/posts/" + id;
     }
+
+    @RequestMapping(value="/posts/{postId}/_delete", method=POST)
+    public String deletePost(@PathVariable("postId") String postId) {
+
+        /**
+        if(result.hasErrors()) {
+            throw new IllegalAccessException("Don't be evil");
+        }
+
+        String topicId = postService.deletePost("#"+postId);
+        return "redirect:/topics/" + topicId;
+        */
+
+        return "t3";
+    }
+
 
 }

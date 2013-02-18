@@ -44,7 +44,7 @@ public class TopicAjaxController {
     /**
      * Update topic.
      */
-    @RequestMapping(value="/topics/{topicId}/update", method=POST)
+    @RequestMapping(value="/topics/{topicId}/_update", method=POST)
     public HttpEntity<?> updateTopic(@PathVariable("topicId") String topicId, @Valid TopicForm form, BindingResult result, Map model) throws Exception {
 
         String viewerId = SecurityUtil.getViewerId();

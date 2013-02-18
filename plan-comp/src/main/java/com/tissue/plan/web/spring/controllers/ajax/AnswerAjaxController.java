@@ -36,7 +36,7 @@ public class AnswerAjaxController {
      * Add an answer to a specific post.
      * The post's type can only be 'question'.
      */
-    @RequestMapping(value="/posts/{postId}/answers", method=POST)
+    @RequestMapping(value="/posts/{postId}/answers/_create", method=POST)
     public String addAnswer(@PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model) {
 
         User user = new User();
@@ -57,7 +57,7 @@ public class AnswerAjaxController {
     /**
      * Update an answer.
      */
-    @RequestMapping(value="/answers/{answerId}", method=POST)
+    @RequestMapping(value="/answers/{answerId}/_update", method=POST)
     public HttpEntity<?> updateAnswer(@PathVariable("answerId") String answerId, @Valid AnswerForm form, BindingResult result, Map model) {
 
         form.setId("#"+answerId);
@@ -69,7 +69,7 @@ public class AnswerAjaxController {
     /**
      * Delete an answer.
      */
-    @RequestMapping(value="/answers/{answerId}/delete", method=POST)
+    @RequestMapping(value="/answers/{answerId}/_delete", method=POST)
     public HttpEntity<?> deleteAnswer(@PathVariable("answerId") String answerId) {
         answerService.deleteAnswer("#"+answerId);
         return new ResponseEntity(HttpStatus.ACCEPTED);

@@ -5,10 +5,10 @@
     </div>
     <div id="message-comment-${messageComment.id?replace("#", "")?replace(":", "-")}-content">${messageComment.content}</div>
 
-    <a class="item-edit" href="#" data-action="<@spring.url '/messageComments/${messageComment.id?replace("#", "")}' />" data-target="#message-comment-${messageComment.id?replace("#", "")?replace(":", "-")}-content">
+    <a class="item-edit" href="#" data-action="<@spring.url '/messageComments/${messageComment.id?replace("#", "")}/_update' />" data-target="#message-comment-${messageComment.id?replace("#", "")?replace(":", "-")}-content">
         <@spring.message 'i18n.action.edit' />
     </a>
-    <a class="del" data-action="<@spring.url '/messageComments/${messageComment.id?replace("#", "")}/delete' />" href="#">
+    <a class="del" data-action="<@spring.url '/messageComments/${messageComment.id?replace("#", "")}/_delete' />" href="#">
         <@spring.message 'i18n.action.delete' />
     </a>
 </li>

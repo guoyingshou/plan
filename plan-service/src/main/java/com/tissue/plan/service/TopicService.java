@@ -37,6 +37,10 @@ public class TopicService {
         topicDao.update(command);
     }
 
+    public void deleteTopic(String topicId) {
+        topicDao.delete(topicId);
+    }
+
     public Topic getTopic(String topicId) {
         return topicDao.getTopic(topicId);
     }
