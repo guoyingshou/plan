@@ -6,6 +6,7 @@ import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.service.TopicService;
+import com.tissue.plan.web.model.TopicForm;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpEntity;
@@ -23,13 +24,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
-import javax.validation.Valid;
 //import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.HashSet;
 import java.util.Arrays;
+import javax.validation.Valid;
 
 @Controller
 public class TopicAjaxController {
@@ -52,11 +53,8 @@ public class TopicAjaxController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        /**
-        form.setId(topicId);
+        form.setId("#"+topicId);
         topicService.updateTopic(form);
-
-        */
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 

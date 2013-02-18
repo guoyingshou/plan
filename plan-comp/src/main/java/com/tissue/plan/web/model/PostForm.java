@@ -10,36 +10,16 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class PostForm implements PostCommand, Serializable {
-
-    String id;
+public class PostForm extends AbstractCommand implements PostCommand {
 
     @NotNull
     @NotEmpty
     private String title;
     
     @NotNull
-    @NotEmpty
-    private String content;
-
-    @NotNull
     private String type;
 
     private Plan plan;
-    private User user;
-
-    /**
-    private String planId;
-    private String topicId;
-    */
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
 
     public void setTitle(String title) {
         this.title = title;
@@ -47,14 +27,6 @@ public class PostForm implements PostCommand, Serializable {
 
     public String getTitle() {
         return title;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getContent() {
-        return content;
     }
 
     public void setType(String type) {
@@ -72,13 +44,4 @@ public class PostForm implements PostCommand, Serializable {
     public Plan getPlan() {
         return plan;
     }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
 }

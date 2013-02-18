@@ -6,7 +6,9 @@ import com.tissue.core.plan.PostMessage;
 import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.service.PostMessageService;
+import com.tissue.plan.web.model.PostMessageForm;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.security.InvalidParameterException;
 import java.util.Map;
 import java.util.Date;
+import javax.validation.Valid;
 
 @Controller
 public class PostMessageAjaxController {
@@ -37,31 +40,26 @@ public class PostMessageAjaxController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/posts/{postId}/messages", method=POST)
-    public String addMessage(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
+    public String addMessage(@PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model) {
+
+        postId = "#" + postId;
 
         String viewerId = SecurityUtil.getViewerId();
         if(!commonService.isMemberOrOwner(viewerId, postId)) {
             throw new InvalidParameterException("not member or owner");
         }
 
-        /**
-        PostMessage message = new PostMessage();
-        message.setContent(content);
-        message.setCreateTime(new Date());
-
         User user = new User();
         user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
-        message.setUser(user);
+        form.setUser(user);
 
         Post post = new Post();
         post.setId(postId);
-        message.setPost(post);
+        form.setPost(post);
 
-        PostMessage postMessage = postMessageService.addMessage(message);
-
+        PostMessage postMessage = postMessageService.addMessage(form);
         model.put("postMessage", postMessage);
-        */
         return "fragments/newMessage";
     }
  
@@ -70,19 +68,15 @@ public class PostMessageAjaxController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{msgId}", method=POST)
-    public HttpEntity<?> updateMessage(@PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
+    public HttpEntity<?> updateMessage(@PathVariable("msgId") String msgId, @Valid PostMessageForm form, BindingResult result) {
 
         String viewerId = SecurityUtil.getViewerId();
-        if(!commonService.isOwner(viewerId, msgId)) {
+        if(!commonService.isOwner(viewerId, "#"+msgId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        /**
-        PostMessage postMessage = new PostMessage();
-        postMessage.setId(msgId);
-        postMessage.setContent(content);
-        postMessageService.updatePostMessage(postMessage);
-        */
+        form.setId("#"+msgId);
+        postMessageService.updatePostMessage(form);
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
@@ -95,10 +89,10 @@ public class PostMessageAjaxController {
     public HttpEntity<?> deleteMessage(@PathVariable("msgId") String msgId, Map model) {
 
         String viewerId = SecurityUtil.getViewerId();
-        if(!commonService.isOwner(viewerId, msgId)) {
+        if(!commonService.isOwner(viewerId, "#"+msgId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        postMessageService.deletePostMessage(msgId);
+        postMessageService.deletePostMessage("#"+msgId);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 

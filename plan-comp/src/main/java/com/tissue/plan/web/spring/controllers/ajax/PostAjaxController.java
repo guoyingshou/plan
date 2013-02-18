@@ -4,7 +4,7 @@ import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;
 import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.plan.web.model.PostEditForm;
+import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.service.PostService;
 
 import org.springframework.validation.BindingResult;
@@ -37,24 +37,16 @@ public class PostAjaxController {
      * The post can be of any type.
      */
     @RequestMapping(value="/posts/{postId}/update", method=POST)
-    public HttpEntity<?> updatePost(@PathVariable("postId") String postId, @Valid PostEditForm form, BindingResult result, Map model) {
+    public HttpEntity<?> updatePost(@PathVariable("postId") String postId, @Valid PostForm form, BindingResult result) {
 
         String viewerId = SecurityUtil.getViewerId();
         
-        if(result.hasErrors() || !commonService.isOwner(viewerId, postId)) {
+        if(result.hasErrors() || !commonService.isOwner(viewerId, "#"+postId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        /**
-
-        Post post = new Post();
-        post.setId(postId);
-        post.setTitle(form.getTitle());
-        post.setContent(form.getContent());
-        //post.setType(form.getType());
-
-        postService.updatePost(post);
-        */
-        return HttpEntity.EMPTY;
+        form.setId("#"+postId);
+        postService.updatePost(form);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 }

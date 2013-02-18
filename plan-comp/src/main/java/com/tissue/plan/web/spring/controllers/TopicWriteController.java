@@ -48,7 +48,7 @@ public class TopicWriteController {
         user.setId(SecurityUtil.getViewerId());
         form.setUser(user);
 
-        String topicId = topicService.addTopic(form);
+        String topicId = topicService.addTopic(form).replace("#", "");
         return "redirect:/topics/" + topicId + "/posts";
     }
 

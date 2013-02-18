@@ -13,12 +13,12 @@ public class PostMessageCommentService {
     @Autowired
     private PostMessageCommentDao postMessageCommentDao;
 
-    public String addComment(PostMessageCommentCommand comment) {
-        return postMessageCommentDao.create(comment);
+    public PostMessageComment addComment(PostMessageCommentCommand command) {
+        return postMessageCommentDao.create(command);
     }
 
-    public void updateComment(PostMessageCommentCommand comment) {
-        postMessageCommentDao.update(comment);
+    public void updateComment(PostMessageCommentCommand command) {
+        postMessageCommentDao.update(command);
     }
 
     public void deleteComment(String commentId) {

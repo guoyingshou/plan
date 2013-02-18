@@ -9,9 +9,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class TopicForm implements TopicCommand, Serializable {
-
-    private String id;
+public class TopicForm extends AbstractCommand implements TopicCommand {
 
     @NotNull
     @NotEmpty
@@ -19,21 +17,7 @@ public class TopicForm implements TopicCommand, Serializable {
 
     @NotNull
     @NotEmpty
-    private String content;
-
-    @NotNull
-    @NotEmpty
     private Set<String> tags;
-
-    private User user;
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
 
     public void setTitle(String title) {
         this.title = title;
@@ -41,14 +25,6 @@ public class TopicForm implements TopicCommand, Serializable {
 
     public String getTitle() {
         return title;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getContent() {
-        return content;
     }
 
     public void setTags(Set<String> tags) {
@@ -59,11 +35,4 @@ public class TopicForm implements TopicCommand, Serializable {
         return tags;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
 }

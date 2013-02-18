@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Date;
-import java.security.Principal;
 
 @Controller
 public class PlanWriteController {
@@ -38,20 +37,15 @@ public class PlanWriteController {
     @RequestMapping(value="/topics/{topicId}/plans", method=POST)
     public String addPlan(@PathVariable("topicId") String topicId, PlanForm form, Map model) {
 
-        Plan plan = new Plan();
-        plan.setDuration(form.getDuration());
-        plan.setCreateTime(new Date());
-
         Topic topic = new Topic();
-        topic.setId(topicId);
-        plan.setTopic(topic);
+        topic.setId("#"+topicId);
+        form.setTopic(topic);
 
         User user = new User();
         user.setId(SecurityUtil.getViewerId());
-        plan.setUser(user);
+        form.setUser(user);
 
-        //plan = planService.addPlan(plan);
-
+        planService.addPlan(form);
         return "redirect:/topics/" + topicId + "/posts";
     }
 
@@ -60,7 +54,7 @@ public class PlanWriteController {
      */
     @RequestMapping(value="/topics/{topicId}/plans/{planId}/join")
     public String joinPlan(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId, Map model) {
-        planService.addMember(planId, SecurityUtil.getViewerId());
+        planService.addMember("#"+planId, SecurityUtil.getViewerId());
         return "redirect:/topics/" + topicId + "/posts";
     }
 

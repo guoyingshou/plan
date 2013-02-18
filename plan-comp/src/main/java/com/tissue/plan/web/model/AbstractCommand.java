@@ -1,22 +1,22 @@
 package com.tissue.plan.web.model;
 
-import com.tissue.core.command.PlanCommand;
+import com.tissue.core.command.TopicCommand;
 import com.tissue.core.social.User;
-import com.tissue.core.plan.Topic;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
-public class PlanForm implements PlanCommand, Serializable {
+public class AbstractCommand implements Serializable {
 
     private String id;
 
     @NotNull
-    private int duration;
+    @NotEmpty
+    private String content;
 
-    private Topic topic;
     private User user;
 
     public void setId(String id) {
@@ -27,20 +27,12 @@ public class PlanForm implements PlanCommand, Serializable {
         return id;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setTopic(Topic topic) {
-        this.topic= topic;
-    }
-
-    public Topic getTopic() {
-        return topic;
+    public String getContent() {
+        return content;
     }
 
     public void setUser(User user) {

@@ -3,10 +3,16 @@ package com.tissue.plan.web.spring.controllers.ajax;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
+import com.tissue.core.plan.Question;
 import com.tissue.core.plan.Answer;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.service.AnswerService;
+import com.tissue.plan.web.model.AnswerForm;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 import java.util.Date;
+import javax.validation.Valid;
 
 @Controller
 public class AnswerAjaxController {
@@ -30,26 +37,20 @@ public class AnswerAjaxController {
      * The post's type can only be 'question'.
      */
     @RequestMapping(value="/posts/{postId}/answers", method=POST)
-    public String addAnswer(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
-
-        /**
-        Answer answer = new Answer();
-        answer.setContent(content);
-        answer.setCreateTime(new Date());
+    public String addAnswer(@PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model) {
 
         User user = new User();
         user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
-        answer.setUser(user);
+        form.setUser(user);
 
         Post post = new Post();
-        post.setId(postId);
-        answer.setQuestion(post);
+        post.setId("#"+postId);
+        Question q = new Question(post);
+        form.setQuestion(q);
 
-        answer = answerService.addAnswer(answer);
-        
+        Answer answer = answerService.addAnswer(form);
         model.put("answer", answer);
-        */
         return "fragments/newAnswer";
     }
 
@@ -57,27 +58,21 @@ public class AnswerAjaxController {
      * Update an answer.
      */
     @RequestMapping(value="/answers/{answerId}", method=POST)
-    @ResponseBody
-    public String updateAnswer(@PathVariable("answerId") String answerId, @RequestParam("content") String content, Map model) {
+    public HttpEntity<?> updateAnswer(@PathVariable("answerId") String answerId, @Valid AnswerForm form, BindingResult result, Map model) {
 
-        /**
-        Answer answer = new Answer();
-        answer.setId(answerId);
-        answer.setContent(content);
-        answerService.updateAnswer(answer);
-        */
+        form.setId("#"+answerId);
+        answerService.updateAnswer(form);
 
-        return "ok";
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     /**
      * Delete an answer.
      */
     @RequestMapping(value="/answers/{answerId}/delete", method=POST)
-    @ResponseBody
-    public String deleteAnswer(@PathVariable("answerId") String answerId, Map model) {
-        answerService.deleteAnswer(answerId);
-        return "ok";
+    public HttpEntity<?> deleteAnswer(@PathVariable("answerId") String answerId) {
+        answerService.deleteAnswer("#"+answerId);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 

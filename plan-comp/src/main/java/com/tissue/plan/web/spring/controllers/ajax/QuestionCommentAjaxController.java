@@ -5,7 +5,12 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.plan.QuestionComment;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.service.QuestionCommentService;
+import com.tissue.plan.web.model.QuestionCommentForm;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 import java.util.Date;
+import javax.validation.Valid;
 
 @Controller
 public class QuestionCommentAjaxController {
@@ -28,26 +34,20 @@ public class QuestionCommentAjaxController {
      * Add a comment to a specific question(a kind of post).
      */
     @RequestMapping(value="/posts/{postId}/questionComments", method=POST)
-    public String addQuestionComment(@PathVariable("postId") String postId, @RequestParam("content") String content, Map model) {
-
-        /**
-        QuestionComment comment = new QuestionComment();
-        comment.setContent(content);
-        comment.setCreateTime(new Date());
+    public String addQuestionComment(@PathVariable("postId") String postId, @Valid QuestionCommentForm form, BindingResult result, Map model) {
 
         User user = new User();
         user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
-        comment.setUser(user);
+        form.setUser(user);
 
         Post post = new Post();
-        post.setId(postId);
-        comment.setQuestion(post);
+        post.setId("#"+postId);
+        form.setQuestion(post);
 
-        comment = questionCommentService.addQuestionComment(comment);
+        QuestionComment comment = questionCommentService.addQuestionComment(form);
 
         model.put("questionComment", comment);
-        */
         return "fragments/newQuestionComment";
     }
  
@@ -55,27 +55,21 @@ public class QuestionCommentAjaxController {
      * Update a QuestionComment.
      */
     @RequestMapping(value="/questionComments/{commentId}", method=POST)
-    @ResponseBody
-    public String updateQuestionComment(@PathVariable("commentId") String commentId, @RequestParam("content") String content, Map model) {
+    public HttpEntity<?> updateQuestionComment(@PathVariable("commentId") String commentId, @Valid QuestionCommentForm form, BindingResult result, Map model) {
 
-        /**
-        QuestionComment comment = new QuestionComment();
-        comment.setId(commentId);
-        comment.setContent(content);
-        questionCommentService.updateQuestionComment(comment);
-        */
+        form.setId("#"+commentId);
+        questionCommentService.updateQuestionComment(form);
 
-        return "ok";
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     /**
      * Delete a QuestionComment.
      */
     @RequestMapping(value="/questionComments/{commentId}/delete", method=POST)
-    @ResponseBody
-    public String deleteQuestionComment(@PathVariable("commentId") String commentId, Map model) {
-        questionCommentService.deleteQuestionComment(commentId);
-        return "ok";
+    public HttpEntity<?> deleteQuestionComment(@PathVariable("commentId") String commentId, Map model) {
+        questionCommentService.deleteQuestionComment("#"+commentId);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 

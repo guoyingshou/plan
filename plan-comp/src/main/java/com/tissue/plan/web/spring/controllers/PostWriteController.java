@@ -29,6 +29,7 @@ import javax.validation.Valid;
 import java.util.Map;
 import java.util.Date;
 import java.util.Locale;
+import java.util.List;
 
 @Controller
 public class PostWriteController {
@@ -67,25 +68,20 @@ public class PostWriteController {
         }
 
         String viewerId = SecurityUtil.getViewerId();
-        Plan plan = planService.getPlan(planId);
-        /**
-        if((plan == null) || !plan.isOwner(viewerId) || !plan.isMember(viewerId)) {
+        Plan plan = planService.getPlan("#"+planId);
+
+        if((plan == null) || !(plan.isOwner(viewerId) || plan.isMember(viewerId))) {
             throw new IllegalAccessException("Don't be evil");
         }
-        */
 
-
-        /**
         form.setPlan(plan);
 
         User user = new User();
         user.setId(SecurityUtil.getViewerId());
         form.setUser(user);
 
-        String id = postService.createPost(form);
+        String id = postService.createPost(form).replace("#", "");
         return "redirect:/posts/" + id;
-        */
-        return "tje";
     }
 
 }

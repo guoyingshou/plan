@@ -13,12 +13,12 @@ public class QuestionCommentService {
     @Autowired
     private QuestionCommentDao questionCommentDao;
 
-    public String addQuestionComment(QuestionCommentCommand comment) {
-        return questionCommentDao.create(comment);
+    public QuestionComment addQuestionComment(QuestionCommentCommand command) {
+        return questionCommentDao.create(command);
     }
 
-    public void updateQuestionComment(QuestionCommentCommand comment) {
-        questionCommentDao.update(comment);
+    public void updateQuestionComment(QuestionCommentCommand command) {
+        questionCommentDao.update(command);
     }
 
     public void deleteQuestionComment(String commentId) {

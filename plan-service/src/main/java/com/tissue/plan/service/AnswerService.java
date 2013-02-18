@@ -13,12 +13,12 @@ public class AnswerService {
     @Autowired
     private AnswerDao answerDao;
 
-    public String addAnswer(AnswerCommand answer) {
-        return answerDao.create(answer);
+    public Answer addAnswer(AnswerCommand command) {
+        return answerDao.create(command);
     }
 
-    public void updateAnswer(AnswerCommand answer) {
-        answerDao.update(answer);
+    public void updateAnswer(AnswerCommand command) {
+        answerDao.update(command);
     }
 
     public void deleteAnswer(String answerId) {

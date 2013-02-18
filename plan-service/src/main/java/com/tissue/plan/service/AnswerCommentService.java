@@ -13,12 +13,12 @@ public class AnswerCommentService {
     @Autowired
     private AnswerCommentDao answerCommentDao;
 
-    public String addComment(AnswerCommentCommand comment) {
-        return answerCommentDao.create(comment);
+    public AnswerComment addComment(AnswerCommentCommand command) {
+        return answerCommentDao.create(command);
      }
 
-    public void updateComment(AnswerCommentCommand comment) {
-        answerCommentDao.update(comment);
+    public void updateComment(AnswerCommentCommand command) {
+        answerCommentDao.update(command);
     }
 
     public void deleteComment(String commentId) {

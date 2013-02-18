@@ -5,10 +5,13 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
 import com.tissue.core.plan.PostMessageComment;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.web.model.MessageForm;
 import com.tissue.plan.service.PostMessageCommentService;
+import com.tissue.plan.web.model.PostMessageCommentForm;
 
+import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 import java.util.Date;
+import javax.validation.Valid;
 
 @Controller
 public class PostMessageCommentAjaxController {
@@ -32,25 +36,19 @@ public class PostMessageCommentAjaxController {
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{msgId}/comments", method=POST)
-    public String addMessageComment(@PathVariable("msgId") String msgId, @RequestParam("content") String content, Map model) {
-
-        /**
-        PostMessageComment comment = new PostMessageComment();
-        comment.setContent(content);
-        comment.setCreateTime(new Date());
+    public String addMessageComment(@PathVariable("msgId") String msgId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model) {
 
         User user = new User();
         user.setId(SecurityUtil.getViewerId());
         user.setDisplayName(SecurityUtil.getDisplayName());
-        comment.setUser(user);
+        form.setUser(user);
 
         PostMessage msg = new PostMessage();
-        msg.setId(msgId);
-        comment.setPostMessage(msg);
+        msg.setId("#"+msgId);
+        form.setPostMessage(msg);
 
-        comment = postMessageCommentService.addComment(comment);
+        PostMessageComment comment = postMessageCommentService.addComment(form);
         model.put("messageComment", comment);
-        */
         return "fragments/newMessageComment";
     }
 
@@ -59,17 +57,12 @@ public class PostMessageCommentAjaxController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messageComments/{commentId}", method=POST)
-    @ResponseBody
-    public String updateMessageComment(@PathVariable("commentId") String commentId, @RequestParam("content") String content, Map model) {
+    public HttpEntity<?> updateMessageComment(@PathVariable("commentId") String commentId, @Valid PostMessageCommentForm form, BindingResult result, Map model) {
 
-        /**
-        PostMessageComment comment = new PostMessageComment();
-        comment.setId(commentId);
-        comment.setContent(content);
-        postMessageCommentService.updateComment(comment);
-        */
+        form.setId("#"+commentId);
+        postMessageCommentService.updateComment(form);
 
-        return "ok";
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     /**
@@ -77,10 +70,9 @@ public class PostMessageCommentAjaxController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messageComments/{commentId}/delete", method=POST)
-    @ResponseBody
-    public String deleteMessageComment(@PathVariable("commentId") String commentId, Map model) {
-        postMessageCommentService.deleteComment(commentId);
-        return "ok";
+    public HttpEntity<?> deleteMessageComment(@PathVariable("commentId") String commentId, Map model) {
+        postMessageCommentService.deleteComment("#"+commentId);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 }

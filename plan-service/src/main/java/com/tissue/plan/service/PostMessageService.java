@@ -13,7 +13,7 @@ public class PostMessageService {
     @Autowired
     private PostMessageDao postMessageDao;
 
-    public String addMessage(PostMessageCommand message) {
+    public PostMessage addMessage(PostMessageCommand message) {
         return postMessageDao.create(message);
     }
 
