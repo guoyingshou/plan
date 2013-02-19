@@ -5,7 +5,7 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
 import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.plan.service.PostMessageService;
+import com.tissue.plan.services.PostMessageService;
 import com.tissue.plan.web.model.PostMessageForm;
 
 import org.springframework.validation.BindingResult;

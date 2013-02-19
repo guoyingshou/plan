@@ -5,7 +5,7 @@ import com.tissue.core.plan.Post;
 import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.service.PostService;
+import com.tissue.plan.services.PostService;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpEntity;
@@ -44,9 +44,11 @@ public class PostAjaxController {
         if(result.hasErrors() || !commonService.isOwner(viewerId, "#"+postId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+
         form.setId("#"+postId);
         postService.updatePost(form);
         return new ResponseEntity(HttpStatus.ACCEPTED);
+
     }
 
 }

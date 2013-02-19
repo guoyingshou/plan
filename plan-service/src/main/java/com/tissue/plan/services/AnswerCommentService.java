@@ -1,4 +1,4 @@
-package com.tissue.plan.service;
+package com.tissue.plan.services;
 
 import com.tissue.core.command.AnswerCommentCommand;
 import com.tissue.core.plan.AnswerComment;

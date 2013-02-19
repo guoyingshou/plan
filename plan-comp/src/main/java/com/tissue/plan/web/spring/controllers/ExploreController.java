@@ -7,10 +7,10 @@ import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.commons.social.service.ActivityService;
-import com.tissue.commons.social.service.UserService;
-import com.tissue.plan.service.TopicService;
-import com.tissue.plan.service.PostService;
+import com.tissue.commons.social.services.ActivityService;
+import com.tissue.commons.social.services.UserService;
+import com.tissue.plan.services.TopicService;
+import com.tissue.plan.services.PostService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,10 +48,12 @@ public class ExploreController {
     @Autowired
     private ActivityService activityService;
 
+    /**
     @ModelAttribute("locale")
     public String setupLocale(Locale locale) {
         return locale.toString();
     }
+    */
 
     @ModelAttribute("viewer")
     public User initViewer(Map model) {

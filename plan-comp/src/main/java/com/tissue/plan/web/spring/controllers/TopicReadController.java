@@ -7,13 +7,13 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.commons.social.service.UserService;
+import com.tissue.commons.social.services.UserService;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.web.model.PlanForm;
-import com.tissue.plan.service.TopicService;
-import com.tissue.plan.service.PlanService;
-import com.tissue.plan.service.PostService;
+import com.tissue.plan.services.TopicService;
+import com.tissue.plan.services.PlanService;
+import com.tissue.plan.services.PostService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,6 @@ import java.util.Locale;
 import java.util.Map;
 
 @Controller
-//public class TopicReadController extends ViewerSetter {
 public class TopicReadController {
 
     @Autowired
@@ -47,10 +46,12 @@ public class TopicReadController {
     @Autowired
     private PostService postService;
 
+    /**
     @ModelAttribute("locale")
     public String setupLocale(Locale locale) {
         return locale.toString();
     }
+    */
 
     @ModelAttribute("viewer")
     public User prefetchViewer(Map model) {

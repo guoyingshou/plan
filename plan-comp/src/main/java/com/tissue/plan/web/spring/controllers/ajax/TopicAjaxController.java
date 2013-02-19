@@ -5,7 +5,7 @@ import com.tissue.core.plan.Topic;
 import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.TopicForm;
-import com.tissue.plan.service.TopicService;
+import com.tissue.plan.services.TopicService;
 import com.tissue.plan.web.model.TopicForm;
 
 import org.springframework.validation.BindingResult;

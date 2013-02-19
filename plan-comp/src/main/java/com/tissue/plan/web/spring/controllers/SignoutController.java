@@ -2,6 +2,9 @@ package com.tissue.plan.web.spring.controllers;
 
 import org.springframework.stereotype.Controller;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +16,7 @@ import javax.servlet.http.Cookie;
 public class SignoutController {
 
     @RequestMapping(value="/signout")
-    @ResponseBody
-    public String signout(HttpSession ses, HttpServletRequest req, HttpServletResponse res) {
+    public HttpEntity<?> signout(HttpSession ses, HttpServletRequest req, HttpServletResponse res) {
         ses.invalidate();
         Cookie[] cookies = req.getCookies();
         if(cookies != null) {
@@ -25,7 +27,7 @@ public class SignoutController {
                 res.addCookie(cookie);
             }
         }
-        return ".";
+        return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 }

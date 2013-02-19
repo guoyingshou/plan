@@ -4,7 +4,7 @@ import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.QuestionComment;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.plan.service.QuestionCommentService;
+import com.tissue.plan.services.QuestionCommentService;
 import com.tissue.plan.web.model.QuestionCommentForm;
 
 import org.springframework.validation.BindingResult;

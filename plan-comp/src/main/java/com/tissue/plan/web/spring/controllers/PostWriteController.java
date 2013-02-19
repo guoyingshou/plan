@@ -9,11 +9,11 @@ import com.tissue.core.plan.Note;
 import com.tissue.core.plan.Tutorial;
 import com.tissue.core.plan.Question;
 import com.tissue.commons.exceptions.IllegalAccessException;
-import com.tissue.commons.social.service.UserService;
+import com.tissue.commons.social.services.UserService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.service.PlanService;
-import com.tissue.plan.service.PostService;
+import com.tissue.plan.services.PlanService;
+import com.tissue.plan.services.PostService;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.stereotype.Controller;

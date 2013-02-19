@@ -6,7 +6,7 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.plan.Question;
 import com.tissue.core.plan.Answer;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.plan.service.AnswerService;
+import com.tissue.plan.services.AnswerService;
 import com.tissue.plan.web.model.AnswerForm;
 
 import org.springframework.validation.BindingResult;
