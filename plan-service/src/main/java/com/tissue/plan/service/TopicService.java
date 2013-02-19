@@ -6,6 +6,7 @@ import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
+import com.tissue.core.orient.dao.CommonDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import java.util.HashMap;
 
 @Component
 public class TopicService {
+
+    @Autowired
+    private CommonDao commonDao;
 
     @Autowired
     private TopicDao topicDao;
@@ -38,7 +42,7 @@ public class TopicService {
     }
 
     public void deleteTopic(String topicId) {
-        topicDao.delete(topicId);
+        commonDao.delete(topicId);
     }
 
     public Topic getTopic(String topicId) {

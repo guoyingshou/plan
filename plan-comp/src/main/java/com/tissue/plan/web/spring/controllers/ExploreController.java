@@ -5,10 +5,10 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.social.User;
 import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
-import com.tissue.commons.ViewerUserSetter;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.social.service.ActivityService;
+import com.tissue.commons.social.service.UserService;
 import com.tissue.plan.service.TopicService;
 import com.tissue.plan.service.PostService;
 
@@ -33,7 +33,11 @@ import java.util.Date;
 import java.security.Principal;
 
 @Controller
-public class ExploreController extends ViewerUserSetter {
+//public class ExploreController extends ViewerUserSetter {
+public class ExploreController {
+
+    @Autowired
+    protected UserService userService;
 
     @Autowired
     private TopicService topicService;
@@ -43,6 +47,26 @@ public class ExploreController extends ViewerUserSetter {
 
     @Autowired
     private ActivityService activityService;
+
+    @ModelAttribute("locale")
+    public String setupLocale(Locale locale) {
+        return locale.toString();
+    }
+
+    @ModelAttribute("viewer")
+    public User initViewer(Map model) {
+        String viewerId = SecurityUtil.getViewerId();
+        if(viewerId == null) {
+            return null;    
+        }
+        return userService.getViewer(viewerId);
+    }
+
+    @ModelAttribute("users")
+    public List<User> initUsers() {
+        String viewerId = SecurityUtil.getViewerId();
+        return userService.getNewUsers(viewerId, 15);
+    }
 
     @ModelAttribute("newPosts")
     public List<Post> getNewPosts() {
@@ -57,7 +81,7 @@ public class ExploreController extends ViewerUserSetter {
         List<Topic> topics = topicService.getTrendingTopics(15);
         model.put("topics", topics);
 
-        return "topics";
+        return "explore";
     }
 
     @RequestMapping("/featured")
@@ -68,7 +92,7 @@ public class ExploreController extends ViewerUserSetter {
         List<Topic> topics = topicService.getFeaturedTopics(15);
         model.put("topics", topics);
 
-        return "topics";
+        return "explore";
     }
 
     @RequestMapping("/topics")
@@ -85,7 +109,7 @@ public class ExploreController extends ViewerUserSetter {
         List<Topic> topics = topicService.getPagedTopics(page, size);
         model.put("topics", topics);
 
-        return "topics";
+        return "explore";
     }
 
     @RequestMapping("/tags/{tag}")
@@ -102,7 +126,14 @@ public class ExploreController extends ViewerUserSetter {
         List<Topic> topics = topicService.getPagedTopicsByTag(tag, page, size);
         model.put("topics", topics);
 
-        return "topics";
+        return "explore";
+    }
+
+    @RequestMapping("/tags")
+    public String exploreTags(Map model) {
+        List<String> tags = topicService.getTopicTags();
+        model.put("tags", tags);
+        return "tags";
     }
 
 }

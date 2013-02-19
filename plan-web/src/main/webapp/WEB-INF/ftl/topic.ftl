@@ -4,27 +4,29 @@
 <#import "postGadgets.ftl" as postGadgets />
 <#import "utilGadgets.ftl" as utilGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in tissue>
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js", "/tissue/js/post.js"] in tissue>
+<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css", "/tissue/css/post.css"] in tissue>
+<#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
 <@tissue.layout "topic">
-
     <div id="logo">
-        <@topicGadgets.topicLogo current />
+        <@topicGadgets.topicLogo current/>
     </div>
 
     <div id="contentWrapper">
         <div id="sidebar">
-            <@topicGadgets.showLivePlan />
-            <@topicGadgets.showArchivedPlans />
+            <@topicGadgets.showPlanSidebar />
         </div>
 
        <div id="content">
            <#if posts??>
                <@postGadgets.showPosts posts />
                <@utilGadgets.showPager />
+           <#elseif post??>
+               <@postGadgets.showPostDetail />
+           <#else>
+               <@topicGadgets.showTopicDetails />
            </#if>
        </div>
     </div>
-
 </@tissue.layout>

@@ -84,19 +84,10 @@ public class PostWriteController {
         return "redirect:/posts/" + id;
     }
 
-    @RequestMapping(value="/posts/{postId}/_delete", method=POST)
+    @RequestMapping(value="/posts/{postId}/_delete")
     public String deletePost(@PathVariable("postId") String postId) {
-
-        /**
-        if(result.hasErrors()) {
-            throw new IllegalAccessException("Don't be evil");
-        }
-
         String topicId = postService.deletePost("#"+postId);
-        return "redirect:/topics/" + topicId;
-        */
-
-        return "t3";
+        return "redirect:/topics/" + topicId + "/posts";
     }
 
 

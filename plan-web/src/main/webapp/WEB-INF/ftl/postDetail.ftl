@@ -14,13 +14,10 @@
 
     <div id="contentWrapper">
         <div id="sidebar">
-           <@topicGadgets.showLivePlan />
-           <@topicGadgets.showArchivedPlans />
+           <@topicGadgets.showPlanSidebar />
         </div>
         <div id="content" class="post-detail">
            <@postGadgets.showPostDetail />
         </div>
     </div>
 </@tissue.layout>
-
-

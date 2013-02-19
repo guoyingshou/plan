@@ -8,6 +8,7 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
 import com.tissue.core.plan.dao.PostDao;
 import com.tissue.core.plan.dao.PostMessageDao;
+import com.tissue.core.orient.dao.CommonDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ import java.util.HashMap;
 
 @Component
 public class PostService {
+
+    @Autowired
+    private CommonDao commonDao;
 
     @Autowired
     private PostDao postDao;
@@ -36,6 +40,16 @@ public class PostService {
 
     public void updatePost(PostCommand post) {
         postDao.update(post);
+    }
+
+    /**
+     * @param postId postId
+     * @return topic id of the containing topic of the deleted post
+     */
+    public String deletePost(String postId) {
+        String topicId = postDao.getTopicId(postId);
+        commonDao.delete(postId);
+        return topicId.replace("#", "");
     }
 
     /**
