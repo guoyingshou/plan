@@ -9,13 +9,13 @@
 
     <div id="answer-${answer.id?replace("#","")?replace(":", "-")}-content">${answer.content}</div>
 
-    <a class="item-edit" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_update' />" data-target="#answer-${answer.id?replace("#","")?replace(":", "-")}-content" href="#">
+    <a class="update-item" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_update' />" data-target="#answer-${answer.id?replace("#","")?replace(":", "-")}-content" href="#">
         <@spring.message 'i18n.action.edit' />
     </a>
-    <a class="del" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
+    <a class="delete-item" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
         <@spring.message 'i18n.action.delete' />
     </a>
-    <a class="item-add" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/comments/_create' />" data-target="#answer-${answer.id?replace("#", "")?replace(":", "-")}-comments" href="#">
+    <a class="create-item" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/comments/_create' />" data-target="#answer-${answer.id?replace("#", "")?replace(":", "-")}-comments" href="#">
         <@spring.message 'i18n.action.comment' />
     </a>
  

@@ -10,7 +10,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class PostForm extends AbstractCommand implements PostCommand {
+public class PostForm extends Command implements PostCommand {
 
     @NotNull
     @NotEmpty

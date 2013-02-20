@@ -1,6 +1,6 @@
 package com.tissue.plan.web.model;
 
-import com.tissue.core.command.TopicCommand;
+import com.tissue.core.command.ItemCommand;
 import com.tissue.core.social.User;
 
 import java.io.Serializable;
@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class AbstractCommand implements Serializable {
+public class Command implements ItemCommand, Serializable {
 
     private String id;
 

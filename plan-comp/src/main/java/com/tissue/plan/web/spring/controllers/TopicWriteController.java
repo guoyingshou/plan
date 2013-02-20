@@ -2,11 +2,12 @@ package com.tissue.plan.web.spring.controllers.ajax;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
+import com.tissue.commons.exceptions.IllegalAccessException;
 import com.tissue.commons.controllers.AccessController;
-//import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.plan.web.model.TopicForm;
+import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.web.model.TopicForm;
+import com.tissue.plan.web.model.Command;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpEntity;
@@ -32,10 +33,28 @@ import java.util.Arrays;
 import javax.validation.Valid;
 
 @Controller
-public class TopicModificationController extends AccessController {
+public class TopicWriteController extends AccessController {
 
     @Autowired
     private TopicService topicService;
+
+    /**
+     * Add new topic.
+     */
+    @RequestMapping(value="/topics/_create", method=POST)
+    public String addTopic(@Valid TopicForm form, BindingResult result, Map model) throws Exception {
+        
+        if(result.hasErrors()) {
+            throw new IllegalAccessException("Don't be evil");
+        }
+
+        User user = new User();
+        user.setId(SecurityUtil.getViewerId());
+        form.setUser(user);
+
+        String topicId = topicService.addTopic(form).replace("#", "");
+        return "redirect:/topics/" + topicId + "/posts";
+    }
 
     /**
      * Update topic.
@@ -56,11 +75,16 @@ public class TopicModificationController extends AccessController {
     }
 
     @RequestMapping(value="/topics/{topicId}/_delete", method=POST)
-    public String deleteTopic(@PathVariable("topicId") String topicId) {
+    public String deleteTopic(@PathVariable("topicId") String topicId, @Valid Command command, BindingResult result) {
         
         checkAuthorizations("#"+topicId);
 
-        topicService.deleteTopic("#"+topicId);
+        command.setId("#"+topicId);
+        User user = new User();
+        user.setId(SecurityUtil.getViewerId());
+        command.setUser(user);
+        topicService.deleteTopic(command);
+
         return "redirect:/topics";
  
     }

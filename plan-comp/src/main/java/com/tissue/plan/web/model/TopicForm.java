@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class TopicForm extends AbstractCommand implements TopicCommand {
+public class TopicForm extends Command implements TopicCommand {
 
     @NotNull
     @NotEmpty

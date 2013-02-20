@@ -5,6 +5,7 @@ import com.tissue.core.plan.Post;
 import com.tissue.commons.controllers.AccessController;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.PostForm;
+import com.tissue.plan.web.model.Command;
 import com.tissue.plan.services.PostService;
 
 import org.springframework.validation.BindingResult;
@@ -51,11 +52,16 @@ public class PostModificationController extends AccessController {
     }
 
     @RequestMapping(value="/posts/{postId}/_delete", method=POST)
-    public String deletePost(@PathVariable("postId") String postId) {
+    public String deletePost(@PathVariable("postId") String postId, @Valid Command command, BindingResult result) {
 
         checkAuthorizations("#"+postId);
 
-        String topicId = postService.deletePost("#"+postId);
+        command.setId("#"+postId);
+        User user = new User();
+        user.setId(SecurityUtil.getViewerId());
+        command.setUser(user);
+
+        String topicId = postService.deletePost(command);
         return "redirect:/topics/" + topicId + "/posts";
     }
  

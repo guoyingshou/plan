@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Date;
 
-public class AnswerCommentForm extends AbstractCommand implements AnswerCommentCommand {
+public class AnswerCommentForm extends Command implements AnswerCommentCommand {
 
     private Answer answer;
 

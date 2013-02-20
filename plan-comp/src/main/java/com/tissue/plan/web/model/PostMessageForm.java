@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Date;
 
-public class PostMessageForm extends AbstractCommand implements PostMessageCommand, Serializable {
+public class PostMessageForm extends Command implements PostMessageCommand {
 
     private Post post;
 

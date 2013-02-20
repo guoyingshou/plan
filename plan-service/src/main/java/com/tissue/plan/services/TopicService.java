@@ -1,5 +1,6 @@
 package com.tissue.plan.services;
 
+import com.tissue.core.command.ItemCommand;
 import com.tissue.core.command.TopicCommand;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
@@ -41,8 +42,10 @@ public class TopicService {
         topicDao.update(command);
     }
 
-    public void deleteTopic(String topicId) {
-        commonDao.delete(topicId);
+    public void deleteTopic(ItemCommand command) {
+        System.out.println("rid in service: " + command.getId());
+        System.out.println("userId in service: " + command.getUser().getId());
+        commonDao.delete(command);
     }
 
     public Topic getTopic(String topicId) {
