@@ -2,8 +2,8 @@ package com.tissue.plan.web.spring.controllers.ajax;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
-import com.tissue.commons.services.CommonService;
-import com.tissue.commons.security.util.SecurityUtil;
+import com.tissue.commons.controllers.AccessController;
+//import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.web.model.TopicForm;
@@ -24,7 +24,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
-//import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -33,10 +32,7 @@ import java.util.Arrays;
 import javax.validation.Valid;
 
 @Controller
-public class TopicAjaxController {
-
-    @Autowired
-    private CommonService commonService;
+public class TopicModificationController extends AccessController {
 
     @Autowired
     private TopicService topicService;
@@ -47,15 +43,26 @@ public class TopicAjaxController {
     @RequestMapping(value="/topics/{topicId}/_update", method=POST)
     public HttpEntity<?> updateTopic(@PathVariable("topicId") String topicId, @Valid TopicForm form, BindingResult result, Map model) throws Exception {
 
-        String viewerId = SecurityUtil.getViewerId();
-
-        if(result.hasErrors() || !commonService.isResourceExist(topicId) || !commonService.isOwner(viewerId, topicId)) {
+        if(result.hasErrors()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
+        checkExistence("#"+topicId);
+        checkAuthorizations("#"+topicId);
+ 
         form.setId("#"+topicId);
         topicService.updateTopic(form);
         return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping(value="/topics/{topicId}/_delete", method=POST)
+    public String deleteTopic(@PathVariable("topicId") String topicId) {
+        
+        checkAuthorizations("#"+topicId);
+
+        topicService.deleteTopic("#"+topicId);
+        return "redirect:/topics";
+ 
     }
 
 }

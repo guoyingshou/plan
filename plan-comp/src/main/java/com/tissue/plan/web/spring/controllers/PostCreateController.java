@@ -32,7 +32,7 @@ import java.util.Locale;
 import java.util.List;
 
 @Controller
-public class PostWriteController {
+public class PostCreateController {
 
     @Autowired
     protected UserService userService;
@@ -83,12 +83,5 @@ public class PostWriteController {
         String id = postService.createPost(form).replace("#", "");
         return "redirect:/posts/" + id;
     }
-
-    @RequestMapping(value="/posts/{postId}/_delete")
-    public String deletePost(@PathVariable("postId") String postId) {
-        String topicId = postService.deletePost("#"+postId);
-        return "redirect:/topics/" + topicId + "/posts";
-    }
-
 
 }

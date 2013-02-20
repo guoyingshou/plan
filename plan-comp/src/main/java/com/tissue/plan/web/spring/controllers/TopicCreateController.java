@@ -4,7 +4,6 @@ import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.exceptions.IllegalAccessException;
-import com.tissue.commons.services.CommonService;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.services.TopicService;
 
@@ -31,10 +30,7 @@ import java.util.List;
 import java.security.InvalidParameterException;
 
 @Controller
-public class TopicWriteController {
-
-    @Autowired
-    private CommonService commonService;
+public class TopicCreateController {
 
     @Autowired
     private TopicService topicService;
@@ -56,19 +52,5 @@ public class TopicWriteController {
         String topicId = topicService.addTopic(form).replace("#", "");
         return "redirect:/topics/" + topicId + "/posts";
     }
-
-    @RequestMapping(value="/topics/{topicId}/_delete")
-    public String deleteTopic(@PathVariable("topicId") String topicId) throws Exception {
-        
-        if(SecurityUtil.getViewer().hasRole("ROLE_ADMIN") || commonService.isOwner(SecurityUtil.getViewerId(), "#"+topicId)) {
-            topicService.deleteTopic("#"+topicId);
-            return "redirect:/topics";
-        }
-        else {
-            throw new IllegalAccessException("Don't be evil");
-        }
-
-   }
-
 
 }

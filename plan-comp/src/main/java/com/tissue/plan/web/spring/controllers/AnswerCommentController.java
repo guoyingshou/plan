@@ -1,9 +1,10 @@
-package com.tissue.plan.web.spring.controllers.ajax;
+package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Answer;
 import com.tissue.core.plan.AnswerComment;
 import com.tissue.commons.security.util.SecurityUtil;
+import com.tissue.commons.controllers.AccessController;
 import com.tissue.plan.services.AnswerCommentService;
 import com.tissue.plan.web.model.AnswerCommentForm;
 
@@ -25,7 +26,7 @@ import java.util.Date;
 import javax.validation.Valid;
 
 @Controller
-public class AnswerCommentAjaxController {
+public class AnswerCommentController extends AccessController {
 
     @Autowired
     protected AnswerCommentService answerCommentService;
@@ -56,6 +57,8 @@ public class AnswerCommentAjaxController {
     @RequestMapping(value="/answerComments/{commentId}/_update", method=POST)
     public HttpEntity<?> updateAnswerComment(@PathVariable("commentId") String commentId, @Valid AnswerCommentForm form, BindingResult result, Map model) {
 
+        checkAuthorizations("#"+commentId);
+
         form.setId("#"+commentId);
         answerCommentService.updateComment(form);
 
@@ -67,6 +70,9 @@ public class AnswerCommentAjaxController {
      */
     @RequestMapping(value="/answerComments/{commentId}/_delete", method=POST)
     public HttpEntity<?> deleteAnswerComment(@PathVariable("commentId") String commentId) {
+
+        checkAuthorizations("#"+commentId);
+
         answerCommentService.deleteComment("#"+commentId);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

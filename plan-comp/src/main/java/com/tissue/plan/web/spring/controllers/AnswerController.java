@@ -1,4 +1,4 @@
-package com.tissue.plan.web.spring.controllers.ajax;
+package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Plan;
@@ -6,6 +6,7 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.plan.Question;
 import com.tissue.core.plan.Answer;
 import com.tissue.commons.security.util.SecurityUtil;
+import com.tissue.commons.controllers.AccessController;
 import com.tissue.plan.services.AnswerService;
 import com.tissue.plan.web.model.AnswerForm;
 
@@ -27,7 +28,7 @@ import java.util.Date;
 import javax.validation.Valid;
 
 @Controller
-public class AnswerAjaxController {
+public class AnswerController extends AccessController {
 
     @Autowired
     protected AnswerService answerService;
@@ -60,6 +61,8 @@ public class AnswerAjaxController {
     @RequestMapping(value="/answers/{answerId}/_update", method=POST)
     public HttpEntity<?> updateAnswer(@PathVariable("answerId") String answerId, @Valid AnswerForm form, BindingResult result, Map model) {
 
+        checkAuthorizations("#"+answerId);
+
         form.setId("#"+answerId);
         answerService.updateAnswer(form);
 
@@ -71,6 +74,9 @@ public class AnswerAjaxController {
      */
     @RequestMapping(value="/answers/{answerId}/_delete", method=POST)
     public HttpEntity<?> deleteAnswer(@PathVariable("answerId") String answerId) {
+
+        checkAuthorizations("#"+answerId);
+
         answerService.deleteAnswer("#"+answerId);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

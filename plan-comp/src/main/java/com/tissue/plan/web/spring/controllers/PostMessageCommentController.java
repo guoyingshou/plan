@@ -1,10 +1,11 @@
-package com.tissue.plan.web.spring.controllers.ajax;
+package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
 import com.tissue.core.plan.PostMessageComment;
 import com.tissue.commons.security.util.SecurityUtil;
+import com.tissue.commons.controllers.AccessController;
 import com.tissue.plan.services.PostMessageCommentService;
 import com.tissue.plan.web.model.PostMessageCommentForm;
 
@@ -26,7 +27,7 @@ import java.util.Date;
 import javax.validation.Valid;
 
 @Controller
-public class PostMessageCommentAjaxController {
+public class PostMessageCommentController extends AccessController {
 
     @Autowired
     protected PostMessageCommentService postMessageCommentService;
@@ -59,6 +60,8 @@ public class PostMessageCommentAjaxController {
     @RequestMapping(value="/messageComments/{commentId}/_update", method=POST)
     public HttpEntity<?> updateMessageComment(@PathVariable("commentId") String commentId, @Valid PostMessageCommentForm form, BindingResult result, Map model) {
 
+        checkAuthorizations("#"+commentId);
+
         form.setId("#"+commentId);
         postMessageCommentService.updateComment(form);
 
@@ -71,6 +74,9 @@ public class PostMessageCommentAjaxController {
      */
     @RequestMapping(value="/messageComments/{commentId}/_delete", method=POST)
     public HttpEntity<?> deleteMessageComment(@PathVariable("commentId") String commentId, Map model) {
+
+        checkAuthorizations("#"+commentId);
+
         postMessageCommentService.deleteComment("#"+commentId);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

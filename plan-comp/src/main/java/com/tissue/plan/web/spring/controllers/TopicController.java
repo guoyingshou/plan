@@ -32,7 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @Controller
-public class TopicReadController {
+public class TopicController {
 
     @Autowired
     protected UserService userService;
@@ -45,13 +45,6 @@ public class TopicReadController {
 
     @Autowired
     private PostService postService;
-
-    /**
-    @ModelAttribute("locale")
-    public String setupLocale(Locale locale) {
-        return locale.toString();
-    }
-    */
 
     @ModelAttribute("viewer")
     public User prefetchViewer(Map model) {

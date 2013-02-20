@@ -1,10 +1,11 @@
-package com.tissue.plan.web.spring.controllers.ajax;
+package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
 import com.tissue.commons.services.CommonService;
 import com.tissue.commons.security.util.SecurityUtil;
+import com.tissue.commons.controllers.AccessController;
 import com.tissue.plan.services.PostMessageService;
 import com.tissue.plan.web.model.PostMessageForm;
 
@@ -27,7 +28,7 @@ import java.util.Date;
 import javax.validation.Valid;
 
 @Controller
-public class PostMessageAjaxController {
+public class PostMessageController extends AccessController {
 
     @Autowired
     protected CommonService commonService;
@@ -70,6 +71,8 @@ public class PostMessageAjaxController {
     @RequestMapping(value="/messages/{msgId}/_update", method=POST)
     public HttpEntity<?> updateMessage(@PathVariable("msgId") String msgId, @Valid PostMessageForm form, BindingResult result) {
 
+        checkAuthorizations("#"+msgId);
+
         String viewerId = SecurityUtil.getViewerId();
         if(!commonService.isOwner(viewerId, "#"+msgId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -88,10 +91,8 @@ public class PostMessageAjaxController {
     @RequestMapping(value="/messages/{msgId}/_delete", method=POST)
     public HttpEntity<?> deleteMessage(@PathVariable("msgId") String msgId, Map model) {
 
-        String viewerId = SecurityUtil.getViewerId();
-        if(!commonService.isOwner(viewerId, "#"+msgId)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+        checkAuthorizations("#"+msgId);
+
         postMessageService.deletePostMessage("#"+msgId);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
