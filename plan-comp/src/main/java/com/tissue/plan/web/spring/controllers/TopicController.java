@@ -81,11 +81,13 @@ public class TopicController {
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
-        long total = postService.getPostsCountByTopicId(topicId);
+        //long total = postService.getPostsCountByTopicId(topicId);
+        long total = topicService.getPostsCount(topicId);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        List<Post> posts = postService.getPagedPostsByTopicId(topicId, page, size);
+        //List<Post> posts = postService.getPagedPostsByTopicId(topicId, page, size);
+        List<Post> posts = topicService.getPagedPosts(topicId, page, size);
         model.put("posts", posts);
 
         return "topic";
@@ -105,11 +107,13 @@ public class TopicController {
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
-        long total = postService.getPostsCountByTopicIdAndType(topicId, type);
+        //long total = postService.getPostsCountByTopicIdAndType(topicId, type);
+        long total = topicService.getPostsCountByType(topicId, type);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        List<Post> posts = postService.getPagedPostsByTopicIdAndType(topicId, type, page, size);
+        //List<Post> posts = postService.getPagedPostsByTopicIdAndType(topicId, type, page, size);
+        List<Post> posts = topicService.getPagedPostsByType(topicId, type, page, size);
         model.put("posts", posts);
 
         return "topic";
@@ -130,11 +134,13 @@ public class TopicController {
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
-        long total = postService.getPostsCountByPlanId(planId);
+        //long total = postService.getPostsCountByPlanId(planId);
+        long total = planService.getPostsCount(planId);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        List<Post> posts = postService.getPagedPostsByPlanId(planId, page, size);
+        //List<Post> posts = postService.getPagedPostsByPlanId(planId, page, size);
+        List<Post> posts = planService.getPagedPosts(planId, page, size);
         model.put("posts", posts);
 
         return "topic";

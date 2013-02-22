@@ -5,6 +5,7 @@ import com.tissue.core.command.TopicCommand;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
+import com.tissue.core.plan.Post;
 import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
 import com.tissue.core.orient.dao.CommonDao;
@@ -43,8 +44,6 @@ public class TopicService {
     }
 
     public void deleteTopic(ItemCommand command) {
-        System.out.println("rid in service: " + command.getId());
-        System.out.println("userId in service: " + command.getUser().getId());
         commonDao.delete(command);
     }
 
@@ -68,12 +67,6 @@ public class TopicService {
         return topicDao.getPagedTopics(page, size);
     }
 
-    /**
-    public List<Topic> getTopics() {
-        return topicDao.getTopics();
-    }
-    */
-
     public List<String> getTopicTags() {
         return topicDao.getTopicTags();
     }
@@ -91,5 +84,25 @@ public class TopicService {
         return topicDao.getNewTopics(excludingUserId, limit);
     }
     */
+
+    /**
+     * Post
+     */
+    public long getPostsCount(String topicId) {
+        return topicDao.getPostsCount(topicId);
+    }
+
+    public List<Post> getPagedPosts(String topicId, int page, int size) {
+        return topicDao.getPagedPosts(topicId, page, size);
+    }
+
+    public long getPostsCountByType(String topicId, String type) {
+        return topicDao.getPostsCountByType(topicId, type);
+    }
+
+    public List<Post> getPagedPostsByType(String topicId, String type, int page, int size) {
+        return topicDao.getPagedPostsByType(topicId, type, page, size);
+    }
+
 
 }

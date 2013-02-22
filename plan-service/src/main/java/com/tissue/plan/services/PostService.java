@@ -60,30 +60,6 @@ public class PostService {
         return postDao.getPost(postId);
     }
 
-    public long getPostsCountByTopicId(String topicId) {
-        return postDao.getPostsCountByTopicId(topicId);
-    }
-
-    public List<Post> getPagedPostsByTopicId(String topicId, int page, int size) {
-        return postDao.getPagedPostsByTopicId(topicId, page, size);
-    }
-
-    public long getPostsCountByTopicIdAndType(String topicId, String type) {
-        return postDao.getPostsCountByTopicIdAndType(topicId, type);
-    }
-
-    public List<Post> getPagedPostsByTopicIdAndType(String topicId, String type, int page, int size) {
-        return postDao.getPagedPostsByTopicIdAndType(topicId, type, page, size);
-    }
-
-    public long getPostsCountByPlanId(String planId) {
-        return postDao.getPostsCountByPlanId(planId);
-    }
-
-    public List<Post> getPagedPostsByPlanId(String planId, int page, int size) {
-        return postDao.getPagedPostsByPlanId(planId, page, size);
-    }
-
     public void addMessage(PostMessageCommand message) {
          postMessageDao.create(message);
     }
