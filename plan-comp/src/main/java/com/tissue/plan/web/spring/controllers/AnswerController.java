@@ -1,5 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,12 +40,9 @@ public class AnswerController extends AccessController {
      * The post's type can only be 'question'.
      */
     @RequestMapping(value="/posts/{postId}/answers/_create", method=POST)
-    public String addAnswer(@PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model) {
+    public String addAnswer(@PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewer") Account viewer) {
 
-        User user = new User();
-        user.setId(SecurityUtil.getViewerId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-        form.setUser(user);
+        form.setAccount(viewer);
 
         Post post = new Post();
         post.setId("#"+postId);

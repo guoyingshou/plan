@@ -1,5 +1,6 @@
 package com.tissue.plan.web.model;
 
+import com.tissue.core.command.Command;
 import com.tissue.core.command.PostMessageCommand;
 import com.tissue.core.plan.Post;
 

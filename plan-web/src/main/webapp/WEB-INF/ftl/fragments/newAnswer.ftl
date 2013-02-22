@@ -4,8 +4,8 @@
 <li class="answer">
     <div class="item-ts">
         
-        <a href="/social/users/${answer.user.id?replace("#","")}/posts">
-            ${answer.user.displayName} 
+        <a href="/social/users/${answer.account.id?replace("#","")}/posts">
+            ${answer.account.user.displayName} 
         </a>
         [ <@utilGadgets.showTimeBefore answer.timeBefore /> ]
     </div>

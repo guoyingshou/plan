@@ -1,5 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
@@ -47,12 +48,12 @@ public class TopicController {
     private PostService postService;
 
     @ModelAttribute("viewer")
-    public User prefetchViewer(Map model) {
+    public Account prefetchViewer(Map model) {
         String viewerId = SecurityUtil.getViewerId();
         if(viewerId == null) {
             return null;    
         }
-        return userService.getViewer(viewerId);
+        return userService.getUserAccount(viewerId);
     }
 
     /**
@@ -81,12 +82,10 @@ public class TopicController {
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
-        //long total = postService.getPostsCountByTopicId(topicId);
         long total = topicService.getPostsCount(topicId);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        //List<Post> posts = postService.getPagedPostsByTopicId(topicId, page, size);
         List<Post> posts = topicService.getPagedPosts(topicId, page, size);
         model.put("posts", posts);
 
@@ -107,12 +106,10 @@ public class TopicController {
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
-        //long total = postService.getPostsCountByTopicIdAndType(topicId, type);
         long total = topicService.getPostsCountByType(topicId, type);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        //List<Post> posts = postService.getPagedPostsByTopicIdAndType(topicId, type, page, size);
         List<Post> posts = topicService.getPagedPostsByType(topicId, type, page, size);
         model.put("posts", posts);
 
@@ -134,12 +131,10 @@ public class TopicController {
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
-        //long total = postService.getPostsCountByPlanId(planId);
         long total = planService.getPostsCount(planId);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        //List<Post> posts = postService.getPagedPostsByPlanId(planId, page, size);
         List<Post> posts = planService.getPagedPosts(planId, page, size);
         model.put("posts", posts);
 

@@ -1,6 +1,6 @@
 <#import "../spring.ftl" as spring />
 <li class="message">
-    <div class="item-ts">${postMessage.user.displayName}</div>
+    <div class="item-ts">${postMessage.account.user.displayName}</div>
     <div id="message-${postMessage.id?replace("#", "")?replace(":","-")}-content" class="item-content">
         ${postMessage.content}
     </div>

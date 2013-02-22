@@ -1,7 +1,7 @@
 package com.tissue.plan.web.model;
 
 import com.tissue.core.command.PlanCommand;
-import com.tissue.core.social.User;
+import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
 
 import java.io.Serializable;
@@ -17,7 +17,7 @@ public class PlanForm implements PlanCommand, Serializable {
     private int duration;
 
     private Topic topic;
-    private User user;
+    private Account account;
 
     public void setId(String id) {
         this.id = id;
@@ -43,11 +43,11 @@ public class PlanForm implements PlanCommand, Serializable {
         return topic;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public User getUser() {
-        return user;
+    public Account getAccount() {
+        return account;
     }
 }

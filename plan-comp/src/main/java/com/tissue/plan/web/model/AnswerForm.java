@@ -1,5 +1,6 @@
 package com.tissue.plan.web.model;
 
+import com.tissue.core.command.Command;
 import com.tissue.core.command.AnswerCommand;
 import com.tissue.core.plan.Question;
 import java.io.Serializable;

@@ -1,5 +1,7 @@
 package com.tissue.plan.web.spring.controllers.ajax;
 
+import com.tissue.core.command.Command;
+import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.commons.exceptions.IllegalAccessException;
@@ -7,7 +9,6 @@ import com.tissue.commons.controllers.AccessController;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.web.model.TopicForm;
-import com.tissue.plan.web.model.Command;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpEntity;
@@ -48,9 +49,9 @@ public class TopicWriteController extends AccessController {
             throw new IllegalAccessException("Don't be evil");
         }
 
-        User user = new User();
-        user.setId(SecurityUtil.getViewerId());
-        form.setUser(user);
+        Account account = new Account();
+        account.setId(SecurityUtil.getViewerId());
+        form.setAccount(account);
 
         String topicId = topicService.addTopic(form).replace("#", "");
         return "redirect:/topics/" + topicId + "/posts";
@@ -80,9 +81,11 @@ public class TopicWriteController extends AccessController {
         checkAuthorizations("#"+topicId);
 
         command.setId("#"+topicId);
-        User user = new User();
-        user.setId(SecurityUtil.getViewerId());
-        command.setUser(user);
+
+        Account account = new Account();
+        account.setId(SecurityUtil.getViewerId());
+        command.setAccount(account);
+
         topicService.deleteTopic(command);
 
         return "redirect:/topics";

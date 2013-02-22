@@ -1,5 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
@@ -47,8 +48,8 @@ public class PostCreateController {
     public String newPost(@PathVariable("planId") String planId, Map model, Locale locale) {
         model.put("locale", locale);
 
-        User user = userService.getViewer(SecurityUtil.getViewerId());
-        model.put("viewer", user);
+        Account account = userService.getUserAccount(SecurityUtil.getViewerId());
+        model.put("viewer", account);
 
         Topic topic = planService.getTopic(planId);
         model.put("topic", topic);
@@ -76,9 +77,9 @@ public class PostCreateController {
 
         form.setPlan(plan);
 
-        User user = new User();
-        user.setId(SecurityUtil.getViewerId());
-        form.setUser(user);
+        Account account = new Account();
+        account.setId(SecurityUtil.getViewerId());
+        form.setAccount(account);
 
         String id = postService.createPost(form).replace("#", "");
         return "redirect:/posts/" + id;

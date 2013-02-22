@@ -1,5 +1,6 @@
 package com.tissue.plan.web.model;
 
+import com.tissue.core.command.Command;
 import com.tissue.core.command.PostCommand;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Plan;

@@ -3,8 +3,8 @@
 
 <li class="comment">
     <div class="item-ts">
-        <a href="/social/users/${comment.user.id?replace("#","")}/posts">
-            ${comment.user.displayName} 
+        <a href="/social/users/${comment.account.id?replace("#","")}/posts">
+            ${comment.account.user.displayName} 
         </a>
         [ <@utilGadgets.showTimeBefore comment.timeBefore /> ]
     </div>

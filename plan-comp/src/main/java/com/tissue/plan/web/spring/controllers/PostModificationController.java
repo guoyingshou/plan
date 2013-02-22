@@ -1,11 +1,11 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.social.User;
+import com.tissue.core.command.Command;
+import com.tissue.core.social.Account;
 import com.tissue.core.plan.Post;
 import com.tissue.commons.controllers.AccessController;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.web.model.Command;
 import com.tissue.plan.services.PostService;
 
 import org.springframework.validation.BindingResult;
@@ -57,9 +57,9 @@ public class PostModificationController extends AccessController {
         checkAuthorizations("#"+postId);
 
         command.setId("#"+postId);
-        User user = new User();
-        user.setId(SecurityUtil.getViewerId());
-        command.setUser(user);
+        Account account = new Account();
+        account.setId(SecurityUtil.getViewerId());
+        command.setAccount(account);
 
         String topicId = postService.deletePost(command);
         return "redirect:/topics/" + topicId + "/posts";

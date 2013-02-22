@@ -1,7 +1,7 @@
 <#import "../spring.ftl" as spring />
 <li class="comment">
     <div class="item-ts">
-        ${messageComment.user.displayName}
+        ${messageComment.account.user.displayName}
     </div>
     <div id="message-comment-${messageComment.id?replace("#", "")?replace(":", "-")}-content" class="item-content">
         ${messageComment.content}

@@ -1,5 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,12 +39,16 @@ public class PostMessageCommentController extends AccessController {
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{msgId}/comments/_create", method=POST)
-    public String addMessageComment(@PathVariable("msgId") String msgId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model) {
+    public String addMessageComment(@PathVariable("msgId") String msgId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model, @ModelAttribute("viewer") Account viewer) {
 
-        User user = new User();
-        user.setId(SecurityUtil.getViewerId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-        form.setUser(user);
+        /**
+        Account account = new Account();
+        account.setId(SecurityUtil.getViewerId());
+        //user.setDisplayName(SecurityUtil.getDisplayName());
+        form.setAccount(account);
+        */
+
+        form.setAccount(viewer);
 
         PostMessage msg = new PostMessage();
         msg.setId("#"+msgId);

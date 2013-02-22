@@ -1,10 +1,10 @@
 <#import '../spring.ftl' as spring />
 <#import '../utilGadgets.ftl' as utilGadgets />
 
-<li>
+<li class="comment">
     <div class="item-ts">
-        <a href="/social/users/${questionComment.user.id?replace("#","")}/posts">
-            ${questionComment.user.displayName} 
+        <a href="/social/users/${questionComment.account.id?replace("#","")}/posts">
+            ${questionComment.account.user.displayName} 
         </a>
         [ <@utilGadgets.showTimeBefore questionComment.timeBefore /> ]
     </div>

@@ -1,5 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.QuestionComment;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,12 +37,9 @@ public class QuestionCommentController extends AccessController {
      * Add a comment to a specific question(a kind of post).
      */
     @RequestMapping(value="/posts/{postId}/questionComments/_create", method=POST)
-    public String addQuestionComment(@PathVariable("postId") String postId, @Valid QuestionCommentForm form, BindingResult result, Map model) {
+    public String addQuestionComment(@PathVariable("postId") String postId, @Valid QuestionCommentForm form, BindingResult result, Map model, @ModelAttribute("viewer") Account viewer) {
 
-        User user = new User();
-        user.setId(SecurityUtil.getViewerId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-        form.setUser(user);
+        form.setAccount(viewer);
 
         Post post = new Post();
         post.setId("#"+postId);

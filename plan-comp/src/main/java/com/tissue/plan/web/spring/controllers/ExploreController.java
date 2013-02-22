@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Post;
+import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
@@ -56,12 +57,13 @@ public class ExploreController {
     */
 
     @ModelAttribute("viewer")
-    public User initViewer(Map model) {
+    public Account initViewer(Map model) {
         String viewerId = SecurityUtil.getViewerId();
         if(viewerId == null) {
             return null;    
         }
-        return userService.getViewer(viewerId);
+        //return userService.getViewer(viewerId);
+        return userService.getUserAccount(viewerId);
     }
 
     @ModelAttribute("users")

@@ -1,9 +1,11 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
 import com.tissue.commons.services.CommonService;
+import com.tissue.commons.social.services.UserService;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.controllers.AccessController;
 import com.tissue.plan.services.PostMessageService;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +37,9 @@ public class PostMessageController extends AccessController {
     protected CommonService commonService;
 
     @Autowired
+    protected UserService userService;
+
+    @Autowired
     protected PostMessageService postMessageService;
 
     /**
@@ -41,7 +47,7 @@ public class PostMessageController extends AccessController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/posts/{postId}/messages/_create", method=POST)
-    public String addMessage(@PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model) {
+    public String addMessage(@PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model, @ModelAttribute("viewer") Account viewer) {
 
         postId = "#" + postId;
 
@@ -50,10 +56,14 @@ public class PostMessageController extends AccessController {
             throw new InvalidParameterException("not member or owner");
         }
 
-        User user = new User();
-        user.setId(SecurityUtil.getViewerId());
-        user.setDisplayName(SecurityUtil.getDisplayName());
-        form.setUser(user);
+        /**
+        Account account = new Account();
+        account.setId(SecurityUtil.getViewerId());
+        //user.setDisplayName(SecurityUtil.getDisplayName());
+        form.setAccount(account);
+        */
+
+        form.setAccount(viewer);
 
         Post post = new Post();
         post.setId(postId);

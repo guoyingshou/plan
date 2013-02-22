@@ -63,7 +63,7 @@
     </bean>
 
     <bean id="accessDeniedHandler" class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
-        <property name="errorPage" value="/accessDenied.htm"/> 
+        <property name="errorPage" value="/accessDenied"/> 
     </bean>
 
     <bean id="filterSecurityInterceptor" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
