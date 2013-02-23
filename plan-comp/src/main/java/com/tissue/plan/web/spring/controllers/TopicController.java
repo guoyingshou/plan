@@ -48,12 +48,13 @@ public class TopicController {
     private PostService postService;
 
     @ModelAttribute("viewer")
-    public Account prefetchViewer(Map model) {
-        String viewerId = SecurityUtil.getViewerId();
-        if(viewerId == null) {
+    public User setupViewer(Map model) {
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        if(viewerAccountId == null) {
             return null;    
         }
-        return userService.getUserAccount(viewerId);
+        model.put("viewerAccountId", viewerAccountId);
+        return userService.getUserByAccount(viewerAccountId);
     }
 
     /**

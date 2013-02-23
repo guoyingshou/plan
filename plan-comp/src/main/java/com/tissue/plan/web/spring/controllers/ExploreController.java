@@ -57,19 +57,18 @@ public class ExploreController {
     */
 
     @ModelAttribute("viewer")
-    public Account initViewer(Map model) {
-        String viewerId = SecurityUtil.getViewerId();
-        if(viewerId == null) {
+    public User setupViewer(Map model) {
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        if(viewerAccountId == null) {
             return null;    
         }
-        //return userService.getViewer(viewerId);
-        return userService.getUserAccount(viewerId);
+        return userService.getUserByAccount(viewerAccountId);
     }
 
     @ModelAttribute("users")
-    public List<User> initUsers() {
-        String viewerId = SecurityUtil.getViewerId();
-        return userService.getNewUsers(viewerId, 15);
+    public List<User> setupUsers() {
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        return userService.getNewUsers(viewerAccountId, 15);
     }
 
     @ModelAttribute("newPosts")

@@ -47,23 +47,19 @@ public class PostMessageController extends AccessController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/posts/{postId}/messages/_create", method=POST)
-    public String addMessage(@PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model, @ModelAttribute("viewer") Account viewer) {
+    public String addMessage(@PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model, @ModelAttribute("viewer") User viewer) {
 
         postId = "#" + postId;
 
-        String viewerId = SecurityUtil.getViewerId();
-        if(!commonService.isMemberOrOwner(viewerId, postId)) {
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        if(!commonService.isMemberOrOwner(viewerAccountId, postId)) {
             throw new InvalidParameterException("not member or owner");
         }
 
-        /**
         Account account = new Account();
-        account.setId(SecurityUtil.getViewerId());
-        //user.setDisplayName(SecurityUtil.getDisplayName());
+        account.setId(SecurityUtil.getViewerAccountId());
+        account.setUser(viewer);
         form.setAccount(account);
-        */
-
-        form.setAccount(viewer);
 
         Post post = new Post();
         post.setId(postId);
@@ -83,8 +79,8 @@ public class PostMessageController extends AccessController {
 
         checkAuthorizations("#"+msgId);
 
-        String viewerId = SecurityUtil.getViewerId();
-        if(!commonService.isOwner(viewerId, "#"+msgId)) {
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        if(!commonService.isOwner(viewerAccountId, "#"+msgId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 

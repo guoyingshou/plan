@@ -37,9 +37,12 @@ public class AnswerCommentController extends AccessController {
      * Add a comment to the answer of a specific question.
      */
     @RequestMapping(value="/answers/{answerId}/comments/_create", method=POST)
-    public String addAnswerComment(@PathVariable("answerId") String answerId, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewer") Account viewer) {
+    public String addAnswerComment(@PathVariable("answerId") String answerId, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewer") User viewer) {
 
-        form.setAccount(viewer);
+        Account account = new Account();
+        account.setId(SecurityUtil.getViewerAccountId());
+        account.setUser(viewer);
+        form.setAccount(account);
 
         Answer answer = new Answer();
         answer.setId("#"+answerId);

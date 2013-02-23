@@ -37,14 +37,13 @@ public class PostModificationController extends AccessController {
     @RequestMapping(value="/posts/{postId}/_update", method=POST)
     public HttpEntity<?> updatePost(@PathVariable("postId") String postId, @Valid PostForm form, BindingResult result) {
 
-        checkAuthorizations("#"+postId);
         /**
-        String viewerId = SecurityUtil.getViewerId();
-        
-        if(result.hasErrors() || !commonService.isOwner(viewerId, "#"+postId)) {
+        if(result.hasErrors()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         */
+
+        checkAuthorizations("#"+postId);
 
         form.setId("#"+postId);
         postService.updatePost(form);
@@ -58,7 +57,7 @@ public class PostModificationController extends AccessController {
 
         command.setId("#"+postId);
         Account account = new Account();
-        account.setId(SecurityUtil.getViewerId());
+        account.setId(SecurityUtil.getViewerAccountId());
         command.setAccount(account);
 
         String topicId = postService.deletePost(command);

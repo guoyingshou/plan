@@ -48,8 +48,8 @@ public class PostCreateController {
     public String newPost(@PathVariable("planId") String planId, Map model, Locale locale) {
         model.put("locale", locale);
 
-        Account account = userService.getUserAccount(SecurityUtil.getViewerId());
-        model.put("viewer", account);
+        User user = userService.getUserByAccount(SecurityUtil.getViewerAccountId());
+        model.put("viewer", user);
 
         Topic topic = planService.getTopic(planId);
         model.put("topic", topic);
@@ -68,17 +68,17 @@ public class PostCreateController {
             throw new IllegalAccessException("Don't be evil");
         }
 
-        String viewerId = SecurityUtil.getViewerId();
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
         Plan plan = planService.getPlan("#"+planId);
 
-        if((plan == null) || !(plan.isOwner(viewerId) || plan.isMember(viewerId))) {
+        if((plan == null) || !(plan.isOwner(viewerAccountId) || plan.isMember(viewerAccountId))) {
             throw new IllegalAccessException("Don't be evil");
         }
 
         form.setPlan(plan);
 
         Account account = new Account();
-        account.setId(SecurityUtil.getViewerId());
+        account.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(account);
 
         String id = postService.createPost(form).replace("#", "");

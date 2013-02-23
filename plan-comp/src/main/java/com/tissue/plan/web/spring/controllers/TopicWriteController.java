@@ -50,7 +50,7 @@ public class TopicWriteController extends AccessController {
         }
 
         Account account = new Account();
-        account.setId(SecurityUtil.getViewerId());
+        account.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(account);
 
         String topicId = topicService.addTopic(form).replace("#", "");
@@ -83,7 +83,7 @@ public class TopicWriteController extends AccessController {
         command.setId("#"+topicId);
 
         Account account = new Account();
-        account.setId(SecurityUtil.getViewerId());
+        account.setId(SecurityUtil.getViewerAccountId());
         command.setAccount(account);
 
         topicService.deleteTopic(command);

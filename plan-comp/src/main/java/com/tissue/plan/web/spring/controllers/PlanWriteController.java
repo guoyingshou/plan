@@ -43,7 +43,7 @@ public class PlanWriteController {
         form.setTopic(topic);
 
         Account account = new Account();
-        account.setId(SecurityUtil.getViewerId());
+        account.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(account);
 
         planService.addPlan(form);
@@ -55,9 +55,8 @@ public class PlanWriteController {
      */
     @RequestMapping(value="/topics/{topicId}/plans/{planId}/join")
     public String joinPlan(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId, Map model) {
-        planService.addMember("#"+planId, SecurityUtil.getViewerId());
+        planService.addMember("#"+planId, SecurityUtil.getViewerAccountId());
         return "redirect:/topics/" + topicId + "/posts";
     }
-
 
 }

@@ -40,9 +40,12 @@ public class AnswerController extends AccessController {
      * The post's type can only be 'question'.
      */
     @RequestMapping(value="/posts/{postId}/answers/_create", method=POST)
-    public String addAnswer(@PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewer") Account viewer) {
+    public String addAnswer(@PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewer") User viewer) {
 
-        form.setAccount(viewer);
+        Account account = new Account();
+        account.setId(SecurityUtil.getViewerAccountId());
+        account.setUser(viewer);
+        form.setAccount(account);
 
         Post post = new Post();
         post.setId("#"+postId);

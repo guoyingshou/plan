@@ -39,16 +39,12 @@ public class PostMessageCommentController extends AccessController {
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{msgId}/comments/_create", method=POST)
-    public String addMessageComment(@PathVariable("msgId") String msgId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model, @ModelAttribute("viewer") Account viewer) {
+    public String addMessageComment(@PathVariable("msgId") String msgId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model, @ModelAttribute("viewer") User viewer) {
 
-        /**
         Account account = new Account();
-        account.setId(SecurityUtil.getViewerId());
-        //user.setDisplayName(SecurityUtil.getDisplayName());
+        account.setId(SecurityUtil.getViewerAccountId());
+        account.setUser(viewer);
         form.setAccount(account);
-        */
-
-        form.setAccount(viewer);
 
         PostMessage msg = new PostMessage();
         msg.setId("#"+msgId);
