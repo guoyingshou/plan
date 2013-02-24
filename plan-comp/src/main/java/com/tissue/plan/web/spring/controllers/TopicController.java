@@ -32,8 +32,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Controller
 public class TopicController {
+
+    private static Logger logger = LoggerFactory.getLogger(TopicController.class);
 
     @Autowired
     protected UserService userService;
@@ -47,14 +52,28 @@ public class TopicController {
     @Autowired
     private PostService postService;
 
-    @ModelAttribute("viewer")
-    public User setupViewer(Map model) {
+    private User init(Map model) {
         String viewerAccountId = SecurityUtil.getViewerAccountId();
-        if(viewerAccountId == null) {
-            return null;    
+        User viewer = null;
+        if(viewerAccountId != null) {
+            model.put("viewerAccountId", viewerAccountId);
+            logger.debug("viewer account id put into model: " + viewerAccountId);
+
+            viewer = userService.getUserByAccount(viewerAccountId);
+            model.put("viewer", viewer);
+            logger.debug("viewer put into model: " + viewer.getId());
         }
-        model.put("viewerAccountId", viewerAccountId);
-        return userService.getUserByAccount(viewerAccountId);
+        return viewer;
+    }
+   
+    private User init(String topicId, Map model) {
+        User viewer = init(model);
+
+        Topic topic = topicService.getTopic(topicId);
+        model.put("topic", topic);
+        logger.debug("topic put into mode: " + topicId);
+
+        return viewer;
     }
 
     /**
@@ -62,10 +81,9 @@ public class TopicController {
      */
     @RequestMapping(value="/topics/{topicId}/objective")
     public String getTopic(@PathVariable("topicId") String topicId, Map model) {
-        model.put("current", "objective");
 
-        Topic topic = topicService.getTopic("#"+topicId);
-        model.put("topic", topic);
+        model.put("current", "objective");
+        init("#"+topicId, model);
 
         return "topic";
     }
@@ -77,9 +95,7 @@ public class TopicController {
     public String getTopic(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         topicId = "#" + topicId;
-
-        Topic topic = topicService.getTopic(topicId);
-        model.put("topic", topic);
+        init(topicId, model);
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -99,11 +115,10 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/{type}/posts")
     public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) throws Exception {
 
-        topicId = "#" + topicId;
         model.put("current", type);
 
-        Topic topic = topicService.getTopic(topicId);
-        model.put("topic", topic);
+        topicId = "#" + topicId;
+        init(topicId, model);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -123,8 +138,9 @@ public class TopicController {
     @RequestMapping(value="/plans/{planId}") 
     public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
-        planId = "#" + planId;
+        init(model);
 
+        planId = "#" + planId;
         Topic topic = planService.getTopic(planId);
         model.put("topic", topic);
 
@@ -148,13 +164,21 @@ public class TopicController {
     @RequestMapping(value="/posts/{postId}")
     public String getPost(@PathVariable("postId") String postId, Map model) {
 
-        postId = "#" + postId;
+        init(model);
 
+        String viewerAccountId = (String)model.get("viewerAccountId");
+
+        postId = "#" + postId;
         Topic topic = postService.getTopic(postId);
         model.put("topic", topic);
 
         Post post = postService.getPost(postId);
         model.put("post", post);
+
+        List<Account> members = post.getPlan().getMembers();
+        for(Account account : members) {
+            System.out.println(account.getId());
+        }
 
         if("question".equals(post.getType())) {
             return "questionDetail";
