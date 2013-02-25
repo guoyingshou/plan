@@ -13,11 +13,11 @@
     </div>
 
     <div class="response">
-        <a class="delete-item action" data-action="<@spring.url '/answerComments/${comment.id?replace("#", "")}/_delete' />" href="#">
+        <a class="delete-item action" data-action="<@spring.url '/topics/${topic.id?replace("#","")}/answerComments/${comment.id?replace("#", "")}/_delete' />" href="#">
             <@spring.message 'i18n.action.delete' />
         </a>
 
-        <a class="update-item action" data-action="<@spring.url '/answerComments/${comment.id?replace("#", "")}/_update'/>" data-target="#answer-comment-${comment.id?replace("#", "")?replace(":", "-")}-content" href="#">
+        <a class="update-item action" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/answerComments/${comment.id?replace("#", "")}/_update'/>" data-target="#answer-comment-${comment.id?replace("#", "")?replace(":", "-")}-content" href="#">
             <@spring.message 'i18n.action.edit' />
         </a>
     </div>

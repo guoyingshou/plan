@@ -14,10 +14,10 @@
     </div>
 
     <div class="response">
-        <a class="delete-item action" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
+        <a class="delete-item action" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
             <@spring.message 'i18n.action.delete' />
         </a>
-        <a class="update-item action" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_update' />" data-target="#question-comment-${questionComment.id?replace("#", "")?replace(":", "-")}-content" href="#">
+        <a class="update-item action" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/questionComments/${questionComment.id?replace("#", "")}/_update' />" data-target="#question-comment-${questionComment.id?replace("#", "")?replace(":", "-")}-content" href="#">
             <@spring.message 'i18n.action.edit' />
         </a>
     </div>

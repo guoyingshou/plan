@@ -8,10 +8,10 @@
     </div>
 
     <div class="response">
-        <a class="update-item action" href="#" data-action="<@spring.url '/messageComments/${messageComment.id?replace("#", "")}/_update' />" data-target="#message-comment-${messageComment.id?replace("#", "")?replace(":", "-")}-content">
+        <a class="update-item action" href="#" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/messageComments/${messageComment.id?replace("#", "")}/_update' />" data-target="#message-comment-${messageComment.id?replace("#", "")?replace(":", "-")}-content">
             <@spring.message 'i18n.action.edit' />
         </a>
-        <a class="delete-item action" data-action="<@spring.url '/messageComments/${messageComment.id?replace("#", "")}/_delete' />" href="#">
+        <a class="delete-item action" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/messageComments/${messageComment.id?replace("#", "")}/_delete' />" href="#">
             <@spring.message 'i18n.action.delete' />
         </a>
     </div>

@@ -14,13 +14,13 @@
     </div>
 
     <div class="response">
-        <a class="delete-item action" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
+        <a class="delete-item action" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
             <@spring.message 'i18n.action.delete' />
         </a>
-        <a class="update-item action" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_update' />" data-target="#answer-${answer.id?replace("#","")?replace(":", "-")}-content" href="#">
+        <a class="update-item action" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/answers/${answer.id?replace("#", "")}/_update' />" data-target="#answer-${answer.id?replace("#","")?replace(":", "-")}-content" href="#">
             <@spring.message 'i18n.action.edit' />
         </a>
-        <a class="create-item action" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/comments/_create' />" data-target="#answer-${answer.id?replace("#", "")?replace(":", "-")}-comments" href="#">
+        <a class="create-item action" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/answers/${answer.id?replace("#", "")}/comments/_create' />" data-target="#answer-${answer.id?replace("#", "")?replace(":", "-")}-comments" href="#">
             <@spring.message 'i18n.action.comment' />
         </a>
     </div>

@@ -96,23 +96,6 @@ public class TopicController {
     }
 
     /**
-     * Add new topic.
-     */
-    @RequestMapping(value="/topics/_create", method=POST)
-    public String addTopic(@Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-        
-        if(result.hasErrors()) {
-            System.out.println(result.getAllErrors());
-            //throw new IllegalAccessException("Don't be evil");
-        }
-
-        form.setAccount(viewerAccount);
-
-        String topicId = topicService.addTopic(form).replace("#", "");
-        return "redirect:/topics/" + topicId + "/posts";
-    }
-
-    /**
      * Update topic.
      */
     @RequestMapping(value="/topics/{topicId}/_update", method=POST)
@@ -195,9 +178,14 @@ public class TopicController {
     }
 
     /**
+     * ================================================
+     * plan
+     * ================================================
+     */
+    /**
      * Add a plan to the specific topic.
      */
-    @RequestMapping(value="/topics/{topicId}/plans", method=POST)
+    @RequestMapping(value="/topics/{topicId}/plans/_create", method=POST)
     public String addPlan(@PathVariable("topicId") String topicId, PlanForm form, Map model, @ModelAttribute("topic") Topic topic, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         form.setTopic(topic);
@@ -242,30 +230,25 @@ public class TopicController {
         return "topic";
     }
 
+    /**
+     * ================================================
+     * post
+     * ================================================
+     */
     @RequestMapping(value="/topics/{topicId}/posts/_form")
     public String newPost(@PathVariable("topicId") String topicId, Map model) {
 
         //todo: authorization check
-        /**
-        Topic topic = planService.getTopic(planId);
-        model.put("topic", topic);
-        */
-
         return "postForm";
     }
  
     /**
      * Get specific post.
      */
-    @RequestMapping(value="/topic/{topicId}/posts/{postId}")
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}")
     public String getPost(@PathVariable("postId") String postId, Map model) {
 
         postId = "#" + postId;
-
-        /**
-        Topic topic = postService.getTopic(postId);
-        model.put("topic", topic);
-        */
 
         Post post = postService.getPost(postId);
         model.put("post", post);
@@ -281,21 +264,19 @@ public class TopicController {
      * The post can be any type.
      */
     @RequestMapping(value="/topics/{topicId}/posts/_create", method=POST)
-    public String addPost(@PathVariable("topicId") String topicId, @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addPost(@PathVariable("topicId") String topicId, @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount, @ModelAttribute("topic") Topic topic) {
 
         if(result.hasErrors()) {
             //throw new IllegalAccessException("Don't be evil");
         }
-
-        //Plan plan = planService.getPlan("#"+planId);
-
         //todo: security check
-        //
-        //form.setPlan(plan);
+
+        form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
 
         String id = postService.createPost(form).replace("#", "");
-        return "redirect:/posts/" + id;
+
+        return "redirect:/topics/" + topicId + "/posts/" + id;
     }
 
     /**
@@ -333,6 +314,11 @@ public class TopicController {
         return "redirect:/topics/" + topicId + "/posts";
     }
 
+    /**
+     * ================================================
+     * answer
+     * ================================================
+     */
     /**
      * Add an answer to a specific post.
      * The post's type can only be 'question'.
