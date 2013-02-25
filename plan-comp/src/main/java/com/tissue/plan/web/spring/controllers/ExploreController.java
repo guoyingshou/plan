@@ -8,7 +8,6 @@ import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.commons.social.services.ActivityService;
 import com.tissue.commons.social.services.UserService;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PostService;
@@ -45,25 +44,6 @@ public class ExploreController {
 
     @Autowired
     private PostService postService;
-
-    @Autowired
-    private ActivityService activityService;
-
-    /**
-    @ModelAttribute("locale")
-    public String setupLocale(Locale locale) {
-        return locale.toString();
-    }
-    */
-
-    @ModelAttribute("viewer")
-    public User setupViewer(Map model) {
-        String viewerAccountId = SecurityUtil.getViewerAccountId();
-        if(viewerAccountId == null) {
-            return null;    
-        }
-        return userService.getUserByAccount(viewerAccountId);
-    }
 
     @ModelAttribute("users")
     public List<User> setupUsers() {

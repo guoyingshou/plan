@@ -1,22 +1,43 @@
 package com.tissue.plan.web.spring.controllers;
 
+import com.tissue.core.command.Command;
 import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
+import com.tissue.core.plan.Question;
+import com.tissue.core.plan.Answer;
+import com.tissue.core.plan.AnswerComment;
+import com.tissue.core.plan.PostMessage;
+import com.tissue.core.plan.PostMessageComment;
+import com.tissue.core.plan.QuestionComment;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.social.services.UserService;
 import com.tissue.plan.web.model.TopicForm;
-import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.web.model.PlanForm;
+import com.tissue.plan.web.model.PostForm;
+import com.tissue.plan.web.model.PostMessageForm;
+import com.tissue.plan.web.model.PostMessageCommentForm;
+import com.tissue.plan.web.model.QuestionCommentForm;
+import com.tissue.plan.web.model.AnswerForm;
+import com.tissue.plan.web.model.AnswerCommentForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PlanService;
 import com.tissue.plan.services.PostService;
+import com.tissue.plan.services.PostMessageService;
+import com.tissue.plan.services.PostMessageCommentService;
+import com.tissue.plan.services.AnswerService;
+import com.tissue.plan.services.AnswerCommentService;
+import com.tissue.plan.services.QuestionCommentService;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,28 +73,75 @@ public class TopicController {
     @Autowired
     private PostService postService;
 
-    private User init(Map model) {
-        String viewerAccountId = SecurityUtil.getViewerAccountId();
-        User viewer = null;
-        if(viewerAccountId != null) {
-            model.put("viewerAccountId", viewerAccountId);
-            logger.debug("viewer account id put into model: " + viewerAccountId);
+    @Autowired
+    private PostMessageService postMessageService;
 
-            viewer = userService.getUserByAccount(viewerAccountId);
-            model.put("viewer", viewer);
-            logger.debug("viewer put into model: " + viewer.getId());
-        }
-        return viewer;
+    @Autowired
+    private PostMessageCommentService postMessageCommentService;
+
+    @Autowired
+    private AnswerService answerService;
+
+    @Autowired
+    private AnswerCommentService answerCommentService;
+
+    @Autowired
+    private QuestionCommentService questionCommentService;
+
+
+    @ModelAttribute("topic")
+    public Topic getTopicByTopicId(@PathVariable("topicId") String topicId) {
+        logger.debug("setting up topic from topicId: " + topicId);
+        return topicService.getTopic(topicId);
     }
-   
-    private User init(String topicId, Map model) {
-        User viewer = init(model);
 
-        Topic topic = topicService.getTopic(topicId);
-        model.put("topic", topic);
-        logger.debug("topic put into mode: " + topicId);
+    /**
+     * Add new topic.
+     */
+    @RequestMapping(value="/topics/_create", method=POST)
+    public String addTopic(@Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+        
+        if(result.hasErrors()) {
+            System.out.println(result.getAllErrors());
+            //throw new IllegalAccessException("Don't be evil");
+        }
 
-        return viewer;
+        form.setAccount(viewerAccount);
+
+        String topicId = topicService.addTopic(form).replace("#", "");
+        return "redirect:/topics/" + topicId + "/posts";
+    }
+
+    /**
+     * Update topic.
+     */
+    @RequestMapping(value="/topics/{topicId}/_update", method=POST)
+    public HttpEntity<?> updateTopic(@PathVariable("topicId") String topicId, @Valid TopicForm form, BindingResult result, Map model) throws Exception {
+
+        if(result.hasErrors()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        //checkExistence("#"+topicId);
+        //checkAuthorizations("#"+topicId);
+ 
+        form.setId("#"+topicId);
+        topicService.updateTopic(form);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping(value="/topics/{topicId}/_delete", method=POST)
+    public String deleteTopic(@PathVariable("topicId") String topicId, @Valid Command command, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+        
+        //checkAuthorizations("#"+topicId);
+
+        command.setId("#"+topicId);
+
+        command.setAccount(viewerAccount);
+
+        topicService.deleteTopic(command);
+
+        return "redirect:/topics";
     }
 
     /**
@@ -81,10 +149,7 @@ public class TopicController {
      */
     @RequestMapping(value="/topics/{topicId}/objective")
     public String getTopic(@PathVariable("topicId") String topicId, Map model) {
-
         model.put("current", "objective");
-        init("#"+topicId, model);
-
         return "topic";
     }
 
@@ -95,7 +160,6 @@ public class TopicController {
     public String getTopic(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         topicId = "#" + topicId;
-        init(topicId, model);
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -116,9 +180,7 @@ public class TopicController {
     public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) throws Exception {
 
         model.put("current", type);
-
         topicId = "#" + topicId;
-        init(topicId, model);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -133,16 +195,38 @@ public class TopicController {
     }
 
     /**
+     * Add a plan to the specific topic.
+     */
+    @RequestMapping(value="/topics/{topicId}/plans", method=POST)
+    public String addPlan(@PathVariable("topicId") String topicId, PlanForm form, Map model, @ModelAttribute("topic") Topic topic, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        form.setTopic(topic);
+        form.setAccount(viewerAccount);
+
+        planService.addPlan(form);
+        return "redirect:/topics/" + topicId + "/posts";
+    }
+
+    /**
+     * Join a plan.
+     */
+    @RequestMapping(value="/topics/{topicId}/plans/{planId}/_join")
+    public String joinPlan(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        //todo: authorization check
+        
+        planService.addMember("#"+planId, viewerAccount.getId());
+        return "redirect:/topics/" + topicId + "/posts";
+    }
+
+
+    /**
      * Get paged posts by planId.
      */
-    @RequestMapping(value="/plans/{planId}") 
+    @RequestMapping(value="/topics/{topicId}/plans/{planId}") 
     public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
-        init(model);
-
         planId = "#" + planId;
-        Topic topic = planService.getTopic(planId);
-        model.put("topic", topic);
 
         System.out.println(">>>>current plan: " + planId);
 
@@ -158,32 +242,340 @@ public class TopicController {
         return "topic";
     }
 
+    @RequestMapping(value="/topics/{topicId}/posts/_form")
+    public String newPost(@PathVariable("topicId") String topicId, Map model) {
+
+        //todo: authorization check
+        /**
+        Topic topic = planService.getTopic(planId);
+        model.put("topic", topic);
+        */
+
+        return "postForm";
+    }
+ 
     /**
      * Get specific post.
      */
-    @RequestMapping(value="/posts/{postId}")
+    @RequestMapping(value="/topic/{topicId}/posts/{postId}")
     public String getPost(@PathVariable("postId") String postId, Map model) {
 
-        init(model);
-
-        String viewerAccountId = (String)model.get("viewerAccountId");
-
         postId = "#" + postId;
+
+        /**
         Topic topic = postService.getTopic(postId);
         model.put("topic", topic);
+        */
 
         Post post = postService.getPost(postId);
         model.put("post", post);
-
-        List<Account> members = post.getPlan().getMembers();
-        for(Account account : members) {
-            System.out.println(account.getId());
-        }
 
         if("question".equals(post.getType())) {
             return "questionDetail";
         }
         return "topic";
     }
+
+    /**
+     * Add a post to the active plan.
+     * The post can be any type.
+     */
+    @RequestMapping(value="/topics/{topicId}/posts/_create", method=POST)
+    public String addPost(@PathVariable("topicId") String topicId, @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if(result.hasErrors()) {
+            //throw new IllegalAccessException("Don't be evil");
+        }
+
+        //Plan plan = planService.getPlan("#"+planId);
+
+        //todo: security check
+        //
+        //form.setPlan(plan);
+        form.setAccount(viewerAccount);
+
+        String id = postService.createPost(form).replace("#", "");
+        return "redirect:/posts/" + id;
+    }
+
+    /**
+     * Update a post.
+     * The post can be of any type.
+     */
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/_update", method=POST)
+    public HttpEntity<?> updatePost(@PathVariable("postId") String postId, @Valid PostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        /**
+        if(result.hasErrors()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        */
+
+        //checkAuthorizations("#"+postId);
+        //todo: authorization check
+
+        form.setId("#"+postId);
+        postService.updatePost(form);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/_delete", method=POST)
+    public String deletePost(@PathVariable("postId") String postId, @Valid Command command, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        //checkAuthorizations("#"+postId);
+        //todo: authorization check
+
+        command.setId("#"+postId);
+        command.setAccount(viewerAccount);
+        String topicId = postService.deletePost(command);
+
+        return "redirect:/topics/" + topicId + "/posts";
+    }
+
+    /**
+     * Add an answer to a specific post.
+     * The post's type can only be 'question'.
+     */
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/_create", method=POST)
+    public String addAnswer(@PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        Post post = new Post();
+        post.setId("#"+postId);
+        Question q = new Question(post);
+        form.setQuestion(q);
+        form.setAccount(viewerAccount);
+
+        Answer answer = answerService.addAnswer(form);
+        model.put("answer", answer);
+
+        return "fragments/newAnswer";
+    }
+
+    /**
+     * Update an answer.
+     */
+    @RequestMapping(value="/topics/{topicId}/answers/{answerId}/_update", method=POST)
+    public HttpEntity<?> updateAnswer(@PathVariable("answerId") String answerId, @Valid AnswerForm form, BindingResult result, Map model) {
+
+        //checkAuthorizations("#"+answerId);
+
+        form.setId("#"+answerId);
+        answerService.updateAnswer(form);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Delete an answer.
+     */
+    @RequestMapping(value="/topics/{topicId}/answers/{answerId}/_delete", method=POST)
+    public HttpEntity<?> deleteAnswer(@PathVariable("answerId") String answerId) {
+
+        //checkAuthorizations("#"+answerId);
+
+        answerService.deleteAnswer("#"+answerId);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Add a comment to the answer of a specific question.
+     */
+    @RequestMapping(value="/topics/{topicId}/answers/{answerId}/comments/_create", method=POST)
+    public String addAnswerComment(@PathVariable("answerId") String answerId, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        Answer answer = new Answer();
+        answer.setId("#"+answerId);
+        form.setAnswer(answer);
+        form.setAccount(viewerAccount);
+
+        AnswerComment comment = answerCommentService.addComment(form);
+        model.put("comment", comment);
+
+        return "fragments/newAnswerComment";
+    }
+
+    /**
+     * Update an answer comment.
+     */
+    @RequestMapping(value="/topics/{topicId}/answerComments/{commentId}/_update", method=POST)
+    public HttpEntity<?> updateAnswerComment(@PathVariable("commentId") String commentId, @Valid AnswerCommentForm form, BindingResult result, Map model) {
+
+        //checkAuthorizations("#"+commentId);
+        //todo: authorization check
+
+        form.setId("#"+commentId);
+        answerCommentService.updateComment(form);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Delete an answer comment.
+     */
+    @RequestMapping(value="/topics/{topicId}/answerComments/{commentId}/_delete", method=POST)
+    public HttpEntity<?> deleteAnswerComment(@PathVariable("commentId") String commentId) {
+
+        //checkAuthorizations("#"+commentId);
+
+        answerCommentService.deleteComment("#"+commentId);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Add a message to a specific post.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/_create", method=POST)
+    public String addMessage(@PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        postId = "#" + postId;
+
+        /**
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        if(!commonService.isMemberOrOwner(viewerAccountId, postId)) {
+            throw new InvalidParameterException("not member or owner");
+        }
+        */
+
+        Post post = new Post();
+        post.setId(postId);
+        form.setPost(post);
+        form.setAccount(viewerAccount);
+
+        PostMessage postMessage = postMessageService.addMessage(form);
+        model.put("postMessage", postMessage);
+        return "fragments/newMessage";
+    }
+ 
+    /**
+     * Update a message.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/topics/{topicId}/messages/{msgId}/_update", method=POST)
+    public HttpEntity<?> updateMessage(@PathVariable("msgId") String msgId, @Valid PostMessageForm form, BindingResult result) {
+
+        //checkAuthorizations("#"+msgId);
+
+        /**
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        if(!commonService.isOwner(viewerAccountId, "#"+msgId)) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        */
+
+        form.setId("#"+msgId);
+        postMessageService.updatePostMessage(form);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Delete a message.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/topics/{topicId}/messages/{msgId}/_delete", method=POST)
+    public HttpEntity<?> deleteMessage(@PathVariable("msgId") String msgId, Map model) {
+
+        //checkAuthorizations("#"+msgId);
+
+        postMessageService.deletePostMessage("#"+msgId);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Add a comment to the message of a specific post.
+     * The post's type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/topics/{topicId}/messages/{msgId}/comments/_create", method=POST)
+    public String addMessageComment(@PathVariable("msgId") String msgId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+
+        PostMessage msg = new PostMessage();
+        msg.setId("#"+msgId);
+        form.setPostMessage(msg);
+        form.setAccount(viewerAccount);
+
+        PostMessageComment comment = postMessageCommentService.addComment(form);
+        model.put("messageComment", comment);
+
+        return "fragments/newMessageComment";
+    }
+
+    /**
+     * Update a PostMessageComment.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/topics/{topicId}/messageComments/{commentId}/_update", method=POST)
+    public HttpEntity<?> updateMessageComment(@PathVariable("commentId") String commentId, @Valid PostMessageCommentForm form, BindingResult result, Map model) {
+
+        //checkAuthorizations("#"+commentId);
+
+        form.setId("#"+commentId);
+        postMessageCommentService.updateComment(form);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Delete a PostMessageComment.
+     * The post type can be 'concept', 'note' or 'tutorial'.
+     */
+    @RequestMapping(value="/topics/{topicId}/messageComments/{commentId}/_delete", method=POST)
+    public HttpEntity<?> deleteMessageComment(@PathVariable("commentId") String commentId, Map model) {
+
+        //checkAuthorizations("#"+commentId);
+
+        postMessageCommentService.deleteComment("#"+commentId);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Add a comment to a specific question(a kind of post).
+     */
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/questionComments/_create", method=POST)
+    public String addQuestionComment(@PathVariable("postId") String postId, @Valid QuestionCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+
+        Post post = new Post();
+        post.setId("#"+postId);
+        form.setQuestion(post);
+        form.setAccount(viewerAccount);
+
+        QuestionComment comment = questionCommentService.addQuestionComment(form);
+        model.put("questionComment", comment);
+
+        return "fragments/newQuestionComment";
+    }
+ 
+    /**
+     * Update a QuestionComment.
+     */
+    @RequestMapping(value="/topics/{topicId}/questionComments/{commentId}/_update", method=POST)
+    public HttpEntity<?> updateQuestionComment(@PathVariable("commentId") String commentId, @Valid QuestionCommentForm form, BindingResult result, Map model) {
+
+        //checkAuthorizations("#"+commentId);
+
+        form.setId("#"+commentId);
+        questionCommentService.updateQuestionComment(form);
+
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * Delete a QuestionComment.
+     */
+    @RequestMapping(value="/topics/{topicId}/questionComments/{commentId}/_delete", method=POST)
+    public HttpEntity<?> deleteQuestionComment(@PathVariable("commentId") String commentId, Map model) {
+
+        //checkAuthorizations("#"+commentId);
+
+        questionCommentService.deleteQuestionComment("#"+commentId);
+        return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+
 
 }
