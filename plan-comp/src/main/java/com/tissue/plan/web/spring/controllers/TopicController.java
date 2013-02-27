@@ -253,6 +253,14 @@ public class TopicController {
         Post post = postService.getPost(postId);
         model.put("post", post);
 
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        System.out.println("=============");
+        System.out.println("viewerAccountId: " + viewerAccountId);
+        System.out.println("is plan active? " + post.getPlan().isActive());
+        System.out.println("is member? " + post.getPlan().isMember(viewerAccountId));
+        System.out.println("is owner? " + post.getPlan().isOwner(viewerAccountId));
+        System.out.println("=============");
+
         if("question".equals(post.getType())) {
             return "questionDetail";
         }
