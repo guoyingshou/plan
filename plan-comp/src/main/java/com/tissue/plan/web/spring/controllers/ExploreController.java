@@ -33,7 +33,6 @@ import java.util.Date;
 import java.security.Principal;
 
 @Controller
-//public class ExploreController extends ViewerUserSetter {
 public class ExploreController {
 
     @Autowired
@@ -45,21 +44,16 @@ public class ExploreController {
     @Autowired
     private PostService postService;
 
-    @ModelAttribute("users")
-    public List<User> setupUsers() {
-        String viewerAccountId = SecurityUtil.getViewerAccountId();
-        return userService.getNewUsers(viewerAccountId, 15);
-    }
-
-    @ModelAttribute("newPosts")
-    public List<Post> getNewPosts() {
-        return postService.getLatestPosts(15);
-    }
-
     @RequestMapping("/explore")
-    public String exploreTrending(Map model) {
+    public String exploreTrending(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("current", "trending");
+
+        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        model.put("users", users);
+
+        List<Post> newPosts = postService.getLatestPosts(15);
+        model.put("newPosts", newPosts);
 
         List<Topic> topics = topicService.getTrendingTopics(15);
         model.put("topics", topics);
@@ -68,9 +62,15 @@ public class ExploreController {
     }
 
     @RequestMapping("/featured")
-    public String exploreFeatured(Map model) {
+    public String exploreFeatured(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("current", "featured");
+
+        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        model.put("users", users);
+
+        List<Post> newPosts = postService.getLatestPosts(15);
+        model.put("newPosts", newPosts);
 
         List<Topic> topics = topicService.getFeaturedTopics(15);
         model.put("topics", topics);
@@ -79,9 +79,15 @@ public class ExploreController {
     }
 
     @RequestMapping("/topics")
-    public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
+    public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("current", "topics");
+
+        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        model.put("users", users);
+
+        List<Post> newPosts = postService.getLatestPosts(15);
+        model.put("newPosts", newPosts);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;
@@ -96,9 +102,13 @@ public class ExploreController {
     }
 
     @RequestMapping("/tags/{tag}")
-    public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
+    public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("current", "tags");
+
+        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        model.put("users", users);
+
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;
@@ -113,7 +123,11 @@ public class ExploreController {
     }
 
     @RequestMapping("/tags")
-    public String exploreTags(Map model) {
+    public String exploreTags(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        model.put("users", users);
+
         List<String> tags = topicService.getTopicTags();
         model.put("tags", tags);
         return "tags";
