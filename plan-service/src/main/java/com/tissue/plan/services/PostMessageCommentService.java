@@ -3,12 +3,16 @@ package com.tissue.plan.services;
 import com.tissue.core.command.PostMessageCommentCommand;
 import com.tissue.core.plan.PostMessageComment;
 import com.tissue.core.plan.dao.PostMessageCommentDao;
+import com.tissue.core.orient.dao.CommonDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
 public class PostMessageCommentService {
+
+    @Autowired
+    private CommonDao commonDao;
 
     @Autowired
     private PostMessageCommentDao postMessageCommentDao;
@@ -22,7 +26,7 @@ public class PostMessageCommentService {
     }
 
     public void deleteComment(String commentId) {
-        postMessageCommentDao.delete(commentId);
+        commonDao.delete(commentId);
     }
 
 }

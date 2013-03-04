@@ -1,6 +1,6 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.command.ItemCommand;
+//import com.tissue.core.command.ItemCommand;
 import com.tissue.core.command.TopicCommand;
 import com.tissue.core.social.User;
 import com.tissue.core.social.Account;
@@ -45,8 +45,8 @@ public class TopicService {
         topicDao.update(command);
     }
 
-    public void deleteTopic(ItemCommand command) {
-        commonDao.delete(command);
+    public void deleteTopic(String topicId) {
+        commonDao.delete(topicId);
     }
 
     public Topic getTopic(String topicId) {

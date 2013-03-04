@@ -1,6 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.command.Command;
+//import com.tissue.core.command.Command;
 import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
@@ -96,18 +96,14 @@ public class PostController {
     }
 
     @RequestMapping(value="/topics/{topicId}/posts/{postId}/_delete", method=POST)
-    public String deletePost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid Command command, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
-        }
+    public String deletePost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
-        command.setId("#"+postId);
-        command.setAccount(viewerAccount);
-        postService.deletePost(command);
+        //command.setId("#"+postId);
+        //command.setAccount(viewerAccount);
+        postService.deletePost("#"+postId);
 
         return "redirect:/topics/" + topicId + "/posts";
     }

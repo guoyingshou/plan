@@ -1,6 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.command.Command;
+//import com.tissue.core.command.Command;
 import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
@@ -77,21 +77,18 @@ public class TopicController {
  
         form.setId("#"+topicId);
         topicService.updateTopic(form);
-        return "redirect:/topics/" + topicId;
+        return "redirect:/topics/" + topicId + "/objective";
     }
 
     @RequestMapping(value="/topics/{topicId}/_delete", method=POST)
-    public String deleteTopic(@PathVariable("topicId") String topicId, @Valid Command command, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String deleteTopic(@PathVariable("topicId") String topicId, @ModelAttribute("viewerAccount") Account viewerAccount) {
         
-        if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
-        }
         Topic topic = topicService.getTopic("#" + topicId);
         topicService.checkOwner(topic, viewerAccount);
  
-        command.setId("#"+topicId);
-        command.setAccount(viewerAccount);
-        topicService.deleteTopic(command);
+        //command.setId("#"+topicId);
+        //command.setAccount(viewerAccount);
+        topicService.deleteTopic("#"+topicId);
         return "redirect:/topics";
     }
 

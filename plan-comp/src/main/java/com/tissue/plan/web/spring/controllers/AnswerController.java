@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
+import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.Question;
 import com.tissue.core.plan.Answer;
@@ -52,7 +53,14 @@ public class AnswerController {
      * The post's type can only be 'question'.
      */
     @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/_create", method=POST)
-    public String addAnswer(@PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addAnswer(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         Post post = new Post();
         post.setId("#"+postId);
@@ -63,32 +71,38 @@ public class AnswerController {
         Answer answer = answerService.addAnswer(form);
         model.put("answer", answer);
 
-        return "fragments/newAnswer";
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
 
     /**
      * Update an answer.
      */
-    @RequestMapping(value="/topics/{topicId}/answers/{answerId}/_update", method=POST)
-    public HttpEntity<?> updateAnswer(@PathVariable("answerId") String answerId, @Valid AnswerForm form, BindingResult result, Map model) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/{answerId}/_update", method=POST)
+    public String updateAnswer(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("answerId") String answerId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        //checkAuthorizations("#"+answerId);
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         form.setId("#"+answerId);
         answerService.updateAnswer(form);
 
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
 
     /**
      * Delete an answer.
      */
-    @RequestMapping(value="/topics/{topicId}/answers/{answerId}/_delete", method=POST)
-    public HttpEntity<?> deleteAnswer(@PathVariable("answerId") String answerId) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/{answerId}/_delete", method=POST)
+    public String deleteAnswer(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("answerId") String answerId, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        //checkAuthorizations("#"+answerId);
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         answerService.deleteAnswer("#"+answerId);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
 }

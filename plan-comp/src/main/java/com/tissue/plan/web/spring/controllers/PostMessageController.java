@@ -51,45 +51,47 @@ public class PostMessageController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/_create", method=POST)
-    public String addMessage(@PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addMessage(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        postId = "#" + postId;
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         Post post = new Post();
-        post.setId(postId);
+        post.setId("#"+postId);
         form.setPost(post);
         form.setAccount(viewerAccount);
 
         PostMessage postMessage = postMessageService.addMessage(form);
-        model.put("postMessage", postMessage);
-        return "fragments/newMessage";
+
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
  
     /**
      * Update a message.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/messages/{msgId}/_update", method=POST)
-    public HttpEntity<?> updateMessage(@PathVariable("msgId") String msgId, @Valid PostMessageForm form, BindingResult result) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{msgId}/_update", method=POST)
+    public String updateMessage(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("msgId") String msgId, @Valid PostMessageForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         form.setId("#"+msgId);
         postMessageService.updatePostMessage(form);
-
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
 
     /**
      * Delete a message.
-     * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/messages/{msgId}/_delete", method=POST)
-    public HttpEntity<?> deleteMessage(@PathVariable("msgId") String msgId, Map model) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{msgId}/_delete", method=POST)
+    public String deleteMessage(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("msgId") String msgId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        //checkAuthorizations("#"+msgId);
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         postMessageService.deletePostMessage("#"+msgId);
-
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
 
 }

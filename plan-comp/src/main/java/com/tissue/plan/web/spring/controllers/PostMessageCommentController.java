@@ -1,6 +1,7 @@
 package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.Account;
+import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.PostMessage;
 import com.tissue.core.plan.PostMessageComment;
@@ -49,47 +50,54 @@ public class PostMessageCommentController {
      * Add a comment to the message of a specific post.
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/messages/{msgId}/comments/_create", method=POST)
-    public String addMessageComment(@PathVariable("msgId") String msgId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{messageId}/comments/_create", method=POST)
+    public String addMessageComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("messageId") String messageId, @Valid PostMessageCommentForm form, BindingResult resutl, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
-        PostMessage msg = new PostMessage();
-        msg.setId("#"+msgId);
-        form.setPostMessage(msg);
+        PostMessage message = new PostMessage();
+        message.setId("#"+messageId);
+        form.setPostMessage(message);
         form.setAccount(viewerAccount);
 
         PostMessageComment comment = postMessageCommentService.addComment(form);
         model.put("messageComment", comment);
 
-        return "fragments/newMessageComment";
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        //return "fragments/newMessageComment";
     }
 
     /**
      * Update a PostMessageComment.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/messageComments/{commentId}/_update", method=POST)
-    public HttpEntity<?> updateMessageComment(@PathVariable("commentId") String commentId, @Valid PostMessageCommentForm form, BindingResult result, Map model) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{messageId}/messageComments/{commentId}/_update", method=POST)
+    public String updateMessageComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("messageId") String messageId, @PathVariable("commentId") String commentId, @Valid PostMessageCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        //checkAuthorizations("#"+commentId);
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         form.setId("#"+commentId);
         postMessageCommentService.updateComment(form);
 
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        //return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
     /**
      * Delete a PostMessageComment.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/messageComments/{commentId}/_delete", method=POST)
-    public HttpEntity<?> deleteMessageComment(@PathVariable("commentId") String commentId, Map model) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{messageId}/messageComments/{commentId}/_delete", method=POST)
+    public String deleteMessageComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("messageId") String messageId, @PathVariable("commentId") String commentId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        //checkAuthorizations("#"+commentId);
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         postMessageCommentService.deleteComment("#"+commentId);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        //return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 
 }

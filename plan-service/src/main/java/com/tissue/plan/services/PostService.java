@@ -1,6 +1,6 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.command.ItemCommand;
+//import com.tissue.core.command.ItemCommand;
 import com.tissue.core.command.PostCommand;
 import com.tissue.core.command.PostMessageCommand;
 import com.tissue.core.plan.Topic;
@@ -47,10 +47,10 @@ public class PostService {
      * @param postId postId
      * @return topic id of the containing topic of the deleted post
      */
-    public String deletePost(ItemCommand command) {
-        String topicId = postDao.getTopicId(command.getId());
-        commonDao.delete(command);
-        return topicId.replace("#", "");
+    public void deletePost(String postId) {
+        //String topicId = postDao.getTopicId(command.getId());
+        commonDao.delete(postId);
+        //return topicId.replace("#", "");
     }
 
     /**
