@@ -7,17 +7,17 @@
 <#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in tissue>
 
 <@tissue.layout "topic">
-    <div id="logo">
+    <div id="page-logo">
         <@topicGadgets.topicLogo current />
     </div>
 
-    <div id="contentWrapper">
-        <div id="sidebar">
+    <div id="page-content-wrapper">
+        <div id="page-sidebar">
             <@topicGadgets.showLivePlan />
             <@topicGadgets.showArchivedPlans />
         </div>
 
-       <div id="content">
+       <div id="page-content">
            <@postGadgets.postForm />
        </div>
     </div>

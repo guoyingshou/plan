@@ -3,12 +3,14 @@ package com.tissue.plan.services;
 import com.tissue.core.command.ItemCommand;
 import com.tissue.core.command.TopicCommand;
 import com.tissue.core.social.User;
+import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
 import com.tissue.core.orient.dao.CommonDao;
+import com.tissue.commons.exceptions.IllegalAccessException;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,5 +106,21 @@ public class TopicService {
         return topicDao.getPagedPostsByType(topicId, type, page, size);
     }
 
+    public void checkOwner(Topic topic, Account viewerAccount) {
+        Account ownerAccount = topic.getAccount();
+        if(!viewerAccount.equals(ownerAccount)) {
+            throw new IllegalAccessException("illegal access: " + topic.getId() + ", viewer: " + viewerAccount.getUsername());
+        }
+    }
+
+    public void checkActivePlan(Topic topic, Account viewerAccount) {
+        Plan activePlan = topic.getActivePlan();
+        if(activePlan == null) {
+            throw new IllegalArgumentException("no active plan for topic: " + topic.getId());
+        }
+        if(!activePlan.isOwner(viewerAccount.getId()) && !activePlan.isMember(viewerAccount.getId())) {
+            throw new IllegalArgumentException(viewerAccount.getUsername() + " is not owner or member for active plan in topic: " + topic.getId());
+        }
+    }
 
 }

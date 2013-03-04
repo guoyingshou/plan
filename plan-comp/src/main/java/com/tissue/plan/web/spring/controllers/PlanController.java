@@ -49,8 +49,9 @@ public class PlanController {
      * Add a plan to the specific topic.
      */
     @RequestMapping(value="/topics/{topicId}/plans/_create", method=POST)
-    public String addPlan(@PathVariable("topicId") String topicId, PlanForm form, Map model, @ModelAttribute("topic") Topic topic, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addPlan(@PathVariable("topicId") String topicId, PlanForm form, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        Topic topic = topicService.getTopic(topicId);
         form.setTopic(topic);
         form.setAccount(viewerAccount);
 
@@ -64,19 +65,19 @@ public class PlanController {
     @RequestMapping(value="/topics/{topicId}/plans/{planId}/_join")
     public String joinPlan(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        //todo: authorization check
-        
-        planService.addMember("#"+planId, viewerAccount.getId());
+        planId = "#" + planId;
+        //check if plan exist. If not, an exception from the db will be thrown.
+        Plan plan = planService.getPlan(planId);
+
+        planService.addMember(planId, viewerAccount.getId());
         return "redirect:/topics/" + topicId + "/posts";
     }
-
 
     /**
      * Get paged posts by planId.
      */
     @RequestMapping(value="/topics/{topicId}/plans/{planId}/posts") 
     public String getPosts(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
-
 
         topicId = "#" + topicId;
         planId = "#" + planId;

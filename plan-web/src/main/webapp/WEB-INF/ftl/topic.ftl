@@ -9,16 +9,16 @@
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
 <@tissue.layout "topic">
-    <div id="logo">
+    <div id="page-logo">
         <@topicGadgets.topicLogo current/>
     </div>
 
-    <div id="contentWrapper">
-        <div id="sidebar">
+    <div id="page-content-wrapper">
+        <div id="page-sidebar">
             <@topicGadgets.showPlanSidebar />
         </div>
 
-       <div id="content">
+       <div id="page-content">
            <#if posts??>
                <@postGadgets.showPosts posts />
                <@utilGadgets.showPager />

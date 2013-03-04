@@ -55,13 +55,6 @@ public class PostMessageController {
 
         postId = "#" + postId;
 
-        /**
-        String viewerAccountId = SecurityUtil.getViewerAccountId();
-        if(!commonService.isMemberOrOwner(viewerAccountId, postId)) {
-            throw new InvalidParameterException("not member or owner");
-        }
-        */
-
         Post post = new Post();
         post.setId(postId);
         form.setPost(post);
@@ -78,15 +71,6 @@ public class PostMessageController {
      */
     @RequestMapping(value="/topics/{topicId}/messages/{msgId}/_update", method=POST)
     public HttpEntity<?> updateMessage(@PathVariable("msgId") String msgId, @Valid PostMessageForm form, BindingResult result) {
-
-        //checkAuthorizations("#"+msgId);
-
-        /**
-        String viewerAccountId = SecurityUtil.getViewerAccountId();
-        if(!commonService.isOwner(viewerAccountId, "#"+msgId)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-        */
 
         form.setId("#"+msgId);
         postMessageService.updatePostMessage(form);

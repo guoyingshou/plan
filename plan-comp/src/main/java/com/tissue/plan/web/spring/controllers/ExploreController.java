@@ -49,7 +49,8 @@ public class ExploreController {
 
         model.put("current", "trending");
 
-        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = userService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
         List<Post> newPosts = postService.getLatestPosts(15);
@@ -66,7 +67,8 @@ public class ExploreController {
 
         model.put("current", "featured");
 
-        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = userService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
         List<Post> newPosts = postService.getLatestPosts(15);
@@ -83,7 +85,8 @@ public class ExploreController {
 
         model.put("current", "topics");
 
-        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = userService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
         List<Post> newPosts = postService.getLatestPosts(15);
@@ -106,7 +109,11 @@ public class ExploreController {
 
         model.put("current", "tags");
 
-        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        List<Post> newPosts = postService.getLatestPosts(15);
+        model.put("newPosts", newPosts);
+
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = userService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
 
@@ -125,7 +132,8 @@ public class ExploreController {
     @RequestMapping("/tags")
     public String exploreTags(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        List<User> users = userService.getNewUsers(viewerAccount.getUser().getId(), 10);
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = userService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
         List<String> tags = topicService.getTopicTags();

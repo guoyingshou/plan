@@ -54,10 +54,10 @@ public class TopicController {
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         
         if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
         }
 
         form.setAccount(viewerAccount);
-
         String topicId = topicService.addTopic(form).replace("#", "");
         return "redirect:/topics/" + topicId + "/posts";
     }
@@ -66,31 +66,32 @@ public class TopicController {
      * Update topic.
      */
     @RequestMapping(value="/topics/{topicId}/_update", method=POST)
-    public HttpEntity<?> updateTopic(@PathVariable("topicId") String topicId, @Valid TopicForm form, BindingResult result, Map model) throws Exception {
+    public String updateTopic(@PathVariable("topicId") String topicId, @Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException(result.getAllErrors().toString());
         }
 
-        //checkExistence("#"+topicId);
-        //checkAuthorizations("#"+topicId);
+        Topic topic = topicService.getTopic("#" + topicId);
+        topicService.checkOwner(topic, viewerAccount);
  
         form.setId("#"+topicId);
         topicService.updateTopic(form);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId;
     }
 
     @RequestMapping(value="/topics/{topicId}/_delete", method=POST)
     public String deleteTopic(@PathVariable("topicId") String topicId, @Valid Command command, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
         
-        //checkAuthorizations("#"+topicId);
-
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+        Topic topic = topicService.getTopic("#" + topicId);
+        topicService.checkOwner(topic, viewerAccount);
+ 
         command.setId("#"+topicId);
-
         command.setAccount(viewerAccount);
-
         topicService.deleteTopic(command);
-
         return "redirect:/topics";
     }
 
@@ -100,10 +101,8 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/objective")
     public String getTopic(@PathVariable("topicId") String topicId, Map model) {
         model.put("current", "objective");
-
-        Topic topic = topicService.getTopic("#"+topicId);
+        Topic topic = topicService.getTopic("#" + topicId);
         model.put("topic", topic);
-
         return "topic";
     }
 
@@ -113,19 +112,16 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/posts")
     public String getTopic(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
-        topicId = "#" + topicId;
-
-        Topic topic = topicService.getTopic(topicId);
+        Topic topic = topicService.getTopic("#" + topicId);
         model.put("topic", topic);
-
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
-        long total = topicService.getPostsCount(topicId);
+        long total = topicService.getPostsCount("#"+topicId);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        List<Post> posts = topicService.getPagedPosts(topicId, page, size);
+        List<Post> posts = topicService.getPagedPosts("#"+topicId, page, size);
         model.put("posts", posts);
 
         return "topic";
@@ -135,22 +131,20 @@ public class TopicController {
      * Get paged posts by topicId and type.
      */
     @RequestMapping(value="/topics/{topicId}/{type}/posts")
-    public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) throws Exception {
+    public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
         model.put("current", type);
-        topicId = "#" + topicId;
 
-        Topic topic = topicService.getTopic(topicId);
+        Topic topic = topicService.getTopic("#" + topicId);
         model.put("topic", topic);
-
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
-        long total = topicService.getPostsCountByType(topicId, type);
+        long total = topicService.getPostsCountByType("#"+topicId, type);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        List<Post> posts = topicService.getPagedPostsByType(topicId, type, page, size);
+        List<Post> posts = topicService.getPagedPostsByType("#"+topicId, type, page, size);
         model.put("posts", posts);
 
         return "topic";

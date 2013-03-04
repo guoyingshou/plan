@@ -10,6 +10,7 @@ import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.social.services.UserService;
 import com.tissue.plan.web.model.PostForm;
+import com.tissue.plan.web.model.UpdatePostForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PostService;
 
@@ -49,15 +50,66 @@ public class PostController {
 
     @RequestMapping(value="/topics/{topicId}/posts/_form")
     public String newPost(@PathVariable("topicId") String topicId, Map model) {
-
-        topicId = "#" + topicId;
-
-        Topic topic = topicService.getTopic(topicId);
+        Topic topic = topicService.getTopic("#"+topicId);
         model.put("topic", topic);
-
-
-        //todo: authorization check
+        model.put("post", new PostForm());
         return "postForm";
+    }
+
+    /**
+     * Add a post to the active plan.
+     * The post can be any type.
+     */
+    @RequestMapping(value="/topics/{topicId}/posts/_create", method=POST)
+    public String addPost(@PathVariable("topicId") String topicId, @ModelAttribute("post") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if(result.hasErrors()) {
+            return "postForm";
+        }
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
+
+        form.setPlan(topic.getActivePlan());
+        form.setAccount(viewerAccount);
+
+        String id = postService.createPost(form).replace("#", "");
+        return "redirect:/topics/" + topicId + "/posts/" + id;
+    }
+
+    /**
+     * Update a post.
+     * The post can be of any type.
+     */
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/_update", method=POST)
+    public String updatePost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid UpdatePostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
+
+        form.setId("#"+postId);
+        postService.updatePost(form);
+
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
+    }
+
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/_delete", method=POST)
+    public String deletePost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid Command command, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
+
+        command.setId("#"+postId);
+        command.setAccount(viewerAccount);
+        postService.deletePost(command);
+
+        return "redirect:/topics/" + topicId + "/posts";
     }
  
     /**
@@ -66,12 +118,10 @@ public class PostController {
     @RequestMapping(value="/topics/{topicId}/posts/{postId}")
     public String getPost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, Map model) {
 
-        topicId = "#" + topicId;
-        postId = "#" + postId;
-
-        Topic topic = topicService.getTopic(topicId);
+        Topic topic = topicService.getTopic("#"+topicId);
         model.put("topic", topic);
 
+        postId = "#" + postId;
         Post post = postService.getPost(postId);
         model.put("post", post);
 
@@ -81,58 +131,4 @@ public class PostController {
         return "topic";
     }
 
-    /**
-     * Add a post to the active plan.
-     * The post can be any type.
-     */
-    @RequestMapping(value="/topics/{topicId}/posts/_create", method=POST)
-    public String addPost(@PathVariable("topicId") String topicId, @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount, @ModelAttribute("topic") Topic topic) {
-
-        if(result.hasErrors()) {
-            //throw new IllegalAccessException("Don't be evil");
-        }
-        //todo: security check
-
-        form.setPlan(topic.getActivePlan());
-        form.setAccount(viewerAccount);
-
-        String id = postService.createPost(form).replace("#", "");
-
-        return "redirect:/topics/" + topicId + "/posts/" + id;
-    }
-
-    /**
-     * Update a post.
-     * The post can be of any type.
-     */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/_update", method=POST)
-    public HttpEntity<?> updatePost(@PathVariable("postId") String postId, @Valid PostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        /**
-        if(result.hasErrors()) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-        */
-
-        //checkAuthorizations("#"+postId);
-        //todo: authorization check
-
-        form.setId("#"+postId);
-        postService.updatePost(form);
-
-        return new ResponseEntity(HttpStatus.ACCEPTED);
-    }
-
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/_delete", method=POST)
-    public String deletePost(@PathVariable("postId") String postId, @Valid Command command, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        //checkAuthorizations("#"+postId);
-        //todo: authorization check
-
-        command.setId("#"+postId);
-        command.setAccount(viewerAccount);
-        String topicId = postService.deletePost(command);
-
-        return "redirect:/topics/" + topicId + "/posts";
-    }
 }

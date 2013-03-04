@@ -10,20 +10,20 @@
 <#assign mystyles=["/tissue/css/layout3.css"] in tissue>
 
 <@tissue.layout current>
-    <div id="logo">
+    <div id="page-logo">
         <@exploreGadgets.exploreLogo current />
     </div>
 
-    <div id="contentWrapper">
-        <div id="sidebar">
+    <div id="page-content-wrapper">
+        <div id="page-sidebar">
             <@userGadgets.showUsers />
         </div>
 
-        <div id="mid">
+        <div id="page-mid">
             <@postGadgets.showPosts newPosts />
         </div>
 
-        <div id="content">
+        <div id="page-content">
             <@topicGadgets.showTopics />
             <#if (current == 'topics') || (current == 'tags')>
                 <@utilGadgets.showPager />
