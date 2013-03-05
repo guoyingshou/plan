@@ -1,7 +1,7 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.command.Command;
 import com.tissue.core.social.Account;
+import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.QuestionComment;
 import com.tissue.core.security.UserDetailsImpl;
@@ -49,44 +49,53 @@ public class QuestionCommentController {
      * Add a comment to a specific question(a kind of post).
      */
     @RequestMapping(value="/topics/{topicId}/posts/{postId}/questionComments/_create", method=POST)
-    public String addQuestionComment(@PathVariable("postId") String postId, @Valid QuestionCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addQuestionComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid QuestionCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         Post post = new Post();
         post.setId("#"+postId);
         form.setQuestion(post);
         form.setAccount(viewerAccount);
 
-        QuestionComment comment = questionCommentService.addQuestionComment(form);
-        model.put("questionComment", comment);
+        questionCommentService.addQuestionComment(form);
 
-        return "fragments/newQuestionComment";
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
  
     /**
      * Update a QuestionComment.
      */
-    @RequestMapping(value="/topics/{topicId}/questionComments/{commentId}/_update", method=POST)
-    public HttpEntity<?> updateQuestionComment(@PathVariable("commentId") String commentId, @Valid QuestionCommentForm form, BindingResult result, Map model) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/questionComments/{commentId}/_update", method=POST)
+    public String updateQuestionComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId, @Valid QuestionCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        //checkAuthorizations("#"+commentId);
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         form.setId("#"+commentId);
         questionCommentService.updateQuestionComment(form);
 
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
 
     /**
      * Delete a QuestionComment.
      */
-    @RequestMapping(value="/topics/{topicId}/questionComments/{commentId}/_delete", method=POST)
-    public HttpEntity<?> deleteQuestionComment(@PathVariable("commentId") String commentId, Map model) {
+    @RequestMapping(value="/topics/{topicId}/posts/{postId}/questionComments/{commentId}/_delete", method=POST)
+    public String deleteQuestionComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        //checkAuthorizations("#"+commentId);
+        Topic topic = topicService.getTopic("#"+topicId);
+        topicService.checkActivePlan(topic, viewerAccount);
 
         questionCommentService.deleteQuestionComment("#"+commentId);
-        return new ResponseEntity(HttpStatus.ACCEPTED);
+        return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
 
 }
