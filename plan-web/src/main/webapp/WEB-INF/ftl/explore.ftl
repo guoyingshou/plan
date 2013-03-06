@@ -9,26 +9,37 @@
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in tissue>
 <#assign mystyles=["/tissue/css/layout3.css"] in tissue>
 
-<@tissue.layout current>
-    <div id="page-logo">
-        <@exploreGadgets.exploreLogo current />
+<#assign title="explore" in tissue>
+
+<@tissue.layout>
+    <div id="page-logo-wrapper">
+        <div id="page-logo">
+            <@exploreGadgets.exploreLogo />
+        </div>
     </div>
 
-    <div id="page-content-wrapper">
-        <div id="page-sidebar">
-            <@userGadgets.showUsers />
+    <div id="page-menu-wrapper">
+        <div id="page-menu">
+            <@exploreGadgets.exploreMenu current/>
         </div>
+    </div>
 
-        <div id="page-mid">
-            <@postGadgets.showPosts newPosts />
-        </div>
+    <div id="page-main-wrapper">
+        <div id="page-main" class="center">
+            <div id="main-sidebar">
+                <@userGadgets.showUsers />
+            </div>
 
-        <div id="page-content">
-            <@topicGadgets.showTopics />
-            <#if (current == 'topics') || (current == 'tags')>
-                <@utilGadgets.showPager />
-            </#if>
+            <div id="main-mid">
+                <@postGadgets.showPosts newPosts />
+            </div>
+
+            <div id="main-content">
+                <@topicGadgets.showTopics />
+                <#if (current == 'topics') || (current == 'tags')>
+                    <@utilGadgets.showPager />
+                </#if>
+            </div>
         </div>
    </div>
-
 </@tissue.layout>

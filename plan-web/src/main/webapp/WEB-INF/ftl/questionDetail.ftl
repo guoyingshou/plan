@@ -6,17 +6,29 @@
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in tissue>
 <#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css", "/tissue/css/post.css"] in tissue>
 
-<@tissue.layout "question">
-    <div id="page-logo">
-        <@topicGadgets.topicLogo />
+<#assign title="question" in tissue />
+
+<@tissue.layout>
+    <div id="page-logo-wrapper">
+        <div id="page-logo">
+            <@topicGadgets.topicLogo />
+        </div>
     </div>
 
-    <div id="page-content-wrapper">
-        <div id="page-sidebar">
-            <@topicGadgets.showPlanSidebar />
+    <div id="page-menu-wrapper">
+        <div id="page-menu">
+            <@topicGadgets.topicMenu current />
         </div>
-        <div id="page-content">
-           <@postGadgets.showQuestionDetail />
+    </div>
+
+    <div id="page-main-wrapper">
+        <div id="page-main">
+            <div id="main-sidebar">
+                <@topicGadgets.showPlanSidebar />
+            </div>
+            <div id="main-content">
+               <@postGadgets.showQuestionDetail />
+            </div>
         </div>
     </div>
 </@tissue.layout>
