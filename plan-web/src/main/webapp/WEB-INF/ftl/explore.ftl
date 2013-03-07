@@ -3,7 +3,7 @@
 <#import "exploreGadgets.ftl" as exploreGadgets />
 <#import "userGadgets.ftl" as userGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
-<#import "utilGadgets.ftl" as utilGadgets />
+<#import "commonGadgets.ftl" as commonGadgets />
 <#import "postGadgets.ftl" as postGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in tissue>
@@ -37,7 +37,7 @@
             <div id="main-content">
                 <@topicGadgets.showTopics />
                 <#if (current == 'topics') || (current == 'tags')>
-                    <@utilGadgets.showPager />
+                    <@commonGadgets.showPager />
                 </#if>
             </div>
         </div>

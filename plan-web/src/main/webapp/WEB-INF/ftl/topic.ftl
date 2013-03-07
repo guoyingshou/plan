@@ -2,7 +2,7 @@
 <#import "tissue.ftl" as tissue />
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "postGadgets.ftl" as postGadgets />
-<#import "utilGadgets.ftl" as utilGadgets />
+<#import "commonGadgets.ftl" as commonGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in tissue>
 <#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css", "/tissue/css/post.css"] in tissue>
@@ -32,7 +32,7 @@
            <div id="main-content">
            <#if posts??>
                <@postGadgets.showPosts posts />
-               <@utilGadgets.showPager />
+               <@commonGadgets.showPager />
            <#elseif post??>
                <@postGadgets.showPostDetail />
            <#else>
