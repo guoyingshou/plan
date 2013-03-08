@@ -1,6 +1,5 @@
 package com.tissue.plan.web.spring.controllers;
 
-//import com.tissue.core.command.Command;
 import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
@@ -101,10 +100,7 @@ public class PostController {
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
-        //command.setId("#"+postId);
-        //command.setAccount(viewerAccount);
         postService.deletePost("#"+postId);
-
         return "redirect:/topics/" + topicId + "/posts";
     }
  

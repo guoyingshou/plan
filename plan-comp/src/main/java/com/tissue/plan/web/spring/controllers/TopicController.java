@@ -1,6 +1,5 @@
 package com.tissue.plan.web.spring.controllers;
 
-//import com.tissue.core.command.Command;
 import com.tissue.core.social.Account;
 import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
@@ -86,8 +85,6 @@ public class TopicController {
         Topic topic = topicService.getTopic("#" + topicId);
         topicService.checkOwner(topic, viewerAccount);
  
-        //command.setId("#"+topicId);
-        //command.setAccount(viewerAccount);
         topicService.deleteTopic("#"+topicId);
         return "redirect:/topics";
     }
@@ -108,6 +105,8 @@ public class TopicController {
      */
     @RequestMapping(value="/topics/{topicId}/posts")
     public String getTopic(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
+
+        model.put("selected", "all");
 
         Topic topic = topicService.getTopic("#" + topicId);
         model.put("topic", topic);
@@ -130,7 +129,7 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/{type}/posts")
     public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
-        model.put("current", type);
+        model.put("selected", type);
 
         Topic topic = topicService.getTopic("#" + topicId);
         model.put("topic", topic);

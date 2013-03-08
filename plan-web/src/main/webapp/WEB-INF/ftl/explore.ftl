@@ -1,26 +1,24 @@
 <#import "spring.ftl" as spring />
-<#import "tissue.ftl" as tissue />
-<#import "exploreGadgets.ftl" as exploreGadgets />
 <#import "userGadgets.ftl" as userGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "commonGadgets.ftl" as commonGadgets />
 <#import "postGadgets.ftl" as postGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in tissue>
-<#assign mystyles=["/tissue/css/layout3.css"] in tissue>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
+<#assign mystyles=["/tissue/css/layout3.css"] in commonGadgets>
 
-<#assign title="explore" in tissue>
+<#assign title="explore" in commonGadgets>
 
-<@tissue.layout>
+<@commonGadgets.layout>
     <div id="page-logo-wrapper">
         <div id="page-logo">
-            <@exploreGadgets.exploreLogo />
+            <@topicGadgets.exploreLogo />
         </div>
     </div>
 
     <div id="page-menu-wrapper">
         <div id="page-menu">
-            <@exploreGadgets.exploreMenu current/>
+            <@topicGadgets.exploreMenu selected/>
         </div>
     </div>
 
@@ -36,10 +34,10 @@
 
             <div id="main-content">
                 <@topicGadgets.showTopics />
-                <#if (current == 'topics') || (current == 'tags')>
+                <#if (selected == 'topics') || (selected == 'tags')>
                     <@commonGadgets.showPager />
                 </#if>
             </div>
         </div>
    </div>
-</@tissue.layout>
+</@commonGadgets.layout>

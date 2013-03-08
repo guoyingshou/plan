@@ -47,7 +47,7 @@ public class ExploreController {
     @RequestMapping("/explore")
     public String exploreTrending(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("current", "trending");
+        model.put("selected", "trending");
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
         List<User> users = userService.getNewUsers(viewerId, 10);
@@ -65,7 +65,7 @@ public class ExploreController {
     @RequestMapping("/featured")
     public String exploreFeatured(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("current", "featured");
+        model.put("selected", "featured");
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
         List<User> users = userService.getNewUsers(viewerId, 10);
@@ -83,7 +83,7 @@ public class ExploreController {
     @RequestMapping("/topics")
     public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("current", "topics");
+        model.put("selected", "topics");
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
         List<User> users = userService.getNewUsers(viewerId, 10);
@@ -107,7 +107,7 @@ public class ExploreController {
     @RequestMapping("/tags/{tag}")
     public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("current", "tags");
+        model.put("selected", "tags");
 
         List<Post> newPosts = postService.getLatestPosts(15);
         model.put("newPosts", newPosts);
@@ -131,6 +131,8 @@ public class ExploreController {
 
     @RequestMapping("/tags")
     public String exploreTags(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        model.put("selected", "tags");
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
         List<User> users = userService.getNewUsers(viewerId, 10);
