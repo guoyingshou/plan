@@ -7,7 +7,6 @@ import com.tissue.core.plan.PostMessage;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.commons.social.services.UserService;
 import com.tissue.plan.web.model.PostMessageForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PostMessageService;

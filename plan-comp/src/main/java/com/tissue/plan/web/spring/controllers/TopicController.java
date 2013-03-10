@@ -8,7 +8,6 @@ import com.tissue.core.plan.Post;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.commons.social.services.UserService;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.services.TopicService;
 
@@ -39,9 +38,6 @@ import org.slf4j.LoggerFactory;
 public class TopicController {
 
     private static Logger logger = LoggerFactory.getLogger(TopicController.class);
-
-    @Autowired
-    protected UserService userService;
 
     @Autowired
     private TopicService topicService;

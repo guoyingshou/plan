@@ -8,7 +8,7 @@ import com.tissue.core.social.Activity;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.security.util.SecurityUtil;
-import com.tissue.commons.social.services.UserService;
+import com.tissue.commons.services.CommonService;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PostService;
 
@@ -36,7 +36,7 @@ import java.security.Principal;
 public class ExploreController {
 
     @Autowired
-    protected UserService userService;
+    protected CommonService commonService;
 
     @Autowired
     private TopicService topicService;
@@ -50,7 +50,7 @@ public class ExploreController {
         model.put("selected", "trending");
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = userService.getNewUsers(viewerId, 10);
+        List<User> users = commonService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
         List<Post> newPosts = postService.getLatestPosts(15);
@@ -68,7 +68,7 @@ public class ExploreController {
         model.put("selected", "featured");
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = userService.getNewUsers(viewerId, 10);
+        List<User> users = commonService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
         List<Post> newPosts = postService.getLatestPosts(15);
@@ -86,7 +86,7 @@ public class ExploreController {
         model.put("selected", "topics");
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = userService.getNewUsers(viewerId, 10);
+        List<User> users = commonService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
         List<Post> newPosts = postService.getLatestPosts(15);
@@ -113,7 +113,7 @@ public class ExploreController {
         model.put("newPosts", newPosts);
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = userService.getNewUsers(viewerId, 10);
+        List<User> users = commonService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
 
@@ -135,7 +135,7 @@ public class ExploreController {
         model.put("selected", "tags");
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = userService.getNewUsers(viewerId, 10);
+        List<User> users = commonService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
         List<String> tags = topicService.getTopicTags();
