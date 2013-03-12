@@ -4,9 +4,9 @@
 <#import "questionGadgets.ftl" as questionGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css", "/tissue/css/post.css"] in commonGadgets>
+<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in commonGadgets>
 
-<#assign title="question" in commonGadgets />
+<#assign title="topic" in commonGadgets>
 
 <@commonGadgets.layout>
     <div id="page-logo-wrapper">
@@ -24,13 +24,13 @@
     <div id="page-main-wrapper">
         <div id="page-main">
             <div id="main-sidebar">
-                <@topicGadgets.showPlanSidebar />
+                <@topicGadgets.showLivePlan />
+                <@topicGadgets.showArchivedPlans />
             </div>
-            <div id="main-content">
-               <@questionGadgets.showQuestionDetail />
-            </div>
-        </div>
+
+           <div id="main-content">
+               <@questionGadgets.questionForm />
+           </div>
+       </div>
     </div>
 </@commonGadgets.layout>
-
-

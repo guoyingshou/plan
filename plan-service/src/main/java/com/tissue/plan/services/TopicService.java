@@ -1,12 +1,12 @@
 package com.tissue.plan.services;
 
-//import com.tissue.core.command.ItemCommand;
 import com.tissue.core.command.TopicCommand;
 import com.tissue.core.social.User;
 import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
+import com.tissue.core.plan.Question;
 import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
 import com.tissue.core.orient.dao.CommonDao;
@@ -82,12 +82,6 @@ public class TopicService {
     }
 
     /**
-    public List<Topic> getNewTopics(String excludingUserId, int limit) {
-        return topicDao.getNewTopics(excludingUserId, limit);
-    }
-    */
-
-    /**
      * Post
      */
     public long getPostsCount(String topicId) {
@@ -106,6 +100,20 @@ public class TopicService {
         return topicDao.getPagedPostsByType(topicId, type, page, size);
     }
 
+    /**
+     * question
+     */
+    public long getQuestionsCount(String topicId) {
+        return topicDao.getQuestionsCount(topicId);
+    }
+
+    public List<Question> getPagedQuestions(String topicId, int page, int size) {
+        return topicDao.getPagedQuestions(topicId, page, size);
+    }
+
+    /**
+     * utils
+     */
     public void checkOwner(Topic topic, Account viewerAccount) {
         Account ownerAccount = topic.getAccount();
         if(!viewerAccount.equals(ownerAccount)) {

@@ -5,6 +5,7 @@ import com.tissue.core.social.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
+import com.tissue.core.plan.Question;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
@@ -93,7 +94,7 @@ public class TopicController {
         model.put("current", "objective");
         Topic topic = topicService.getTopic("#" + topicId);
         model.put("topic", topic);
-        return "topic";
+        return "objective";
     }
 
     /**
@@ -116,12 +117,11 @@ public class TopicController {
         List<Post> posts = topicService.getPagedPosts("#"+topicId, page, size);
         model.put("posts", posts);
 
-        return "topic";
+        return "posts";
     }
 
     /**
      * Get paged posts by topicId and type.
-     */
     @RequestMapping(value="/topics/{topicId}/{type}/posts")
     public String getTopicsByType(@PathVariable("topicId") String topicId, @PathVariable(value="type") String type,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
@@ -141,4 +141,98 @@ public class TopicController {
 
         return "topic";
     }
+     */
+
+    /**
+     * Get concepts
+     */
+    @RequestMapping(value="/topics/{topicId}/concepts")
+    public String getConcepts(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+
+        model.put("selected", "concept");
+
+        Topic topic = topicService.getTopic("#" + topicId);
+        model.put("topic", topic);
+
+        page = (page == null) ? 1 : page;
+        size = (size == null) ? 50 : size;
+        long total = topicService.getPostsCountByType("#"+topicId, "concept");
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
+
+        List<Post> posts = topicService.getPagedPostsByType("#"+topicId, "concept", page, size);
+        model.put("posts", posts);
+
+        return "posts";
+    }
+
+    /**
+     * Get concepts
+     */
+    @RequestMapping(value="/topics/{topicId}/notes")
+    public String getNotes(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+
+        model.put("selected", "note");
+
+        Topic topic = topicService.getTopic("#" + topicId);
+        model.put("topic", topic);
+
+        page = (page == null) ? 1 : page;
+        size = (size == null) ? 50 : size;
+        long total = topicService.getPostsCountByType("#"+topicId, "note");
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
+
+        List<Post> posts = topicService.getPagedPostsByType("#"+topicId, "note", page, size);
+        model.put("posts", posts);
+
+        return "posts";
+    }
+
+    /**
+     * Get concepts
+     */
+    @RequestMapping(value="/topics/{topicId}/tutorials")
+    public String getTutorials(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+
+        model.put("selected", "tutorial");
+
+        Topic topic = topicService.getTopic("#" + topicId);
+        model.put("topic", topic);
+
+        page = (page == null) ? 1 : page;
+        size = (size == null) ? 50 : size;
+        long total = topicService.getPostsCountByType("#"+topicId, "tutorial");
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
+
+        List<Post> posts = topicService.getPagedPostsByType("#"+topicId, "tutorial", page, size);
+        model.put("posts", posts);
+
+        return "posts";
+    }
+
+    /**
+     * Get paged questions by topicId.
+     */
+    @RequestMapping(value="/topics/{topicId}/questions")
+    public String getQuestions(@PathVariable("topicId") String topicId, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+
+        model.put("selected", "question");
+
+        Topic topic = topicService.getTopic("#" + topicId);
+        model.put("topic", topic);
+
+        page = (page == null) ? 1 : page;
+        size = (size == null) ? 50 : size;
+        long total = topicService.getQuestionsCount("#"+topicId);
+        Pager pager = new Pager(total, page, size);
+        model.put("pager", pager);
+
+        List<Question> questions = topicService.getPagedQuestions("#"+topicId, page, size);
+        model.put("questions", questions);
+
+        return "questions";
+    }
+
 }

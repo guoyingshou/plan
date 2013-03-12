@@ -3,14 +3,14 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
-import com.tissue.core.plan.Post;
+import com.tissue.core.plan.Question;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.web.model.UpdatePostForm;
+import com.tissue.plan.web.model.QuestionForm;
+//import com.tissue.plan.web.model.UpdatePostForm;
 import com.tissue.plan.services.TopicService;
-import com.tissue.plan.services.PostService;
+import com.tissue.plan.services.QuestionService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -36,33 +36,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Controller
-public class PostController {
+public class QuestionController {
 
-    private static Logger logger = LoggerFactory.getLogger(PostController.class);
+    private static Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     @Autowired
     private TopicService topicService;
 
     @Autowired
-    private PostService postService;
+    private QuestionService questionService;
 
-    @RequestMapping(value="/topics/{topicId}/posts/_form")
+    @RequestMapping(value="/topics/{topicId}/questions/_form")
     public String newPost(@PathVariable("topicId") String topicId, Map model) {
         Topic topic = topicService.getTopic("#"+topicId);
         model.put("topic", topic);
-        model.put("post", new PostForm());
-        return "postForm";
+        model.put("question", new QuestionForm());
+        return "questionForm";
     }
 
     /**
      * Add a post to the active plan.
      * The post can be any type.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/_create", method=POST)
-    public String addPost(@PathVariable("topicId") String topicId, @ModelAttribute("post") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/topics/{topicId}/questions/_create", method=POST)
+    public String addPost(@PathVariable("topicId") String topicId, @ModelAttribute("question") @Valid QuestionForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
-            return "postForm";
+            return "questionForm";
         }
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
@@ -70,16 +70,32 @@ public class PostController {
         form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
 
-        String id = postService.addPost(form).replace("#", "");
-        return "redirect:/topics/" + topicId + "/posts/" + id;
+        String id = questionService.addQuestion(form).replace("#", "");
+        logger.debug("question created with id: " + id);
+        return "redirect:/topics/" + topicId + "/questions/" + id;
     }
+
+    /**
+     * Get specific post.
+     */
+    @RequestMapping(value="/topics/{topicId}/questions/{questionId}")
+    public String getPost(@PathVariable("topicId") String topicId, @PathVariable("questionId") String questionId, Map model) {
+
+        Topic topic = topicService.getTopic("#"+topicId);
+        model.put("topic", topic);
+
+        Question question = questionService.getQuestion("#"+questionId);
+        model.put("question", question);
+
+        return "questionDetail";
+    }
+
 
     /**
      * Update a post.
      * The post can be of any type.
-     */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/_update", method=POST)
-    public String updatePost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid UpdatePostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/topics/{topicId}/questions/{questionId}/_update", method=POST)
+    public String updatePost(@PathVariable("topicId") String topicId, @PathVariable("questionId") String questionId, @Valid UpdatePostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
@@ -87,36 +103,21 @@ public class PostController {
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
-        form.setId("#"+postId);
-        postService.updatePost(form);
+        form.setId("#"+questionId);
+        questionService.updateQuestion(form);
 
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        return "redirect:/topics/" + topicId + "/questions/" + questionId;
     }
 
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/_delete", method=POST)
-    public String deletePost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/topics/{topicId}/questions/{questionId}/_delete", method=POST)
+    public String deletePost(@PathVariable("topicId") String topicId, @PathVariable("questionId") String postId, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
-        postService.deletePost("#"+postId);
+        questionService.deleteQuestion("#"+questionId);
         return "redirect:/topics/" + topicId + "/posts";
     }
- 
-    /**
-     * Get specific post.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}")
-    public String getPost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, Map model) {
-
-        Topic topic = topicService.getTopic("#"+topicId);
-        model.put("topic", topic);
-
-        postId = "#" + postId;
-        Post post = postService.getPost(postId);
-        model.put("post", post);
-
-        return "topic";
-    }
-
+ 
 }

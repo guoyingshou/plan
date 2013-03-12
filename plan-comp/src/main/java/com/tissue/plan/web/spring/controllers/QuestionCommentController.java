@@ -2,7 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
-import com.tissue.core.plan.Post;
+import com.tissue.core.plan.Question;
 import com.tissue.core.plan.QuestionComment;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
@@ -56,9 +56,13 @@ public class QuestionCommentController {
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
+        /**
         Post post = new Post();
         post.setId("#"+postId);
-        form.setQuestion(post);
+        */
+        Question question = new Question();
+        question.setId("#"+postId);
+        form.setQuestion(question);
         form.setAccount(viewerAccount);
 
         questionCommentService.addQuestionComment(form);
