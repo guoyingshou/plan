@@ -53,6 +53,8 @@ public class TopicController {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
 
+        System.out.println(">>>>>>>>>>" + form.getTags().size());
+
         form.setAccount(viewerAccount);
         String topicId = topicService.addTopic(form).replace("#", "");
         return "redirect:/topics/" + topicId + "/posts";

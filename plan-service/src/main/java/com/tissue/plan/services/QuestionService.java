@@ -1,6 +1,6 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.command.QuestionCommand;
+import com.tissue.core.command.PostCommand;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Question;
@@ -28,13 +28,16 @@ public class QuestionService {
      * @param postCommand 
      * @return id of the newly created post
      */
-    public String addQuestion(QuestionCommand command) {
+    public String addQuestion(PostCommand command) {
         return questionDao.create(command);
     }
+
+    /**
 
     public void updateQuestion(QuestionCommand command) {
         questionDao.update(command);
     }
+    */
 
     /**
      * @param postId postId

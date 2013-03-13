@@ -7,8 +7,7 @@ import com.tissue.core.plan.Question;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.plan.web.model.QuestionForm;
-//import com.tissue.plan.web.model.UpdatePostForm;
+import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.QuestionService;
 
@@ -50,19 +49,15 @@ public class QuestionController {
     public String newPost(@PathVariable("topicId") String topicId, Map model) {
         Topic topic = topicService.getTopic("#"+topicId);
         model.put("topic", topic);
-        model.put("question", new QuestionForm());
-        return "questionForm";
+        model.put("postForm", new PostForm());
+        return "questionFormView";
     }
 
-    /**
-     * Add a post to the active plan.
-     * The post can be any type.
-     */
     @RequestMapping(value="/topics/{topicId}/questions/_create", method=POST)
-    public String addPost(@PathVariable("topicId") String topicId, @ModelAttribute("question") @Valid QuestionForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addPost(@PathVariable("topicId") String topicId, @ModelAttribute("postForm") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
-            return "questionForm";
+            return "questionFormView";
         }
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
@@ -71,53 +66,27 @@ public class QuestionController {
         form.setAccount(viewerAccount);
 
         String id = questionService.addQuestion(form).replace("#", "");
-        logger.debug("question created with id: " + id);
+
         return "redirect:/topics/" + topicId + "/questions/" + id;
+        
     }
 
     /**
-     * Get specific post.
+     * Get specific question.
      */
-    @RequestMapping(value="/topics/{topicId}/questions/{questionId}")
-    public String getPost(@PathVariable("topicId") String topicId, @PathVariable("questionId") String questionId, Map model) {
+    @RequestMapping(value="/questions/{questionId}")
+    public String getPost(@PathVariable("questionId") String questionId, Map model) {
 
+        /**
         Topic topic = topicService.getTopic("#"+topicId);
         model.put("topic", topic);
+        */
 
         Question question = questionService.getQuestion("#"+questionId);
         model.put("question", question);
+        model.put("topic", question.getPlan().getTopic());
 
         return "questionDetail";
     }
 
-
-    /**
-     * Update a post.
-     * The post can be of any type.
-    @RequestMapping(value="/topics/{topicId}/questions/{questionId}/_update", method=POST)
-    public String updatePost(@PathVariable("topicId") String topicId, @PathVariable("questionId") String questionId, @Valid UpdatePostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
-        }
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
-
-        form.setId("#"+questionId);
-        questionService.updateQuestion(form);
-
-        return "redirect:/topics/" + topicId + "/questions/" + questionId;
-    }
-
-    @RequestMapping(value="/topics/{topicId}/questions/{questionId}/_delete", method=POST)
-    public String deletePost(@PathVariable("topicId") String topicId, @PathVariable("questionId") String postId, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
-
-        questionService.deleteQuestion("#"+questionId);
-        return "redirect:/topics/" + topicId + "/posts";
-    }
-     */
- 
 }

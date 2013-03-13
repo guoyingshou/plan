@@ -7,6 +7,7 @@ import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.Question;
+import com.tissue.core.plan.dao.PostDao;
 import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
 import com.tissue.core.orient.dao.CommonDao;
@@ -21,6 +22,11 @@ import java.util.HashMap;
 
 @Component
 public class TopicService {
+
+    /**
+    @Autowired
+    private PostDao postDao;
+    */
 
     @Autowired
     private CommonDao commonDao;

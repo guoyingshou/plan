@@ -8,6 +8,7 @@
 <#assign mystyles=["/tissue/css/layout3.css"] in commonGadgets>
 
 <#assign title="explore" in commonGadgets>
+<#assign posts = newPosts in postGadgets>
 
 <@commonGadgets.layout>
     <div id="page-logo-wrapper">
@@ -29,7 +30,7 @@
             </div>
 
             <div id="main-mid">
-                <@postGadgets.showPosts newPosts />
+                <@postGadgets.showPosts />
             </div>
 
             <div id="main-content">

@@ -71,7 +71,15 @@ public class PostController {
         form.setAccount(viewerAccount);
 
         String id = postService.addPost(form).replace("#", "");
-        return "redirect:/topics/" + topicId + "/posts/" + id;
+
+        if("topic".equals(form.getType())) {
+            return "redirect:/topics/" + topicId + "/objective";
+        }
+        else if("question".equals(form.getType())) {
+            return "redirect:/topics/" + topicId + "/questions/" + id;
+        }
+        return "redirect:/topics/" + topicId + "/articles/" + id;
+        
     }
 
     /**
@@ -103,20 +111,4 @@ public class PostController {
         return "redirect:/topics/" + topicId + "/posts";
     }
  
-    /**
-     * Get specific post.
-     */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}")
-    public String getPost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, Map model) {
-
-        Topic topic = topicService.getTopic("#"+topicId);
-        model.put("topic", topic);
-
-        postId = "#" + postId;
-        Post post = postService.getPost(postId);
-        model.put("post", post);
-
-        return "topic";
-    }
-
 }
