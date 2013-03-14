@@ -27,22 +27,6 @@ public class PostService {
     @Autowired
     private PostDao postDao;
 
-    /**
-     * @param postCommand 
-     * @return id of the newly created post
-    public String addPost(PostCommand postCommand) {
-        return postDao.create(postCommand);
-    }
-
-    public void updatePost(PostCommand post) {
-        postDao.update(post);
-    }
-     */
-
-    /**
-     * @param postId postId
-     * @return topic id of the containing topic of the deleted post
-     */
     public void deletePost(String postId) {
         commonDao.delete(postId);
     }
@@ -51,7 +35,4 @@ public class PostService {
          return postDao.getLatestPosts(limit);
     }
 
-    public Topic getTopic(String postId) {
-         return postDao.getTopic(postId);
-    }
 }

@@ -94,7 +94,6 @@ public class ArticleController {
         }
         model.put("isMember", isMember);
 
-
         return "articleDetail";
     }
 

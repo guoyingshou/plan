@@ -54,13 +54,7 @@ public class QuestionService {
         return questionDao.getQuestion(questionId);
     }
 
-    /**
-    public List<Post> getLatestPosts(int limit) {
-         return postDao.getLatestPosts(limit);
+    public Topic getTopic(String questionId) {
+         return questionDao.getTopic(questionId);
     }
-
-    public Topic getTopic(String postId) {
-         return postDao.getTopic(postId);
-    }
-    */
 }

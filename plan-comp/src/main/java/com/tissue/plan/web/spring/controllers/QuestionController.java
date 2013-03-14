@@ -9,6 +9,7 @@ import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.plan.web.model.QuestionForm;
 import com.tissue.plan.services.TopicService;
+import com.tissue.plan.services.PlanService;
 import com.tissue.plan.services.QuestionService;
 
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,9 @@ public class QuestionController {
     private TopicService topicService;
 
     @Autowired
+    private PlanService planService;
+
+    @Autowired
     private QuestionService questionService;
 
     @RequestMapping(value="/topics/{topicId}/questions/_form")
@@ -75,11 +79,21 @@ public class QuestionController {
      * Get specific question.
      */
     @RequestMapping(value="/questions/{questionId}")
-    public String getPost(@PathVariable("questionId") String questionId, Map model) {
+    public String getPost(@PathVariable("questionId") String questionId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Question question = questionService.getQuestion("#"+questionId);
         model.put("question", question);
-        model.put("topic", question.getPlan().getTopic());
+
+        //model.put("topic", question.getPlan().getTopic());
+        Topic topic = questionService.getTopic("#"+questionId);
+        model.put("topic", topic);
+
+        Boolean isMember = false;
+        Plan plan = topic.getActivePlan();
+        if((plan != null) && (viewerAccount != null)) {
+            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
+        }
+        model.put("isMember", isMember);
 
         return "questionDetail";
     }

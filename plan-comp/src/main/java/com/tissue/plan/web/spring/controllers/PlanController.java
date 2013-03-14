@@ -76,14 +76,20 @@ public class PlanController {
     /**
      * Get paged posts by planId.
      */
-    @RequestMapping(value="/topics/{topicId}/plans/{planId}/posts") 
-    public String getPosts(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+    @RequestMapping(value="/plans/{planId}/posts") 
+    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        topicId = "#" + topicId;
         planId = "#" + planId;
 
-        Topic topic = topicService.getTopic(topicId);
+        Topic topic = planService.getTopic(planId);
         model.put("topic", topic);
+
+        Boolean isMember = false;
+        Plan plan = topic.getActivePlan();
+        if((plan != null) && (viewerAccount != null)) {
+            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
+        }
+        model.put("isMember", isMember);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -94,7 +100,7 @@ public class PlanController {
         List<Post> posts = planService.getPagedPosts(planId, page, size);
         model.put("posts", posts);
 
-        return "topic";
+        return "posts";
     }
 
 }
