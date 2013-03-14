@@ -17,9 +17,9 @@ public class AnswerCommentService {
     @Autowired
     private AnswerCommentDao answerCommentDao;
 
-    public AnswerComment addComment(AnswerCommentCommand command) {
+    public String addComment(AnswerCommentCommand command) {
         return answerCommentDao.create(command);
-     }
+    }
 
     public void updateComment(AnswerCommentCommand command) {
         answerCommentDao.update(command);

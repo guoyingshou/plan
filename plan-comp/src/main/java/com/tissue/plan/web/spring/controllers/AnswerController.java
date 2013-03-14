@@ -61,20 +61,13 @@ public class AnswerController {
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
-        /**
-        Post post = new Post();
-        post.setId("#"+postId);
-        Question q = new Question(post);
-        */
         Question q = new Question();
         q.setId("#" + postId);
 
         form.setQuestion(q);
         form.setAccount(viewerAccount);
 
-        Answer answer = answerService.addAnswer(form);
-        model.put("answer", answer);
-
+        answerService.addAnswer(form);
         return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
 

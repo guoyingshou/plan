@@ -63,8 +63,7 @@ public class AnswerCommentController {
         form.setAnswer(answer);
         form.setAccount(viewerAccount);
 
-        AnswerComment comment = answerCommentService.addComment(form);
-        model.put("comment", comment);
+        answerCommentService.addComment(form);
 
         return "redirect:/topics/" + topicId + "/posts/" + postId;
     }

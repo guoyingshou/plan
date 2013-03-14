@@ -31,8 +31,12 @@ public class PlanService {
         return planDao.getPlan(planId);
     }
 
-    public void addMember(String planId, String userId) {
-        planDao.addMember(planId, userId);
+    public void addMember(String planId, String accountId) {
+        planDao.addMember(planId, accountId);
+    }
+
+    public Boolean isMember(String planId, String accountId) {
+        return planDao.isMember(planId, accountId);
     }
 
     /**
@@ -52,7 +56,5 @@ public class PlanService {
     public List<Post> getPagedPosts(String planId, int page, int size) {
         return planDao.getPagedPosts(planId, page, size);
     }
-
-
 
 }

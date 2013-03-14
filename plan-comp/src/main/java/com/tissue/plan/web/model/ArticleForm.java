@@ -1,11 +1,11 @@
 package com.tissue.plan.web.model;
 
-import com.tissue.core.command.QuestionCommand;
+import com.tissue.core.command.ArticleCommand;
 import com.tissue.core.plan.Plan;
 
 import java.io.Serializable;
 
-public class QuestionForm extends PostForm implements QuestionCommand {
+public class ArticleForm extends PostForm implements ArticleCommand {
    
     private Plan plan;
 

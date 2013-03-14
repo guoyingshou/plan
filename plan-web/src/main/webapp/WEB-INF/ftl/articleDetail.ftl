@@ -26,7 +26,7 @@
             <div id="main-sidebar">
                <@topicGadgets.showPlanSidebar />
             </div>
-            <div id="main-content" class="article-detail">
+            <div id="main-content">
                <@articleGadgets.showArticleDetail />
             </div>
         </div>

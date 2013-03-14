@@ -1,11 +1,12 @@
 package com.tissue.plan.services;
 
+import com.tissue.core.command.ArticleCommand;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Article;
-import com.tissue.core.plan.PostMessage;
+import com.tissue.core.plan.Message;
 import com.tissue.core.plan.dao.ArticleDao;
-import com.tissue.core.plan.dao.PostMessageDao;
+import com.tissue.core.plan.dao.MessageDao;
 import com.tissue.core.orient.dao.CommonDao;
 
 import org.springframework.stereotype.Component;
@@ -26,13 +27,21 @@ public class ArticleService {
     private ArticleDao articleDao;
 
     @Autowired
-    private PostMessageDao postMessageDao;
+    private MessageDao messageDao;
+
+    public String addArticle(ArticleCommand command) {
+        return articleDao.create(command);
+    }
 
     /**
      * Get a specific article.
      */
     public Article getArticle(String articleId) {
         return articleDao.getArticle(articleId);
+    }
+
+    public Topic getTopic(String articleId) {
+        return articleDao.getTopic(articleId);
     }
 
     /**

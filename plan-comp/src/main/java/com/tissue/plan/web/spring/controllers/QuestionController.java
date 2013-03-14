@@ -7,7 +7,7 @@ import com.tissue.core.plan.Question;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.plan.web.model.PostForm;
+import com.tissue.plan.web.model.QuestionForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.QuestionService;
 
@@ -49,12 +49,12 @@ public class QuestionController {
     public String newPost(@PathVariable("topicId") String topicId, Map model) {
         Topic topic = topicService.getTopic("#"+topicId);
         model.put("topic", topic);
-        model.put("postForm", new PostForm());
+        model.put("questionForm", new QuestionForm());
         return "questionFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/questions/_create", method=POST)
-    public String addPost(@PathVariable("topicId") String topicId, @ModelAttribute("postForm") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addQuestion(@PathVariable("topicId") String topicId, @ModelAttribute("questionForm") @Valid QuestionForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             return "questionFormView";
@@ -67,7 +67,7 @@ public class QuestionController {
 
         String id = questionService.addQuestion(form).replace("#", "");
 
-        return "redirect:/topics/" + topicId + "/questions/" + id;
+        return "redirect:/questions/" + id;
         
     }
 
@@ -76,11 +76,6 @@ public class QuestionController {
      */
     @RequestMapping(value="/questions/{questionId}")
     public String getPost(@PathVariable("questionId") String questionId, Map model) {
-
-        /**
-        Topic topic = topicService.getTopic("#"+topicId);
-        model.put("topic", topic);
-        */
 
         Question question = questionService.getQuestion("#"+questionId);
         model.put("question", question);

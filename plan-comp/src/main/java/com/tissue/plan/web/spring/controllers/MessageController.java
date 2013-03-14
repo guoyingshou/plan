@@ -2,14 +2,14 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
-import com.tissue.core.plan.Post;
-import com.tissue.core.plan.PostMessage;
+import com.tissue.core.plan.Article;
+import com.tissue.core.plan.Message;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.plan.web.model.PostMessageForm;
+import com.tissue.plan.web.model.MessageForm;
 import com.tissue.plan.services.TopicService;
-import com.tissue.plan.services.PostMessageService;
+import com.tissue.plan.services.MessageService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -35,62 +35,62 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Controller
-public class PostMessageController {
+public class MessageController {
 
-    private static Logger logger = LoggerFactory.getLogger(PostMessageController.class);
+    private static Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
     private TopicService topicService;
 
     @Autowired
-    private PostMessageService postMessageService;
+    private MessageService messageService;
 
     /**
      * Add a message to a specific post.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/_create", method=POST)
-    public String addMessage(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid PostMessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/topics/{topicId}/articles/{articleId}/messages/_create", method=POST)
+    public String addMessage(@PathVariable("topicId") String topicId, @PathVariable("articleId") String articleId, @Valid MessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
-        Post post = new Post();
-        post.setId("#"+postId);
-        form.setPost(post);
+        Article article = new Article();
+        article.setId("#"+article);
+        form.setArticle(article);
         form.setAccount(viewerAccount);
 
-        PostMessage postMessage = postMessageService.addMessage(form);
+        messageService.addMessage(form);
 
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        return "redirect:/topics/" + topicId + "/posts/" + articleId;
     }
  
     /**
      * Update a message.
      * The post type can be 'concept', 'note' or 'tutorial'.
-     */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{msgId}/_update", method=POST)
-    public String updateMessage(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("msgId") String msgId, @Valid PostMessageForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/topics/{topicId}/articles/{articleId}/messages/{msgId}/_update", method=POST)
+    public String updateMessage(@PathVariable("topicId") String topicId, @PathVariable("articleId") String articleId, @PathVariable("msgId") String msgId, @Valid MessageForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
         form.setId("#"+msgId);
-        postMessageService.updatePostMessage(form);
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        //messageService.updateMessage(form);
+        return "redirect:/topics/" + topicId + "/posts/" + articleId;
     }
+     */
 
     /**
      * Delete a message.
-     */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{msgId}/_delete", method=POST)
-    public String deleteMessage(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("msgId") String msgId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/topics/{topicId}/articles/{articleId}/messages/{msgId}/_delete", method=POST)
+    public String deleteMessage(@PathVariable("topicId") String topicId, @PathVariable("articleId") String articleId, @PathVariable("msgId") String msgId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Topic topic = topicService.getTopic("#"+topicId);
         topicService.checkActivePlan(topic, viewerAccount);
 
-        postMessageService.deletePostMessage("#"+msgId);
+        //messageService.deleteMessage("#"+msgId);
         return "redirect:/topics/" + topicId + "/posts/" + postId;
     }
+     */
 
 }

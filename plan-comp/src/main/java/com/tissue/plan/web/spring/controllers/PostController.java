@@ -8,7 +8,7 @@ import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.plan.web.model.PostForm;
-import com.tissue.plan.web.model.UpdatePostForm;
+//import com.tissue.plan.web.model.UpdatePostForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PostService;
 
@@ -46,6 +46,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    /**
     @RequestMapping(value="/topics/{topicId}/posts/_form")
     public String newPost(@PathVariable("topicId") String topicId, Map model) {
         Topic topic = topicService.getTopic("#"+topicId);
@@ -54,10 +55,6 @@ public class PostController {
         return "postForm";
     }
 
-    /**
-     * Add a post to the active plan.
-     * The post can be any type.
-     */
     @RequestMapping(value="/topics/{topicId}/posts/_create", method=POST)
     public String addPost(@PathVariable("topicId") String topicId, @ModelAttribute("post") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
@@ -82,10 +79,6 @@ public class PostController {
         
     }
 
-    /**
-     * Update a post.
-     * The post can be of any type.
-     */
     @RequestMapping(value="/topics/{topicId}/posts/{postId}/_update", method=POST)
     public String updatePost(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid UpdatePostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
@@ -110,5 +103,6 @@ public class PostController {
         postService.deletePost("#"+postId);
         return "redirect:/topics/" + topicId + "/posts";
     }
+    */
  
 }

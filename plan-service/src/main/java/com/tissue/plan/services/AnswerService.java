@@ -17,7 +17,7 @@ public class AnswerService {
     @Autowired
     private AnswerDao answerDao;
 
-    public Answer addAnswer(AnswerCommand command) {
+    public String addAnswer(AnswerCommand command) {
         return answerDao.create(command);
     }
 
