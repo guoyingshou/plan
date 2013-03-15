@@ -24,8 +24,8 @@
     <div id="page-main-wrapper">
         <div id="page-main">
             <div id="main-sidebar">
-                <@topicGadgets.showLivePlan />
-                <@topicGadgets.showArchivedPlans />
+                <@topicGadgets.showPlanLive />
+                <@topicGadgets.showPlansArchived/>
             </div>
 
            <div id="main-content">

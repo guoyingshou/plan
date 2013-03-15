@@ -50,9 +50,17 @@ public class QuestionController {
     private QuestionService questionService;
 
     @RequestMapping(value="/topics/{topicId}/questions/_form")
-    public String newPost(@PathVariable("topicId") String topicId, Map model) {
+    public String newPost(@PathVariable("topicId") String topicId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         Topic topic = topicService.getTopic("#"+topicId);
         model.put("topic", topic);
+
+        Boolean isMember = false;
+        Plan plan = topic.getActivePlan();
+        if((plan != null) && (viewerAccount != null)) {
+            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
+        }
+        model.put("isMember", isMember);
+
         model.put("questionForm", new QuestionForm());
         return "questionFormView";
     }
