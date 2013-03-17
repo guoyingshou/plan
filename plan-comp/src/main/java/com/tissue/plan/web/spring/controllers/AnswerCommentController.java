@@ -1,7 +1,7 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.social.Account;
-import com.tissue.core.social.User;
+import com.tissue.core.Account;
+import com.tissue.core.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Answer;
 import com.tissue.core.plan.AnswerComment;

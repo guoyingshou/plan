@@ -1,11 +1,12 @@
 package com.tissue.plan.services;
 
+import com.tissue.core.dao.CommonDao;
 import com.tissue.core.command.QuestionCommand;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Question;
+import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.QuestionDao;
-import com.tissue.core.orient.dao.CommonDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import java.util.HashMap;
 
 @Component
 public class QuestionService {
+
+    @Autowired
+    private TopicDao topicDao;
 
     @Autowired
     private CommonDao commonDao;
@@ -55,6 +59,6 @@ public class QuestionService {
     }
 
     public Topic getTopic(String questionId) {
-         return questionDao.getTopic(questionId);
+         return topicDao.getTopicByPost(questionId);
     }
 }

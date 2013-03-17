@@ -1,6 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.social.Account;
+import com.tissue.core.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Article;
@@ -46,61 +46,70 @@ public class ArticleController {
     @Autowired
     private TopicService topicService;
 
+    /**
     @Autowired
     private PlanService planService;
+    */
 
     @RequestMapping(value="/topics/{topicId}/articles/_form")
-    public String newPost(@PathVariable("topicId") String topicId, Map model, @ModelAttribute("viewer") Account viewerAccount) {
-        Topic topic = topicService.getTopic("#"+topicId);
+    public String newPost(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewer") Account viewerAccount) {
+
         model.put("topic", topic);
 
+        topicService.checkMember(topic, viewerAccount, model);
+
+        /**
         Boolean isMember = false;
         Plan plan = topic.getActivePlan();
         if((plan != null) && (viewerAccount != null)) {
             isMember = planService.isMember(plan.getId(), viewerAccount.getId());
         }
         model.put("isMember", isMember);
+        */
 
         model.put("articleForm", new ArticleForm());
         return "articleFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/articles/_create", method=POST)
-    public String addQuestion(@PathVariable("topicId") String topicId, @ModelAttribute("articleForm") @Valid ArticleForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("articleForm") @Valid ArticleForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             return "articleFormView";
         }
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+
+        topicService.checkMember(topic, viewerAccount, model);
 
         form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
 
-        String id = articleService.addArticle(form).replace("#", "");
+        String articleId = articleService.addArticle(form);
 
-        return "redirect:/articles/" + id;
+        return "redirect:/articles/" + articleId.replace("#","");
         
     }
 
     /**
      * Get specific article.
      */
-    @RequestMapping(value="/articles/{articleId}")
-    public String getPost(@PathVariable("articleId") String articleId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/articles/{articleId}", method=GET)
+    public String getPost(@PathVariable("articleId") Article article, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Article article = articleService.getArticle("#"+articleId);
+        Topic topic = article.getPlan().getTopic();
+
         model.put("article", article);
-
-        Topic topic = articleService.getTopic("#"+articleId);
         model.put("topic", topic);
 
+        topicService.checkMember(topic, viewerAccount, model);
+
+        /**
         Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
+        Plan plan = article.getPlan().getTopic().getActivePlan();
         if((plan != null) && (viewerAccount != null)) {
             isMember = planService.isMember(plan.getId(), viewerAccount.getId());
         }
         model.put("isMember", isMember);
+        */
 
         return "articleDetail";
     }

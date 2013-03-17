@@ -1,9 +1,9 @@
 package com.tissue.plan.services;
 
+import com.tissue.core.dao.CommonDao;
 import com.tissue.core.command.AnswerCommentCommand;
 import com.tissue.core.plan.AnswerComment;
 import com.tissue.core.plan.dao.AnswerCommentDao;
-import com.tissue.core.orient.dao.CommonDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

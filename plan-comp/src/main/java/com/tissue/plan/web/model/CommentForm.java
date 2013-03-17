@@ -1,7 +1,7 @@
 package com.tissue.plan.web.model;
 
+import com.tissue.core.Account;
 import com.tissue.core.command.CommentCommand;
-import com.tissue.core.social.Account;
 
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;

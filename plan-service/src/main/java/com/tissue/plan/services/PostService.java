@@ -1,18 +1,13 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.command.PostCommand;
-//import com.tissue.core.command.PostMessageCommand;
-import com.tissue.core.plan.Topic;
-import com.tissue.core.plan.Plan;
+import com.tissue.core.dao.CommonDao;
 import com.tissue.core.plan.Post;
-import com.tissue.core.plan.Message;
 import com.tissue.core.plan.dao.PostDao;
-import com.tissue.core.plan.dao.MessageDao;
-import com.tissue.core.orient.dao.CommonDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -24,7 +19,7 @@ public class PostService {
     @Autowired
     private CommonDao commonDao;
 
-    @Autowired
+    @Resource(name="postDaoImpl")
     private PostDao postDao;
 
     public void deletePost(String postId) {

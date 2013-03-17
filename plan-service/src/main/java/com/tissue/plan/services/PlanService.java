@@ -4,18 +4,28 @@ import com.tissue.core.command.PlanCommand;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
+import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
+import com.tissue.core.plan.dao.PostDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Component
 public class PlanService {
 
     @Autowired
+    private TopicDao topicDao;
+
+    @Autowired
     private PlanDao planDao;
+
+    @Resource(name="postDaoImpl")
+    private PostDao postDao;
 
     /**
      * Save a plan.
@@ -35,26 +45,28 @@ public class PlanService {
         planDao.addMember(planId, accountId);
     }
 
+    /**
     public Boolean isMember(String planId, String accountId) {
         return planDao.isMember(planId, accountId);
     }
+    */
 
     /**
      * topic
      */
     public Topic getTopic(String planId) {
-        return planDao.getTopic(planId);
+        return topicDao.getTopicByPlan(planId);
     }
 
     /**
      * post
      */
     public long getPostsCount(String planId) {
-        return planDao.getPostsCount(planId);
+        return postDao.getPostsCountByPlan(planId);
     }
 
     public List<Post> getPagedPosts(String planId, int page, int size) {
-        return planDao.getPagedPosts(planId, page, size);
+        return postDao.getPagedPostsByPlan(planId, page, size);
     }
 
 }

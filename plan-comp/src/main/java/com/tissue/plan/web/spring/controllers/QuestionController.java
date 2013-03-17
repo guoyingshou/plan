@@ -1,6 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.social.Account;
+import com.tissue.core.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Question;
@@ -44,42 +44,42 @@ public class QuestionController {
     private TopicService topicService;
 
     @Autowired
-    private PlanService planService;
-
-    @Autowired
     private QuestionService questionService;
 
     @RequestMapping(value="/topics/{topicId}/questions/_form")
-    public String newPost(@PathVariable("topicId") String topicId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-        Topic topic = topicService.getTopic("#"+topicId);
+    public String createQustionForm(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
         model.put("topic", topic);
 
+        topicService.checkMember(topic, viewerAccount, model);
+
+        /**
         Boolean isMember = false;
         Plan plan = topic.getActivePlan();
         if((plan != null) && (viewerAccount != null)) {
             isMember = planService.isMember(plan.getId(), viewerAccount.getId());
         }
         model.put("isMember", isMember);
+        */
 
         model.put("questionForm", new QuestionForm());
         return "questionFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/questions/_create", method=POST)
-    public String addQuestion(@PathVariable("topicId") String topicId, @ModelAttribute("questionForm") @Valid QuestionForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("questionForm") @Valid QuestionForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             return "questionFormView";
         }
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        topicService.checkMember(topic, viewerAccount, model);
 
         form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
 
-        String id = questionService.addQuestion(form).replace("#", "");
+        String questionId = questionService.addQuestion(form);
 
-        return "redirect:/questions/" + id;
+        return "redirect:/questions/" + questionId.replace("#", "");
         
     }
 
@@ -87,21 +87,22 @@ public class QuestionController {
      * Get specific question.
      */
     @RequestMapping(value="/questions/{questionId}")
-    public String getPost(@PathVariable("questionId") String questionId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String getPost(@PathVariable("questionId") Question question, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Question question = questionService.getQuestion("#"+questionId);
+        Topic topic = question.getPlan().getTopic();
+
         model.put("question", question);
-
-        //model.put("topic", question.getPlan().getTopic());
-        Topic topic = questionService.getTopic("#"+questionId);
         model.put("topic", topic);
 
+        topicService.checkMember(topic, viewerAccount, model);
+        /**
         Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
+        Plan plan = question.getPlan().getTopic().getActivePlan();
         if((plan != null) && (viewerAccount != null)) {
             isMember = planService.isMember(plan.getId(), viewerAccount.getId());
         }
         model.put("isMember", isMember);
+        */
 
         return "questionDetail";
     }

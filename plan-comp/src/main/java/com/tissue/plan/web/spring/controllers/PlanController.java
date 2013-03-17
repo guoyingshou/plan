@@ -1,6 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.social.Account;
+import com.tissue.core.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
@@ -49,55 +49,50 @@ public class PlanController {
      * Add a plan to the specific topic.
      */
     @RequestMapping(value="/topics/{topicId}/plans/_create", method=POST)
-    public String addPlan(@PathVariable("topicId") String topicId, PlanForm form, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addPlan(@PathVariable("topicId") Topic topic, PlanForm form, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Topic topic = topicService.getTopic(topicId);
         form.setTopic(topic);
         form.setAccount(viewerAccount);
 
         planService.addPlan(form);
-        return "redirect:/topics/" + topicId + "/posts";
+        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts";
     }
 
     /**
      * Join a plan.
      */
-    @RequestMapping(value="/topics/{topicId}/plans/{planId}/_join")
-    public String joinPlan(@PathVariable("topicId") String topicId, @PathVariable("planId") String planId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        planId = "#" + planId;
-        //check if plan exist. If not, an exception from the db will be thrown.
-        Plan plan = planService.getPlan(planId);
-
-        planService.addMember(planId, viewerAccount.getId());
-        return "redirect:/topics/" + topicId + "/posts";
+    @RequestMapping(value="/plans/{planId}/_join")
+    public String joinPlan(@PathVariable("planId") Plan plan, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+        planService.addMember(plan.getId(), viewerAccount.getId());
+        return "redirect:/topics/" + plan.getTopic().getId().replace("#","") + "/posts";
     }
 
     /**
      * Get paged posts by planId.
      */
     @RequestMapping(value="/plans/{planId}/posts") 
-    public String getPosts(@PathVariable("planId") String planId,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String getPosts(@PathVariable("planId") Plan plan,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        planId = "#" + planId;
-
-        Topic topic = planService.getTopic(planId);
+        Topic topic = plan.getTopic();
         model.put("topic", topic);
+        topicService.checkMember(topic, viewerAccount, model);
 
+        /**
         Boolean isMember = false;
         Plan plan = topic.getActivePlan();
         if((plan != null) && (viewerAccount != null)) {
             isMember = planService.isMember(plan.getId(), viewerAccount.getId());
         }
         model.put("isMember", isMember);
+        */
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
-        long total = planService.getPostsCount(planId);
+        long total = planService.getPostsCount(plan.getId());
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        List<Post> posts = planService.getPagedPosts(planId, page, size);
+        List<Post> posts = planService.getPagedPosts(plan.getId(), page, size);
         model.put("posts", posts);
 
         return "posts";

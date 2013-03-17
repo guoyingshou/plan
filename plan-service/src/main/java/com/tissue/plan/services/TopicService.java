@@ -1,8 +1,9 @@
 package com.tissue.plan.services;
 
+import com.tissue.core.User;
+import com.tissue.core.Account;
+import com.tissue.core.dao.CommonDao;
 import com.tissue.core.command.TopicCommand;
-import com.tissue.core.social.User;
-import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
@@ -10,23 +11,20 @@ import com.tissue.core.plan.Question;
 import com.tissue.core.plan.dao.PostDao;
 import com.tissue.core.plan.dao.TopicDao;
 import com.tissue.core.plan.dao.PlanDao;
-import com.tissue.core.orient.dao.CommonDao;
+import com.tissue.core.plan.dao.PostDao;
+import com.tissue.core.plan.dao.QuestionDao;
 import com.tissue.commons.exceptions.IllegalAccessException;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
 @Component
 public class TopicService {
-
-    /**
-    @Autowired
-    private PostDao postDao;
-    */
 
     @Autowired
     private CommonDao commonDao;
@@ -36,6 +34,12 @@ public class TopicService {
 
     @Autowired
     private PlanDao planDao;
+
+    @Resource(name="postDaoImpl")
+    private PostDao postDao;
+
+    @Autowired
+    private QuestionDao questionDao;
 
     /**
      * Save a topic.
@@ -91,30 +95,30 @@ public class TopicService {
      * Post
      */
     public long getPostsCount(String topicId) {
-        return topicDao.getPostsCount(topicId);
+        return postDao.getPostsCountByTopic(topicId);
     }
 
     public List<Post> getPagedPosts(String topicId, int page, int size) {
-        return topicDao.getPagedPosts(topicId, page, size);
+        return postDao.getPagedPostsByTopic(topicId, page, size);
     }
 
     public long getPostsCountByType(String topicId, String type) {
-        return topicDao.getPostsCountByType(topicId, type);
+        return postDao.getPostsCountByType(topicId, type);
     }
 
     public List<Post> getPagedPostsByType(String topicId, String type, int page, int size) {
-        return topicDao.getPagedPostsByType(topicId, type, page, size);
+        return postDao.getPagedPostsByType(topicId, type, page, size);
     }
 
     /**
      * question
      */
     public long getQuestionsCount(String topicId) {
-        return topicDao.getQuestionsCount(topicId);
+        return questionDao.getQuestionsCountByTopic(topicId);
     }
 
     public List<Question> getPagedQuestions(String topicId, int page, int size) {
-        return topicDao.getPagedQuestions(topicId, page, size);
+        return questionDao.getPagedQuestionsByTopic(topicId, page, size);
     }
 
     /**
@@ -137,4 +141,8 @@ public class TopicService {
         }
     }
 
+    public void checkMember(Topic topic, Account viewerAccount, Map model) {
+        Boolean isMember = planDao.isMember(topic.getActivePlan().getId(), viewerAccount.getId());
+        model.put("isMember", isMember);
+    }
 }

@@ -40,9 +40,10 @@
         <property name="converters">
             <set>
                 <bean class="com.tissue.core.spring.converters.TagsConverter" />
-                <!--
-                <bean class="com.tissue.core.spring.converters.IDConverter" />
-                -->
+                <ref bean="idToTopicConverter" />
+                <ref bean="idToPlanConverter" />
+                <ref bean="idToArticleConverter" />
+                <ref bean="idToQuestionConverter" />
             </set>
         </property>
     </bean>

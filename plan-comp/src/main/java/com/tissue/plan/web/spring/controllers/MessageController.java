@@ -1,6 +1,6 @@
 package com.tissue.plan.web.spring.controllers;
 
-import com.tissue.core.social.Account;
+import com.tissue.core.Account;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Article;
 import com.tissue.core.plan.Message;
@@ -40,57 +40,38 @@ public class MessageController {
     private static Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
-    private TopicService topicService;
-
-    @Autowired
     private MessageService messageService;
 
     /**
      * Add a message to a specific post.
-     * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/articles/{articleId}/messages/_create", method=POST)
-    public String addMessage(@PathVariable("topicId") String topicId, @PathVariable("articleId") String articleId, @Valid MessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
-
-        Article article = new Article();
-        article.setId("#"+article);
+    @RequestMapping(value="/articles/{articleId}/messages/_create", method=POST)
+    public String addMessage(@PathVariable("articleId") Article article, @Valid MessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         form.setArticle(article);
         form.setAccount(viewerAccount);
-
         messageService.addMessage(form);
-
-        return "redirect:/topics/" + topicId + "/posts/" + articleId;
+        return "redirect:/topics/" + article.getPlan().getTopic().getId().replace("#","") + "/posts/" + article.getId().replace("#", "");
     }
  
     /**
      * Update a message.
-     * The post type can be 'concept', 'note' or 'tutorial'.
-    @RequestMapping(value="/topics/{topicId}/articles/{articleId}/messages/{msgId}/_update", method=POST)
-    public String updateMessage(@PathVariable("topicId") String topicId, @PathVariable("articleId") String articleId, @PathVariable("msgId") String msgId, @Valid MessageForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
-
-        form.setId("#"+msgId);
-        //messageService.updateMessage(form);
-        return "redirect:/topics/" + topicId + "/posts/" + articleId;
-    }
      */
+    @RequestMapping(value="/messages/{msgId}/_update", method=POST)
+    public String updateMessage(@PathVariable("msgId") Message message, @Valid MessageForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        form.setId(message.getId());
+        messageService.updateMessage(form);
+
+        return "redirect:/topics/" + message.getArticle().getPlan().getTopic().getId().replace("#","") + "/posts/" + message.getArticle().getId().replace("#", "");
+    }
 
     /**
      * Delete a message.
-    @RequestMapping(value="/topics/{topicId}/articles/{articleId}/messages/{msgId}/_delete", method=POST)
-    public String deleteMessage(@PathVariable("topicId") String topicId, @PathVariable("articleId") String articleId, @PathVariable("msgId") String msgId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
-
-        //messageService.deleteMessage("#"+msgId);
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
-    }
      */
+    @RequestMapping(value="/messages/{msgId}/_delete", method=POST)
+    public String deleteMessage(@PathVariable("msgId") Message message, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+        messageService.deleteMessage(message.getId());
+        return "redirect:/topics/" + message.getArticle().getPlan().getTopic().getId().replace("#","") + "/posts/" + message.getArticle().getId().replace("#", "");
+    }
 
 }

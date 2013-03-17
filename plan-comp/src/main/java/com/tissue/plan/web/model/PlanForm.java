@@ -1,7 +1,7 @@
 package com.tissue.plan.web.model;
 
+import com.tissue.core.Account;
 import com.tissue.core.command.PlanCommand;
-import com.tissue.core.social.Account;
 import com.tissue.core.plan.Topic;
 
 import java.io.Serializable;
