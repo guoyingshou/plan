@@ -49,52 +49,49 @@ public class AnswerCommentController {
     /**
      * Add a comment to the answer of a specific question.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/{answerId}/comments/_create", method=POST)
-    public String addAnswerComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("answerId") String answerId, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/answers/{answerId}/comments/_create", method=POST)
+    public String addAnswerComment(@PathVariable("answerId") Answer answer, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
-        Topic topic = topicService.getTopic("#" + topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = answer.getQuestion().getPlan().getTopic();
+        //topicService.checkMember(topic, viewerAccount, model);
 
-        Answer answer = new Answer();
-        answer.setId("#"+answerId);
         form.setAnswer(answer);
         form.setAccount(viewerAccount);
-
         answerCommentService.addComment(form);
 
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");
     }
 
     /**
      * Update an answer comment.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/{answerId}/comments/{commentId}/_update", method=POST)
-    public String updateAnswerComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("answerId") String answerId, @PathVariable("commentId") String commentId, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/answerComments/{commentId}/_update", method=POST)
+    public String updateAnswerComment(@PathVariable("commentId") AnswerComment answerComment, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
-        Topic topic = topicService.getTopic("#" + topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
+        //topicService.checkMember(topic, viewerAccount, model);
 
-        form.setId("#"+commentId);
+        form.setId(answerComment.getId());
         answerCommentService.updateComment(form);
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        return "redirect:/questions/" + answerComment.getAnswer().getQuestion().getId().replace("#","");
     }
 
     /**
      * Delete an answer comment.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/{answerId}/comments/{commentId}/_delete", method=POST)
-    public String deleteAnswerComment(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("commentId") String commentId, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/answerComments/{commentId}/_delete", method=POST)
+    public String deleteAnswerComment(@PathVariable("commentId") AnswerComment answerComment, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Topic topic = topicService.getTopic("#" + topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
+        //topicService.checkMember(topic, viewerAccount, model);
 
-        answerCommentService.deleteComment("#"+commentId);
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        answerCommentService.deleteComment(answerComment.getId());
+        return "redirect:/questions/" + answerComment.getAnswer().getQuestion().getId().replace("#","");
     }
 }

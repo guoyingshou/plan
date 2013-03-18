@@ -51,55 +51,52 @@ public class AnswerController {
      * Add an answer to a specific post.
      * The post's type can only be 'question'.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/_create", method=POST)
-    public String addAnswer(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/questions/{questionId}/answers/_create", method=POST)
+    public String addAnswer(@PathVariable("questionId") Question question, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
 
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = question.getPlan().getTopic();
+        //topicService.checkMember(topic, viewerAccount, model);
 
-        Question q = new Question();
-        q.setId("#" + postId);
-
-        form.setQuestion(q);
+        form.setQuestion(question);
         form.setAccount(viewerAccount);
-
         answerService.addAnswer(form);
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+
+        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + question.getId().replace("#","");
     }
 
     /**
      * Update an answer.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/{answerId}/_update", method=POST)
-    public String updateAnswer(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("answerId") String answerId, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/answers/{answerId}/_update", method=POST)
+    public String updateAnswer(@PathVariable("answerId") Answer answer, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
 
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = answer.getQuestion().getPlan().getTopic();
+        //topicService.checkMember(topic, viewerAccount, model);
 
-        form.setId("#"+answerId);
+        form.setId(answer.getId());
         answerService.updateAnswer(form);
 
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + answer.getQuestion().getId().replace("#","");
     }
 
     /**
      * Delete an answer.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/answers/{answerId}/_delete", method=POST)
-    public String deleteAnswer(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("answerId") String answerId, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/answers/{answerId}/_delete", method=POST)
+    public String deleteAnswer(@PathVariable("answerId") Answer answer, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = answer.getQuestion().getPlan().getTopic();
+        //topicService.checkMember(topic, viewerAccount, model);
+        answerService.deleteAnswer(answer.getId());
 
-        answerService.deleteAnswer("#"+answerId);
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + answer.getQuestion().getId().replace("#","");
     }
 }

@@ -121,6 +121,7 @@ public class TopicController {
         model.put("selected", "all");
 
         topicService.checkMember(topic, viewerAccount, model);
+
         /**
         Boolean isMember = false;
         Plan plan = topic.getActivePlan();
@@ -152,6 +153,7 @@ public class TopicController {
         model.put("selected", "concept");
 
         topicService.checkMember(topic, viewerAccount, model);
+
         /**
         Boolean isMember = false;
         Plan plan = topic.getActivePlan();

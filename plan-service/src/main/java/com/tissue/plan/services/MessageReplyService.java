@@ -21,12 +21,12 @@ public class MessageReplyService {
         return messageReplyDao.create(command);
     }
 
-    public void updateComment(MessageReplyCommand command) {
+    public void updateMessageReply(MessageReplyCommand command) {
         messageReplyDao.update(command);
     }
 
-    public void deleteComment(String commentId) {
-        commonDao.delete(commentId);
+    public void deleteMessageReply(String messageReplyId) {
+        commonDao.delete(messageReplyId);
     }
 
 }

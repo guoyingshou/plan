@@ -49,50 +49,47 @@ public class MessageReplyController {
      * Add a comment to the message of a specific post.
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{messageId}/comments/_create", method=POST)
-    public String addMessageReply(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("messageId") String messageId, @Valid MessageReplyForm form, BindingResult resutl, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/messages/{messageId}/comments/_create", method=POST)
+    public String addMessageReply(@PathVariable("messageId") Message message, @Valid MessageReplyForm form, BindingResult resutl, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = message.getArticle().getPlan().getTopic();
+        //topicService.checkMember(topic, viewerAccount, model);
 
-        Message message = new Message();
-        message.setId("#"+messageId);
         form.setMessage(message);
         form.setAccount(viewerAccount);
-
         messageReplyService.addReply(form);
 
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        return "redirect:/topics/" + topic.getId().replace("#", "") + "/posts/" + message.getArticle().getId().replace("#","");
     }
 
     /**
      * Update a PostMessageComment.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{messageId}/messageComments/{commentId}/_update", method=POST)
-    public String updateMessageReply(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("messageId") String messageId, @PathVariable("commentId") String commentId, @Valid MessageReplyForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/messageReplies/{replyId}/_update", method=POST)
+    public String updateMessageReply(@PathVariable("replyId") MessageReply messageReply, @Valid MessageReplyForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = messageReply.getMessage().getArticle().getPlan().getTopic();
+        topicService.checkMember(topic, viewerAccount, model);
 
-        form.setId("#"+commentId);
-        //messageReplyService.updateComment(form);
+        form.setId(messageReply.getId());
+        messageReplyService.updateMessageReply(form);
 
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + messageReply.getMessage().getArticle().getId().replace("#", "");
     }
 
     /**
      * Delete a PostMessageComment.
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/topics/{topicId}/posts/{postId}/messages/{messageId}/messageComments/{commentId}/_delete", method=POST)
-    public String deleteMessageReply(@PathVariable("topicId") String topicId, @PathVariable("postId") String postId, @PathVariable("messageId") String messageId, @PathVariable("commentId") String commentId, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @RequestMapping(value="/messageReplies/{replyId}/_delete", method=POST)
+    public String deleteMessageReply(@PathVariable("replyId") MessageReply messageReply, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Topic topic = topicService.getTopic("#"+topicId);
-        topicService.checkActivePlan(topic, viewerAccount);
+        Topic topic = messageReply.getMessage().getArticle().getPlan().getTopic();
+        topicService.checkMember(topic, viewerAccount, model);
 
-        //messageReplyService.deleteComment("#"+commentId);
-        return "redirect:/topics/" + topicId + "/posts/" + postId;
+        messageReplyService.deleteMessageReply(messageReply.getId());
+        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + messageReply.getMessage().getArticle().getId().replace("#", "");
     }
 
 }
