@@ -9,6 +9,7 @@ import com.tissue.core.plan.Answer;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
+import com.tissue.plan.web.model.ContentForm;
 import com.tissue.plan.web.model.AnswerForm;
 import com.tissue.plan.services.AnswerService;
 import com.tissue.plan.services.TopicService;
@@ -72,7 +73,7 @@ public class AnswerController {
      * Update an answer.
      */
     @RequestMapping(value="/answers/{answerId}/_update", method=POST)
-    public String updateAnswer(@PathVariable("answerId") Answer answer, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updateAnswer(@PathVariable("answerId") Answer answer, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
@@ -82,7 +83,7 @@ public class AnswerController {
         //topicService.checkMember(topic, viewerAccount, model);
 
         form.setId(answer.getId());
-        answerService.updateAnswer(form);
+        answerService.updateContent(form);
 
         return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + answer.getQuestion().getId().replace("#","");
     }
@@ -95,7 +96,7 @@ public class AnswerController {
 
         Topic topic = answer.getQuestion().getPlan().getTopic();
         //topicService.checkMember(topic, viewerAccount, model);
-        answerService.deleteAnswer(answer.getId());
+        answerService.deleteContent(answer.getId());
 
         return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + answer.getQuestion().getId().replace("#","");
     }

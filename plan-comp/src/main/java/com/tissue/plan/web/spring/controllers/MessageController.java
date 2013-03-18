@@ -7,6 +7,7 @@ import com.tissue.core.plan.Message;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
+import com.tissue.plan.web.model.ContentForm;
 import com.tissue.plan.web.model.MessageForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.MessageService;
@@ -57,10 +58,10 @@ public class MessageController {
      * Update a message.
      */
     @RequestMapping(value="/messages/{msgId}/_update", method=POST)
-    public String updateMessage(@PathVariable("msgId") Message message, @Valid MessageForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updateMessage(@PathVariable("msgId") Message message, @Valid ContentForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         form.setId(message.getId());
-        messageService.updateMessage(form);
+        messageService.updateContent(form);
 
         return "redirect:/topics/" + message.getArticle().getPlan().getTopic().getId().replace("#","") + "/posts/" + message.getArticle().getId().replace("#", "");
     }
@@ -70,7 +71,7 @@ public class MessageController {
      */
     @RequestMapping(value="/messages/{msgId}/_delete", method=POST)
     public String deleteMessage(@PathVariable("msgId") Message message, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-        messageService.deleteMessage(message.getId());
+        messageService.deleteContent(message.getId());
         return "redirect:/topics/" + message.getArticle().getPlan().getTopic().getId().replace("#","") + "/posts/" + message.getArticle().getId().replace("#", "");
     }
 

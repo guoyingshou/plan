@@ -1,18 +1,22 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.dao.CommonDao;
 import com.tissue.core.command.AnswerCommand;
 import com.tissue.core.plan.Answer;
 import com.tissue.core.plan.dao.AnswerDao;
+//import com.tissue.core.plan.dao.PostDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Component
-public class AnswerService {
+import javax.annotation.Resource;
 
-    @Autowired
-    private CommonDao commonDao;
+@Component
+public class AnswerService extends ContentService {
+
+    /**
+    @Resource(name="postDaoImpl")
+    private PostDao postDao;
+    */
 
     @Autowired
     private AnswerDao answerDao;
@@ -21,11 +25,13 @@ public class AnswerService {
         return answerDao.create(command);
     }
 
+    /**
     public void updateAnswer(AnswerCommand command) {
         answerDao.update(command);
     }
 
     public void deleteAnswer(String answerId) {
-        commonDao.delete(answerId);
+        postDao.delete(answerId);
     }
+    */
 }

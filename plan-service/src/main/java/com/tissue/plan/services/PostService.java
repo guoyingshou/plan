@@ -1,29 +1,27 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.dao.CommonDao;
+import com.tissue.core.command.PostCommand;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.dao.PostDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import javax.annotation.Resource;
 
 @Component
-public class PostService {
-
-    @Autowired
-    private CommonDao commonDao;
+public class PostService extends ContentService {
 
     @Resource(name="postDaoImpl")
     private PostDao postDao;
 
-    public void deletePost(String postId) {
-        commonDao.delete(postId);
+    public String createPost(PostCommand command) {
+        return postDao.create(command);
+    }
+
+    public void updatePost(PostCommand command) {
+        postDao.update(command);
     }
 
     public List<Post> getLatestPosts(int limit) {

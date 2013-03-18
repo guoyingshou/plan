@@ -7,6 +7,7 @@ import com.tissue.core.plan.QuestionComment;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
+import com.tissue.plan.web.model.ContentForm;
 import com.tissue.plan.web.model.QuestionCommentForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.QuestionCommentService;
@@ -68,7 +69,7 @@ public class QuestionCommentController {
      * Update a QuestionComment.
      */
     @RequestMapping(value="/questionComments/{commentId}/_update", method=POST)
-    public String updateQuestionComment(@PathVariable("commentId") QuestionComment questionComment, @Valid QuestionCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updateQuestionComment(@PathVariable("commentId") QuestionComment questionComment, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
@@ -77,7 +78,7 @@ public class QuestionCommentController {
         topicService.checkMember(topic, viewerAccount, model);
 
         form.setId(questionComment.getId());
-        questionCommentService.updateQuestionComment(form);
+        questionCommentService.updateContent(form);
 
         return "redirect:/topics/" + topic.getId().replace("#","") + "/questions/" + questionComment.getQuestion().getId().replace("#","");
     }
@@ -91,7 +92,7 @@ public class QuestionCommentController {
         Topic topic = questionComment.getQuestion().getPlan().getTopic();
         topicService.checkMember(topic, viewerAccount, model);
 
-        questionCommentService.deleteQuestionComment(questionComment.getId());
+        questionCommentService.deleteContent(questionComment.getId());
         return "redirect:/topics/" + topic.getId().replace("#","") + "/questions/" + questionComment.getQuestion().getId().replace("#","");
     }
 

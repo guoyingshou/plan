@@ -84,7 +84,7 @@ public class TopicController {
         
         topicService.checkOwner(topic, viewerAccount);
  
-        topicService.deleteTopic(topic.getId());
+        topicService.deleteContent(topic.getId());
         return "redirect:/topics";
     }
 

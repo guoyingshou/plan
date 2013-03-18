@@ -43,7 +43,12 @@
                 <ref bean="idToTopicConverter" />
                 <ref bean="idToPlanConverter" />
                 <ref bean="idToArticleConverter" />
+                <ref bean="idToMessageConverter" />
+                <ref bean="idToMessageReplyConverter" />
                 <ref bean="idToQuestionConverter" />
+                <ref bean="idToQuestionCommentConverter" />
+                <ref bean="idToAnswerConverter" />
+                <ref bean="idToAnswerCommentConverter" />
             </set>
         </property>
     </bean>

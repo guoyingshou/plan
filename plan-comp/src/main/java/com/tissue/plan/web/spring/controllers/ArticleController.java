@@ -7,8 +7,9 @@ import com.tissue.core.plan.Article;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.plan.web.model.ArticleForm;
+import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.services.TopicService;
+import com.tissue.plan.services.PostService;
 import com.tissue.plan.services.ArticleService;
 import com.tissue.plan.services.PlanService;
 
@@ -41,15 +42,10 @@ public class ArticleController {
     private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
-    private ArticleService articleService;
-
-    @Autowired
     private TopicService topicService;
 
-    /**
     @Autowired
-    private PlanService planService;
-    */
+    private ArticleService articleService;
 
     @RequestMapping(value="/topics/{topicId}/articles/_form")
     public String newPost(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewer") Account viewerAccount) {
@@ -58,21 +54,12 @@ public class ArticleController {
 
         topicService.checkMember(topic, viewerAccount, model);
 
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
-
-        model.put("articleForm", new ArticleForm());
+        model.put("articleForm", new PostForm());
         return "articleFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/articles/_create", method=POST)
-    public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("articleForm") @Valid ArticleForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("articleForm") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             return "articleFormView";
@@ -83,7 +70,7 @@ public class ArticleController {
         form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
 
-        String articleId = articleService.addArticle(form);
+        String articleId = articleService.createPost(form);
 
         return "redirect:/articles/" + articleId.replace("#","");
         
@@ -102,16 +89,26 @@ public class ArticleController {
 
         topicService.checkMember(topic, viewerAccount, model);
 
-        /**
-        Boolean isMember = false;
-        Plan plan = article.getPlan().getTopic().getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
-
         return "articleDetail";
+    }
+
+    @RequestMapping(value="/articles/{articleId}/_update", method=POST)
+    public String updatePost(@PathVariable("articleId") Article article, @Valid PostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+
+        form.setId(article.getId());
+        articleService.updatePost(form);
+
+        return "redirect:/articles/" + article.getId().replace("#","");
+    }
+
+    @RequestMapping(value="/articles/{articleId}/_delete", method=POST)
+    public String deletePost(@PathVariable("articleId") Article article, @ModelAttribute("viewerAccount") Account viewerAccount) {
+        articleService.deleteContent(article.getId());
+        return "redirect:/articles/" + article.getId().replace("#","");
     }
 
 }

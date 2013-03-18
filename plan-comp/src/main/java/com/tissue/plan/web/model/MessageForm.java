@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Date;
 
-public class MessageForm extends CommentForm implements MessageCommand {
+public class MessageForm extends ContentForm implements MessageCommand {
 
     private Article article;
 

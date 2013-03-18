@@ -8,6 +8,7 @@ import com.tissue.core.plan.MessageReply;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
+import com.tissue.plan.web.model.ContentForm;
 import com.tissue.plan.web.model.MessageReplyForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.MessageReplyService;
@@ -67,13 +68,13 @@ public class MessageReplyController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messageReplies/{replyId}/_update", method=POST)
-    public String updateMessageReply(@PathVariable("replyId") MessageReply messageReply, @Valid MessageReplyForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updateMessageReply(@PathVariable("replyId") MessageReply messageReply, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Topic topic = messageReply.getMessage().getArticle().getPlan().getTopic();
         topicService.checkMember(topic, viewerAccount, model);
 
         form.setId(messageReply.getId());
-        messageReplyService.updateMessageReply(form);
+        messageReplyService.updateContent(form);
 
         return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + messageReply.getMessage().getArticle().getId().replace("#", "");
     }
@@ -88,7 +89,7 @@ public class MessageReplyController {
         Topic topic = messageReply.getMessage().getArticle().getPlan().getTopic();
         topicService.checkMember(topic, viewerAccount, model);
 
-        messageReplyService.deleteMessageReply(messageReply.getId());
+        messageReplyService.deleteContent(messageReply.getId());
         return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + messageReply.getMessage().getArticle().getId().replace("#", "");
     }
 

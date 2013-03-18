@@ -1,7 +1,7 @@
 package com.tissue.plan.web.model;
 
 import com.tissue.core.Account;
-import com.tissue.core.command.CommentCommand;
+import com.tissue.core.command.ContentCommand;
 
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Date;
 
-public class CommentForm implements CommentCommand {
+public class ContentForm implements ContentCommand {
 
     private String id;
 

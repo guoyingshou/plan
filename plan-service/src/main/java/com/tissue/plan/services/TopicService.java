@@ -2,7 +2,6 @@ package com.tissue.plan.services;
 
 import com.tissue.core.User;
 import com.tissue.core.Account;
-import com.tissue.core.dao.CommonDao;
 import com.tissue.core.command.TopicCommand;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
@@ -24,10 +23,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 @Component
-public class TopicService {
-
-    @Autowired
-    private CommonDao commonDao;
+public class TopicService extends ContentService {
 
     @Autowired
     private TopicDao topicDao;
@@ -53,10 +49,6 @@ public class TopicService {
 
     public void updateTopic(TopicCommand command) {
         topicDao.update(command);
-    }
-
-    public void deleteTopic(String topicId) {
-        commonDao.delete(topicId);
     }
 
     public Topic getTopic(String topicId) {
@@ -142,7 +134,11 @@ public class TopicService {
     }
 
     public void checkMember(Topic topic, Account viewerAccount, Map model) {
-        Boolean isMember = planDao.isMember(topic.getActivePlan().getId(), viewerAccount.getId());
+        Boolean isMember = false;
+        Plan plan = topic.getActivePlan();
+        if(plan != null) {
+            isMember = planDao.isMember(plan.getId(), viewerAccount.getId());
+        }
         model.put("isMember", isMember);
     }
 }

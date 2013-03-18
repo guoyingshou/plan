@@ -8,6 +8,7 @@ import com.tissue.core.plan.AnswerComment;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
+import com.tissue.plan.web.model.ContentForm;
 import com.tissue.plan.web.model.AnswerCommentForm;
 import com.tissue.plan.services.AnswerCommentService;
 import com.tissue.plan.services.TopicService;
@@ -60,7 +61,7 @@ public class AnswerCommentController {
 
         form.setAnswer(answer);
         form.setAccount(viewerAccount);
-        answerCommentService.addComment(form);
+        answerCommentService.addAnswerComment(form);
 
         return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");
     }
@@ -69,7 +70,7 @@ public class AnswerCommentController {
      * Update an answer comment.
      */
     @RequestMapping(value="/answerComments/{commentId}/_update", method=POST)
-    public String updateAnswerComment(@PathVariable("commentId") AnswerComment answerComment, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updateAnswerComment(@PathVariable("commentId") AnswerComment answerComment, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
@@ -78,7 +79,7 @@ public class AnswerCommentController {
         //topicService.checkMember(topic, viewerAccount, model);
 
         form.setId(answerComment.getId());
-        answerCommentService.updateComment(form);
+        answerCommentService.updateContent(form);
         return "redirect:/questions/" + answerComment.getAnswer().getQuestion().getId().replace("#","");
     }
 
@@ -91,7 +92,7 @@ public class AnswerCommentController {
         Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
         //topicService.checkMember(topic, viewerAccount, model);
 
-        answerCommentService.deleteComment(answerComment.getId());
+        answerCommentService.deleteContent(answerComment.getId());
         return "redirect:/questions/" + answerComment.getAnswer().getQuestion().getId().replace("#","");
     }
 }

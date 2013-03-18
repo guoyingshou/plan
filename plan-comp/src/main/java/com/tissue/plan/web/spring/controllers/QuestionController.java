@@ -7,7 +7,7 @@ import com.tissue.core.plan.Question;
 import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
-import com.tissue.plan.web.model.QuestionForm;
+import com.tissue.plan.web.model.PostForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PlanService;
 import com.tissue.plan.services.QuestionService;
@@ -53,21 +53,12 @@ public class QuestionController {
 
         topicService.checkMember(topic, viewerAccount, model);
 
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
-
-        model.put("questionForm", new QuestionForm());
+        model.put("questionForm", new PostForm());
         return "questionFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/questions/_create", method=POST)
-    public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("questionForm") @Valid QuestionForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("questionForm") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             return "questionFormView";
@@ -77,7 +68,7 @@ public class QuestionController {
         form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
 
-        String questionId = questionService.addQuestion(form);
+        String questionId = questionService.createPost(form);
 
         return "redirect:/questions/" + questionId.replace("#", "");
         
@@ -95,15 +86,6 @@ public class QuestionController {
         model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
-        /**
-        Boolean isMember = false;
-        Plan plan = question.getPlan().getTopic().getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
-
         return "questionDetail";
     }
 
