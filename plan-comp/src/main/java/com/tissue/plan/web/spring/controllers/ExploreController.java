@@ -53,8 +53,8 @@ public class ExploreController {
         List<User> users = exploreService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
-        List<Post> newPosts = postService.getLatestPosts(15);
-        model.put("newPosts", newPosts);
+        List<Post> posts = postService.getLatestPosts(15);
+        model.put("posts", posts);
 
         List<Topic> topics = topicService.getTrendingTopics(15);
         model.put("topics", topics);
@@ -71,8 +71,8 @@ public class ExploreController {
         List<User> users = exploreService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
-        List<Post> newPosts = postService.getLatestPosts(15);
-        model.put("newPosts", newPosts);
+        List<Post> posts = postService.getLatestPosts(15);
+        model.put("posts", posts);
 
         List<Topic> topics = topicService.getFeaturedTopics(15);
         model.put("topics", topics);
@@ -89,8 +89,8 @@ public class ExploreController {
         List<User> users = exploreService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
-        List<Post> newPosts = postService.getLatestPosts(15);
-        model.put("newPosts", newPosts);
+        List<Post> posts = postService.getLatestPosts(15);
+        model.put("posts", posts);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;
@@ -109,8 +109,8 @@ public class ExploreController {
 
         model.put("selected", "tags");
 
-        List<Post> newPosts = postService.getLatestPosts(15);
-        model.put("newPosts", newPosts);
+        List<Post> posts = postService.getLatestPosts(15);
+        model.put("posts", posts);
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
         List<User> users = exploreService.getNewUsers(viewerId, 10);

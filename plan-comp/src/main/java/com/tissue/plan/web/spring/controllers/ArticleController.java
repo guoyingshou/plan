@@ -50,6 +50,7 @@ public class ArticleController {
     @RequestMapping(value="/topics/{topicId}/articles/_form")
     public String newPost(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewer") Account viewerAccount) {
 
+        model.put("selected", "all");
         model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
@@ -81,6 +82,8 @@ public class ArticleController {
      */
     @RequestMapping(value="/articles/{articleId}", method=GET)
     public String getPost(@PathVariable("articleId") Article article, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        model.put("selected", article.getType());
 
         Topic topic = article.getPlan().getTopic();
 

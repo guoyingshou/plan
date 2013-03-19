@@ -49,6 +49,7 @@ public class QuestionController {
     @RequestMapping(value="/topics/{topicId}/questions/_form")
     public String createQustionForm(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        model.put("selected", "question");
         model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
@@ -79,6 +80,8 @@ public class QuestionController {
      */
     @RequestMapping(value="/questions/{questionId}")
     public String getPost(@PathVariable("questionId") Question question, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        model.put("selected", "question");
 
         Topic topic = question.getPlan().getTopic();
 

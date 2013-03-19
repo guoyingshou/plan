@@ -104,7 +104,6 @@ public class TopicService extends ContentService {
 
     /**
      * question
-     */
     public long getQuestionsCount(String topicId) {
         return questionDao.getQuestionsCountByTopic(topicId);
     }
@@ -112,6 +111,7 @@ public class TopicService extends ContentService {
     public List<Question> getPagedQuestions(String topicId, int page, int size) {
         return questionDao.getPagedQuestionsByTopic(topicId, page, size);
     }
+     */
 
     /**
      * utils

@@ -9,7 +9,6 @@
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
 <#assign title="topic" in commonGadgets>
-<#assign posts=posts in postGadgets>
 
 <@commonGadgets.layout>
     <div id="page-logo-wrapper">
@@ -20,7 +19,7 @@
 
     <div id="page-menu-wrapper">
         <div id="page-menu">
-        <@topicGadgets.topicMenu current />
+        <@topicGadgets.topicMenu />
         </div>
     </div>
 

@@ -17,7 +17,7 @@
 
     <div id="page-menu-wrapper">
         <div id="page-menu">
-            <@topicGadgets.topicMenu current />
+            <@topicGadgets.topicMenu />
         </div>
     </div>
 

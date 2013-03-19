@@ -19,7 +19,7 @@
 
     <div id="page-menu-wrapper">
         <div id="page-menu">
-        <@topicGadgets.topicMenu current />
+        <@topicGadgets.topicMenu />
         </div>
     </div>
 
@@ -30,14 +30,7 @@
             </div>
 
            <div id="main-content">
-           <#if posts??>
-               <@postGadgets.showPosts posts />
-               <@commonGadgets.showPager />
-           <#elseif post??>
-               <@postGadgets.showPostDetail />
-           <#else>
-               <@topicGadgets.showTopicDetails />
-           </#if>
+               <@topicGadgets.showTopicObjective />
            </div>
        </div>
     </div>

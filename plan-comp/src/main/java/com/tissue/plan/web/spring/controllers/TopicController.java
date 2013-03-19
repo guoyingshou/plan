@@ -11,7 +11,6 @@ import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.services.TopicService;
-import com.tissue.plan.services.PlanService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -43,9 +42,6 @@ public class TopicController {
 
     @Autowired
     private TopicService topicService;
-
-    @Autowired
-    private PlanService planService;
 
     /**
      * Add new topic.
@@ -94,21 +90,12 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/objective")
     public String getTopic(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        model.put("selected", "objective");
         model.put("topic", topic);
-        model.put("current", "objective");
 
         topicService.checkMember(topic, viewerAccount, model);
 
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
-
-        return "objective";
+        return "topic";
     }
 
     /**
@@ -117,19 +104,10 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/posts")
     public String getTopic(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("topic", topic);
         model.put("selected", "all");
+        model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
-
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -149,19 +127,10 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/concepts")
     public String getConcepts(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("topic", topic);
         model.put("selected", "concept");
+        model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
-
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -181,18 +150,10 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/notes")
     public String getNotes(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("topic", topic);
         model.put("selected", "note");
+        model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -212,19 +173,10 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/tutorials")
     public String getTutorials(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("topic", topic);
         model.put("selected", "tutorial");
+        model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
-
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -244,29 +196,21 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/questions")
     public String getQuestions(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        model.put("topic", topic);
         model.put("selected", "question");
+        model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
-        long total = topicService.getQuestionsCount(topic.getId());
+        long total = topicService.getPostsCountByType(topic.getId(), "question");
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
 
-        List<Question> questions = topicService.getPagedQuestions(topic.getId(), page, size);
-        model.put("questions", questions);
+        List<Post> posts = topicService.getPagedPostsByType(topic.getId(), "question", page, size);
+        model.put("posts", posts);
 
-        return "questions";
+        return "posts";
     }
 
 }

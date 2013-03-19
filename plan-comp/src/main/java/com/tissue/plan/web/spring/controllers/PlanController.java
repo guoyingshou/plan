@@ -73,18 +73,11 @@ public class PlanController {
     @RequestMapping(value="/plans/{planId}/posts") 
     public String getPosts(@PathVariable("planId") Plan plan,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        model.put("selected", "all");
+
         Topic topic = plan.getTopic();
         model.put("topic", topic);
         topicService.checkMember(topic, viewerAccount, model);
-
-        /**
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccount != null)) {
-            isMember = planService.isMember(plan.getId(), viewerAccount.getId());
-        }
-        model.put("isMember", isMember);
-        */
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
