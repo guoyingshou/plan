@@ -51,7 +51,7 @@ public class MessageController {
         form.setArticle(article);
         form.setAccount(viewerAccount);
         messageService.addMessage(form);
-        return "redirect:/topics/" + article.getPlan().getTopic().getId().replace("#","") + "/posts/" + article.getId().replace("#", "");
+        return "redirect:/articles/" + article.getId().replace("#", "");
     }
  
     /**
@@ -63,7 +63,7 @@ public class MessageController {
         form.setId(message.getId());
         messageService.updateContent(form);
 
-        return "redirect:/topics/" + message.getArticle().getPlan().getTopic().getId().replace("#","") + "/posts/" + message.getArticle().getId().replace("#", "");
+        return "redirect:/articles/" + message.getArticle().getId().replace("#", "");
     }
 
     /**
@@ -72,7 +72,7 @@ public class MessageController {
     @RequestMapping(value="/messages/{msgId}/_delete", method=POST)
     public String deleteMessage(@PathVariable("msgId") Message message, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         messageService.deleteContent(message.getId());
-        return "redirect:/topics/" + message.getArticle().getPlan().getTopic().getId().replace("#","") + "/posts/" + message.getArticle().getId().replace("#", "");
+        return "redirect:/articles/" + message.getArticle().getId().replace("#", "");
     }
 
 }

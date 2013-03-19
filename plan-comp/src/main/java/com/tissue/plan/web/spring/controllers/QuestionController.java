@@ -92,4 +92,24 @@ public class QuestionController {
         return "questionDetail";
     }
 
+    @RequestMapping(value="/questions/{questionId}/_update", method=POST)
+    public String updatePost(@PathVariable("questionId") Question question, @Valid PostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
+
+        form.setId(question.getId());
+        questionService.updatePost(form);
+
+        return "redirect:/questions/" + question.getId().replace("#","");
+    }
+
+    @RequestMapping(value="/questions/{questionId}/_delete", method=POST)
+    public String deletePost(@PathVariable("questionId") Question question, @ModelAttribute("viewerAccount") Account viewerAccount) {
+        questionService.deleteContent(question.getId());
+        return "redirect:/questions/" + question.getId().replace("#","");
+    }
+
+
 }

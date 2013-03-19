@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 public class QuestionCommentController {
 
     private static Logger logger = LoggerFactory.getLogger(QuestionCommentController.class);
+
     @Autowired
     private TopicService topicService;
 
@@ -62,7 +63,7 @@ public class QuestionCommentController {
 
         questionCommentService.addQuestionComment(form);
 
-        return "redirect:/topics/" + topic.getId().replace("#", "") + "/questions/" + question.getId().replace("#", "");
+        return "redirect:/questions/" + question.getId().replace("#", "");
     }
  
     /**
@@ -80,7 +81,7 @@ public class QuestionCommentController {
         form.setId(questionComment.getId());
         questionCommentService.updateContent(form);
 
-        return "redirect:/topics/" + topic.getId().replace("#","") + "/questions/" + questionComment.getQuestion().getId().replace("#","");
+        return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");
     }
 
     /**
@@ -93,7 +94,7 @@ public class QuestionCommentController {
         topicService.checkMember(topic, viewerAccount, model);
 
         questionCommentService.deleteContent(questionComment.getId());
-        return "redirect:/topics/" + topic.getId().replace("#","") + "/questions/" + questionComment.getQuestion().getId().replace("#","");
+        return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");
     }
 
 }

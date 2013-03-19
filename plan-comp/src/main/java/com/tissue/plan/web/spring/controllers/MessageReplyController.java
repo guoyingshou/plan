@@ -50,7 +50,7 @@ public class MessageReplyController {
      * Add a comment to the message of a specific post.
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
-    @RequestMapping(value="/messages/{messageId}/comments/_create", method=POST)
+    @RequestMapping(value="/messages/{messageId}/messageReplies/_create", method=POST)
     public String addMessageReply(@PathVariable("messageId") Message message, @Valid MessageReplyForm form, BindingResult resutl, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Topic topic = message.getArticle().getPlan().getTopic();
@@ -60,7 +60,7 @@ public class MessageReplyController {
         form.setAccount(viewerAccount);
         messageReplyService.addReply(form);
 
-        return "redirect:/topics/" + topic.getId().replace("#", "") + "/posts/" + message.getArticle().getId().replace("#","");
+        return "redirect:/articles/" + message.getArticle().getId().replace("#","");
     }
 
     /**
@@ -76,7 +76,7 @@ public class MessageReplyController {
         form.setId(messageReply.getId());
         messageReplyService.updateContent(form);
 
-        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + messageReply.getMessage().getArticle().getId().replace("#", "");
+        return "redirect:/articles/" + messageReply.getMessage().getArticle().getId().replace("#", "");
     }
 
     /**
@@ -90,7 +90,7 @@ public class MessageReplyController {
         topicService.checkMember(topic, viewerAccount, model);
 
         messageReplyService.deleteContent(messageReply.getId());
-        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + messageReply.getMessage().getArticle().getId().replace("#", "");
+        return "redirect:/articles/" + messageReply.getMessage().getArticle().getId().replace("#", "");
     }
 
 }

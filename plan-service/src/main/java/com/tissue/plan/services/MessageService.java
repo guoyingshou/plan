@@ -16,14 +16,4 @@ public class MessageService extends ContentService {
     public String addMessage(MessageCommand command) {
         return messageDao.create(command);
     }
-
-    /**
-    public void updateMessage(MessageCommand command) {
-        messageDao.update(command);
-    }
-
-    public void deleteMessage(String messageId) {
-        commonDao.delete(messageId);
-    }
-    */
 }

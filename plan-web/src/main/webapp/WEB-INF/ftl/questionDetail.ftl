@@ -3,7 +3,7 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "questionGadgets.ftl" as questionGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/question.js"] in commonGadgets>
 <#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css", "/tissue/css/post.css"] in commonGadgets>
 
 <#assign title="question" in commonGadgets />

@@ -66,7 +66,7 @@ public class AnswerController {
         form.setAccount(viewerAccount);
         answerService.addAnswer(form);
 
-        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + question.getId().replace("#","");
+        return "redirect:/questions/" + question.getId().replace("#","");
     }
 
     /**
@@ -85,7 +85,7 @@ public class AnswerController {
         form.setId(answer.getId());
         answerService.updateContent(form);
 
-        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + answer.getQuestion().getId().replace("#","");
+        return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");
     }
 
     /**
@@ -98,6 +98,6 @@ public class AnswerController {
         //topicService.checkMember(topic, viewerAccount, model);
         answerService.deleteContent(answer.getId());
 
-        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts/" + answer.getQuestion().getId().replace("#","");
+        return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");
     }
 }
