@@ -2,16 +2,16 @@ package com.tissue.plan.services;
 
 import com.tissue.core.User;
 import com.tissue.core.Account;
-import com.tissue.core.plan.command.TopicCommand;
-import com.tissue.core.plan.Topic;
-import com.tissue.core.plan.Plan;
-import com.tissue.core.plan.Post;
-import com.tissue.core.plan.Question;
-import com.tissue.core.plan.dao.PostDao;
-import com.tissue.core.plan.dao.TopicDao;
-import com.tissue.core.plan.dao.PlanDao;
-import com.tissue.core.plan.dao.PostDao;
-import com.tissue.core.plan.dao.QuestionDao;
+import com.tissue.plan.command.TopicCommand;
+import com.tissue.plan.Topic;
+import com.tissue.plan.Plan;
+import com.tissue.plan.Post;
+import com.tissue.plan.Question;
+import com.tissue.plan.dao.PostDao;
+import com.tissue.plan.dao.TopicDao;
+import com.tissue.plan.dao.PlanDao;
+import com.tissue.plan.dao.PostDao;
+import com.tissue.plan.dao.QuestionDao;
 import com.tissue.commons.services.ContentService;
 //import com.tissue.commons.exceptions.IllegalAccessException;
 

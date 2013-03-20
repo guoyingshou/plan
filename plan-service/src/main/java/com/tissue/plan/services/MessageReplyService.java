@@ -1,10 +1,10 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.plan.command.MessageReplyCommand;
-import com.tissue.core.plan.MessageReply;
-import com.tissue.core.plan.dao.MessageReplyDao;
-import com.tissue.core.plan.dao.PostDao;
 import com.tissue.commons.services.ContentService;
+import com.tissue.plan.command.MessageReplyCommand;
+import com.tissue.plan.MessageReply;
+import com.tissue.plan.dao.MessageReplyDao;
+import com.tissue.plan.dao.PostDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

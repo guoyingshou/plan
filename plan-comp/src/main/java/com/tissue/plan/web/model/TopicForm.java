@@ -1,6 +1,6 @@
 package com.tissue.plan.web.model;
 
-import com.tissue.core.plan.command.TopicCommand;
+import com.tissue.plan.command.TopicCommand;
 
 import java.io.Serializable;
 import java.util.Date;

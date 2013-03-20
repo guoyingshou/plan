@@ -1,9 +1,9 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.plan.command.PostCommand;
-import com.tissue.core.plan.Post;
-import com.tissue.core.plan.dao.PostDao;
 import com.tissue.commons.services.ContentService;
+import com.tissue.plan.command.PostCommand;
+import com.tissue.plan.Post;
+import com.tissue.plan.dao.PostDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,10 +2,10 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.Account;
 import com.tissue.core.User;
-import com.tissue.core.plan.Topic;
-import com.tissue.core.plan.Post;
-import com.tissue.core.social.Activity;
 import com.tissue.commons.util.Pager;
+import com.tissue.social.Activity;
+import com.tissue.plan.Topic;
+import com.tissue.plan.Post;
 import com.tissue.plan.services.ExploreService;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PostService;

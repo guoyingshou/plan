@@ -1,7 +1,7 @@
 package com.tissue.plan.web.model;
 
-import com.tissue.core.plan.command.QuestionCommentCommand;
-import com.tissue.core.plan.Question;
+import com.tissue.plan.command.QuestionCommentCommand;
+import com.tissue.plan.Question;
 
 import java.io.Serializable;
 import java.util.List;

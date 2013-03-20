@@ -1,12 +1,12 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.plan.command.PlanCommand;
-import com.tissue.core.plan.Topic;
-import com.tissue.core.plan.Plan;
-import com.tissue.core.plan.Post;
-import com.tissue.core.plan.dao.TopicDao;
-import com.tissue.core.plan.dao.PlanDao;
-import com.tissue.core.plan.dao.PostDao;
+import com.tissue.plan.command.PlanCommand;
+import com.tissue.plan.Topic;
+import com.tissue.plan.Plan;
+import com.tissue.plan.Post;
+import com.tissue.plan.dao.TopicDao;
+import com.tissue.plan.dao.PlanDao;
+import com.tissue.plan.dao.PostDao;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;

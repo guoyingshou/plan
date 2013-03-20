@@ -107,7 +107,7 @@
         <property name="userDetailsDao" ref="userDetailsDao" />
     </bean>
 
-    <bean id="userDetailsDao" class="com.tissue.core.security.dao.orient.UserDetailsDaoImpl">
+    <bean id="userDetailsDao" class="com.tissue.security.dao.orient.UserDetailsDaoImpl">
         <property name="dataSource" ref="dataSource" />
     </bean>
 
