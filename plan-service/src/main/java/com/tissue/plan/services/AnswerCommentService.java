@@ -1,6 +1,7 @@
 package com.tissue.plan.services;
 
-import com.tissue.core.command.AnswerCommentCommand;
+import com.tissue.commons.services.ContentService;
+import com.tissue.core.plan.command.AnswerCommentCommand;
 import com.tissue.core.plan.AnswerComment;
 import com.tissue.core.plan.dao.AnswerCommentDao;
 
@@ -16,11 +17,5 @@ public class AnswerCommentService extends ContentService {
     public String addAnswerComment(AnswerCommentCommand command) {
         return answerCommentDao.create(command);
     }
-
-    /**
-    public void updateComment(AnswerCommentCommand command) {
-        answerCommentDao.update(command);
-    }
-    */
 
 }

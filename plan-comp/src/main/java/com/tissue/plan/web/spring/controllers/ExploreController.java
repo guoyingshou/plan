@@ -5,9 +5,7 @@ import com.tissue.core.User;
 import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Post;
 import com.tissue.core.social.Activity;
-import com.tissue.core.security.UserDetailsImpl;
 import com.tissue.commons.util.Pager;
-import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.plan.services.ExploreService;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PostService;
@@ -30,7 +28,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.Map;
 import java.util.Date;
-import java.security.Principal;
 
 @Controller
 public class ExploreController {

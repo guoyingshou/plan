@@ -2,7 +2,7 @@ package com.tissue.plan.web.model;
 
 import com.tissue.core.Account;
 import com.tissue.core.plan.Plan;
-import com.tissue.core.command.PostCommand;
+import com.tissue.core.plan.command.PostCommand;
 
 import java.io.Serializable;
 import java.util.List;

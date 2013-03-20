@@ -6,8 +6,6 @@ import com.tissue.core.plan.Topic;
 import com.tissue.core.plan.Plan;
 import com.tissue.core.plan.Post;
 import com.tissue.core.plan.Question;
-import com.tissue.core.security.UserDetailsImpl;
-import com.tissue.commons.security.util.SecurityUtil;
 import com.tissue.commons.util.Pager;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.services.TopicService;
@@ -68,7 +66,7 @@ public class TopicController {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
 
-        topicService.checkOwner(topic, viewerAccount);
+        //topicService.checkOwner(topic, viewerAccount);
  
         form.setId(topic.getId());
         topicService.updateTopic(form);
@@ -78,7 +76,7 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/_delete", method=POST)
     public String deleteTopic(@PathVariable("topicId") Topic topic, @ModelAttribute("viewerAccount") Account viewerAccount) {
         
-        topicService.checkOwner(topic, viewerAccount);
+        //topicService.checkOwner(topic, viewerAccount);
  
         topicService.deleteContent(topic.getId());
         return "redirect:/topics";

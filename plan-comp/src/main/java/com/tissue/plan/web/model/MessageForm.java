@@ -1,6 +1,6 @@
 package com.tissue.plan.web.model;
 
-import com.tissue.core.command.MessageCommand;
+import com.tissue.core.plan.command.MessageCommand;
 import com.tissue.core.plan.Article;
 
 import java.io.Serializable;

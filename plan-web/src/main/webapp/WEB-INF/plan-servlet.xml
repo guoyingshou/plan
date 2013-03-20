@@ -53,23 +53,6 @@
         </property>
     </bean>
  
-    <!--
-    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <property name="converters">
-            <set>
-                <bean class="com.tissue.core.spring.converters.TagsConverter" />
-                <bean class="com.tissue.core.spring.converters.IDConverter" />
-            </set>
-        </property>
-
-        <property name="formatters">
-            <set>
-                <bean class="com.tissue.core.spring.formatters.IDAnnotationFormatterFactory" />
-            </set>
-        </property>
-    </bean>
-    -->
-
     <mvc:annotation-driven conversion-service="conversionService" />
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" /> 
