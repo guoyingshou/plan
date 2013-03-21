@@ -13,7 +13,6 @@ import com.tissue.plan.dao.PlanDao;
 import com.tissue.plan.dao.PostDao;
 import com.tissue.plan.dao.QuestionDao;
 import com.tissue.commons.services.ContentService;
-//import com.tissue.commons.exceptions.IllegalAccessException;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +125,7 @@ public class TopicService extends ContentService {
     public void checkMember(Topic topic, Account viewerAccount, Map model) {
         Boolean isMember = false;
         Plan plan = topic.getActivePlan();
-        if(plan != null) {
+        if((plan != null) && (viewerAccount != null)) {
             isMember = planDao.isMember(plan.getId(), viewerAccount.getId());
         }
         model.put("isMember", isMember);

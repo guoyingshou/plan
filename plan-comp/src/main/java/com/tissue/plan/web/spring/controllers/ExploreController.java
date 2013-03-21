@@ -46,15 +46,15 @@ public class ExploreController {
 
         model.put("selected", "trending");
 
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
+        List<Topic> topics = topicService.getTrendingTopics(15);
+        model.put("topics", topics);
 
         List<Post> posts = postService.getLatestPosts(15);
         model.put("posts", posts);
 
-        List<Topic> topics = topicService.getTrendingTopics(15);
-        model.put("topics", topics);
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = exploreService.getNewUsers(viewerId, 10);
+        model.put("users", users);
 
         return "explore";
     }
@@ -64,15 +64,15 @@ public class ExploreController {
 
         model.put("selected", "featured");
 
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
+        List<Topic> topics = topicService.getFeaturedTopics(15);
+        model.put("topics", topics);
 
         List<Post> posts = postService.getLatestPosts(15);
         model.put("posts", posts);
 
-        List<Topic> topics = topicService.getFeaturedTopics(15);
-        model.put("topics", topics);
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = exploreService.getNewUsers(viewerId, 10);
+        model.put("users", users);
 
         return "explore";
     }
@@ -81,13 +81,6 @@ public class ExploreController {
     public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "topics");
-
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
-
-        List<Post> posts = postService.getLatestPosts(15);
-        model.put("posts", posts);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;
@@ -98,6 +91,13 @@ public class ExploreController {
         List<Topic> topics = topicService.getPagedTopics(page, size);
         model.put("topics", topics);
 
+        List<Post> posts = postService.getLatestPosts(15);
+        model.put("posts", posts);
+
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = exploreService.getNewUsers(viewerId, 10);
+        model.put("users", users);
+
         return "explore";
     }
 
@@ -105,13 +105,6 @@ public class ExploreController {
     public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "tags");
-
-        List<Post> posts = postService.getLatestPosts(15);
-        model.put("posts", posts);
-
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;
@@ -122,6 +115,13 @@ public class ExploreController {
         List<Topic> topics = topicService.getPagedTopicsByTag(tag, page, size);
         model.put("topics", topics);
 
+        List<Post> posts = postService.getLatestPosts(15);
+        model.put("posts", posts);
+
+        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
+        List<User> users = exploreService.getNewUsers(viewerId, 10);
+        model.put("users", users);
+
         return "explore";
     }
 
@@ -130,12 +130,13 @@ public class ExploreController {
 
         model.put("selected", "tags");
 
+        List<String> tags = topicService.getTopicTags();
+        model.put("tags", tags);
+
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
         List<User> users = exploreService.getNewUsers(viewerId, 10);
         model.put("users", users);
 
-        List<String> tags = topicService.getTopicTags();
-        model.put("tags", tags);
         return "tags";
     }
 
