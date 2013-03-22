@@ -39,7 +39,7 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
-                <bean class="com.tissue.plan.spring.converters.TagsConverter" />
+                <ref bean="tagsConverter" />
                 <ref bean="idToTopicConverter" />
                 <ref bean="idToPlanConverter" />
                 <ref bean="idToArticleConverter" />
