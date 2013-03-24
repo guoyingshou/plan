@@ -30,7 +30,38 @@
             </div>
 
            <div id="main-content">
-               <@topicGadgets.showTopicObjective />
+               <div class="ts">
+                   <span>
+                      ${topic.account.user.displayName}
+                      [ <@commonGadgets.showTimeBefore topic.timeBefore /> ]
+                   </span>
+               </div>
+               <div class="tags">
+                   <#list topic.tags as tag>
+                   <span><a href="<@spring.url '/tags/${tag}' />">${tag}</a></span>
+                   </#list>
+               </div>
+               <div class="content">
+                   ${topic.content}
+               </div>
+
+               <#if !topic.deleted>
+               <@commonGadgets.deleteConfirmForm />
+               <#if viewerAccount?? && topic.isOwner(viewerAccount.id)>
+               <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
+                   <@spring.message 'Update.topic' />
+               </a>
+               <a class="delete" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
+                   <@spring.message 'Delete.topic' />
+               </a>
+               <#else>
+               <@sec.authorize access="hasRole('ROLE_ADMIN')">
+               <a class="delete" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
+                   <@spring.message 'Delete.topic' />
+               </a>
+               </@sec.authorize>
+               </#if>
+               </#if>
            </div>
        </div>
     </div>

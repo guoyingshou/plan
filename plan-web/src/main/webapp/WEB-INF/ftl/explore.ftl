@@ -8,9 +8,6 @@
 <#assign mystyles=["/tissue/css/layout3.css"] in commonGadgets>
 
 <#assign title="explore" in commonGadgets>
-<#--
-<#assign posts = newPosts in postGadgets>
--->
 
 <@commonGadgets.layout>
     <div id="page-logo-wrapper">
@@ -21,7 +18,7 @@
 
     <div id="page-menu-wrapper">
         <div id="page-menu">
-            <@topicGadgets.exploreMenu selected/>
+            <@topicGadgets.exploreMenu />
         </div>
     </div>
 
@@ -36,9 +33,22 @@
             </div>
 
             <div id="main-content">
-                <@topicGadgets.showTopics />
-                <#if (selected == 'topics') || (selected == 'tags')>
-                    <@commonGadgets.showPager />
+                <ul>
+                    <#list topics as topic>
+                    <li>
+                        <div class="ts">
+                            <a href="/social/users/${topic.account.user.id?replace("#", "")}/posts">${topic.account.user.displayName}</a>
+                            [ <@commonGadgets.showTimeBefore topic.timeBefore /> ]
+                        </div>
+                        <div class="title">
+                            <a href="/group/topics/${topic.id?replace("#", "")}/objective">${topic.title}</a>
+                        </div>
+                    </li>
+                    </#list>
+                </ul>
+
+                <#if pager??>
+                <@commonGadgets.showPager />
                 </#if>
             </div>
         </div>

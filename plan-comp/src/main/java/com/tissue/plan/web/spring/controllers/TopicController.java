@@ -41,6 +41,14 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
 
+
+    @RequestMapping(value="/topics/_create")
+    public String showTopicFormView(Map model) {
+        model.put("topicForm", new TopicForm());
+        return "topicFormView";
+
+    }
+
     /**
      * Add new topic.
      */
@@ -48,14 +56,21 @@ public class TopicController {
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         
         if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
+            return "topicFormView";
         }
 
         form.setAccount(viewerAccount);
-        String topicId = topicService.addTopic(form).replace("#", "");
-        return "redirect:/topics/" + topicId + "/posts";
+        String topicId = topicService.addTopic(form);
+        return "redirect:/topics/" + topicId.replace("#","") + "/posts";
     }
 
+    @RequestMapping(value="/topics/{topicId}/_update")
+    public String updateTopicFormView(@PathVariable("topicId") Topic topic,Map model) {
+
+        model.put("topicForm", topic);
+        return "updateTopicFormView";
+    }
+ 
     /**
      * Update topic.
      */
@@ -63,7 +78,7 @@ public class TopicController {
     public String updateTopic(@PathVariable("topicId") Topic topic, @Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
+            return "updateTopicFormView";
         }
 
         //topicService.checkOwner(topic, viewerAccount);

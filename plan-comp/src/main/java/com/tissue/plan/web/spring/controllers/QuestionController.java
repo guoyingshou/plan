@@ -44,7 +44,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @RequestMapping(value="/topics/{topicId}/questions/_form")
+    @RequestMapping(value="/topics/{topicId}/questions/_create")
     public String createQustionForm(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "question");
@@ -60,9 +60,15 @@ public class QuestionController {
     public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("questionForm") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
+            model.put("selected", "question");
+            model.put("topic", topic);
+
+            topicService.checkMember(topic, viewerAccount, model);
+
             return "questionFormView";
         }
-        topicService.checkMember(topic, viewerAccount, model);
+
+        //topicService.checkMember(topic, viewerAccount, model);
 
         form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
@@ -90,11 +96,34 @@ public class QuestionController {
         return "questionDetail";
     }
 
+    @RequestMapping(value="/questions/{questionId}/_update")
+    public String updateQuestionFormView(@PathVariable("questionId") Question question, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        model.put("selected", "question");
+
+        Topic topic = question.getPlan().getTopic();
+        model.put("topic", topic);
+
+        topicService.checkMember(topic, viewerAccount, model);
+
+        model.put("questionForm", question);
+
+        return "updateQuestionFormView";
+ 
+    }
+
     @RequestMapping(value="/questions/{questionId}/_update", method=POST)
-    public String updatePost(@PathVariable("questionId") Question question, @Valid PostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updateQuestion(@PathVariable("questionId") Question question, @Valid @ModelAttribute("questionForm") PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
+            model.put("selected", "question");
+
+            Topic topic = question.getPlan().getTopic();
+            model.put("topic", topic);
+
+            topicService.checkMember(topic, viewerAccount, model);
+
+            return "updateQuestionFormView";
         }
 
         form.setId(question.getId());

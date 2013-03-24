@@ -5,7 +5,7 @@
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
 <#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in commonGadgets>
 
-<#assign title="topic" in commonGadgets>
+<#assign title="update article" in commonGadgets>
 
 <@commonGadgets.layout>
     <div id="page-logo-wrapper">
@@ -29,29 +29,10 @@
 
            <div id="main-content">
                <@spring.bind "articleForm.*" />
-               <form id="createArticleForm" method="post" action="<@spring.url '/topics/${topic.id?replace("#", "")}/articles/_create'/>">
+               <form id="createArticleForm" method="post" action="<@spring.url '/articles/${articleForm.id?replace("#","")}/_update'/>">
                <div class="error">
                    <@spring.showErrors "<br>" />
                </div>
-
-               <fieldset class="post-type">
-                   <legend>
-                       <@spring.message 'Legend.articleForm.type' />
-                   </legend>
-
-                   <label>
-                      <@spring.message 'Label.articleForm.concept' />
-                      <input type="radio" name="type" value="concept" />
-                   </label>
-                   <label>
-                       <@spring.message 'Label.articleForm.note' />
-                       <input type="radio" name="type" value="note" />
-                   </label>
-                   <label>
-                       <@spring.message 'Label.articleForm.tutorial' />
-                       <input type="radio" name="type" value="tutorial" />
-                   </label>
-               </fieldset>
 
                <fieldset>
                    <legend>
@@ -59,6 +40,9 @@
                    </legend>
 
                    <ul>
+                       <li>
+                           <@spring.formHiddenInput "articleForm.id" />
+                       </li>
                        <li>
                            <label for="title">
                                <@spring.message "Label.articleForm.title" />
@@ -70,6 +54,9 @@
                                <@spring.message "Label.articleForm.content" />
                            </label>
                            <@spring.formTextarea "articleForm.content" 'class="sum"' />
+                       </li>
+                       <li>
+                           <@spring.formHiddenInput "articleForm.type" />
                        </li>
                        <li>
                            <input type="submit" value="<@spring.message 'Publish.button'/>" />

@@ -39,7 +39,9 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
+                <!--
                 <ref bean="tagsConverter" />
+                -->
                 <ref bean="idToTopicConverter" />
                 <ref bean="idToPlanConverter" />
                 <ref bean="idToArticleConverter" />

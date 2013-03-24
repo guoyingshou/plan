@@ -45,7 +45,7 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @RequestMapping(value="/topics/{topicId}/articles/_form")
+    @RequestMapping(value="/topics/{topicId}/articles/_create")
     public String newPost(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewer") Account viewerAccount) {
 
         model.put("selected", "all");
@@ -61,6 +61,10 @@ public class ArticleController {
     public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("articleForm") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
+            model.put("selected", "all");
+            model.put("topic", topic);
+
+            topicService.checkMember(topic, viewerAccount, model);
             return "articleFormView";
         }
 
@@ -93,11 +97,30 @@ public class ArticleController {
         return "articleDetail";
     }
 
+    @RequestMapping(value="/articles/{articleId}/_update")
+    public String updateArticleFormView(@PathVariable("articleId") Article article, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        model.put("selected", article.getType());
+
+        Topic topic = article.getPlan().getTopic();
+        topicService.checkMember(topic, viewerAccount, model);
+        model.put("topic", topic);
+
+        model.put("articleForm", article);
+        return "updateArticleFormView";
+
+    }
+
     @RequestMapping(value="/articles/{articleId}/_update", method=POST)
-    public String updatePost(@PathVariable("articleId") Article article, @Valid PostForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updatePost(@PathVariable("articleId") Article article, @Valid @ModelAttribute("articleForm") PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
+            model.put("selected", article.getType());
+            Topic topic = article.getPlan().getTopic();
+            topicService.checkMember(topic, viewerAccount, model);
+            model.put("topic", topic);
+
+            return "updateArticleFormView";
         }
 
         form.setId(article.getId());

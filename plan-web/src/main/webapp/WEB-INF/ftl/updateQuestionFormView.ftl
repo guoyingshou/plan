@@ -29,7 +29,7 @@
 
            <div id="main-content">
                <@spring.bind "questionForm.*" />
-               <form id="createQuestionForm" method="post" action="<@spring.url '/topics/${topic.id?replace("#", "")}/questions/_create'/>">
+               <form id="updateQuestionForm" method="post" action="<@spring.url '/questions/${questionForm.id?replace("#","")}/_update'/>">
               <div class="error">
                   <@spring.showErrors "<br>" />
               </div>
@@ -39,6 +39,10 @@
                   </legend>
 
                   <ul>
+                      <li>
+                          <@spring.formHiddenInput "questionForm.id" />
+
+                      </li>
                       <li>
                           <label for="title">
                               <@spring.message "Label.questionForm.title" />
