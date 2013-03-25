@@ -2,7 +2,6 @@
 <#import "userGadgets.ftl" as userGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "commonGadgets.ftl" as commonGadgets />
-<#import "postGadgets.ftl" as postGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
 <#assign mystyles=["/tissue/css/layout3.css"] in commonGadgets>
@@ -12,13 +11,13 @@
 <@commonGadgets.layout>
     <div id="page-logo-wrapper">
         <div id="page-logo">
-            <@topicGadgets.exploreLogo />
+            <@topicGadgets.topicLogo />
         </div>
     </div>
 
     <div id="page-menu-wrapper">
         <div id="page-menu">
-            <@topicGadgets.exploreMenu selected/>
+            <@topicGadgets.topicMenu />
         </div>
     </div>
 

@@ -43,6 +43,18 @@ public class PlanController {
     @Autowired
     private PlanService planService;
 
+    @RequestMapping(value="/topics/{topicId}/plans/_create")
+    public String addPlan(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        model.put("selected", "objective");
+        model.put("topic", topic);
+        topicService.checkMember(topic, viewerAccount, model);
+
+        model.put("planForm", new PlanForm());
+        return "createPlanFormView";
+    }
+
+
     /**
      * Add a plan to the specific topic.
      */
@@ -53,7 +65,7 @@ public class PlanController {
         form.setAccount(viewerAccount);
 
         planService.addPlan(form);
-        return "redirect:/topics/" + topic.getId().replace("#","") + "/posts";
+        return "redirect:/topics/" + topic.getId().replace("#","") + "/objective";
     }
 
     /**

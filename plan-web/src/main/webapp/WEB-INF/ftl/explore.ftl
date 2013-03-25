@@ -2,7 +2,6 @@
 <#import "userGadgets.ftl" as userGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "commonGadgets.ftl" as commonGadgets />
-<#import "postGadgets.ftl" as postGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
 <#assign mystyles=["/tissue/css/layout3.css"] in commonGadgets>
@@ -23,13 +22,13 @@
     </div>
 
     <div id="page-main-wrapper">
-        <div id="page-main" class="center">
+        <div id="page-main">
             <div id="main-sidebar">
                 <@userGadgets.showUsers />
             </div>
 
             <div id="main-mid">
-                <@postGadgets.showPosts />
+                <@topicGadgets.showPosts />
             </div>
 
             <div id="main-content">

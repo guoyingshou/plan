@@ -17,7 +17,7 @@
 
     <div id="page-menu-wrapper">
         <div id="page-menu">
-            <@topicGadgets.exploreMenu selected />
+            <@topicGadgets.exploreMenu/>
         </div>
     </div>
 

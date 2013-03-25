@@ -164,23 +164,19 @@
                   </#if>
                </ul>
 
-<#--
                <#if !(topic.deleted || question.deleted) && isMember>
-               <@updateQuestionForm />
-               <@questionCommentForm />
-               <@answerForm />
-               <@answerCommentForm />
+               <@topicGadgets.questionCommentForm />
+               <@topicGadgets.answerForm />
+               <@topicGadgets.answerCommentForm />
                <@commonGadgets.deleteConfirmForm />
                <#else>
                <@sec.authorize access="hasRole('ROLE_ADMIN')">
-               <@updateQuestionForm />
-               <@questionCommentForm />
-               <@answerForm />
-               <@answerCommentForm />
+               <@topicGadgets.questionCommentForm />
+               <@topicGadgets.answerForm />
+               <@topicGadgets.answerCommentForm />
                <@commonGadgets.deleteConfirmForm />
                </@sec.authorize>
                </#if>
-               -->
             </div>
         </div>
     </div>

@@ -48,12 +48,12 @@ public class QuestionController {
     public String createQustionForm(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "question");
-        model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
+        model.put("topic", topic);
 
         model.put("questionForm", new PostForm());
-        return "questionFormView";
+        return "createQuestionFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/questions/_create", method=POST)
@@ -65,7 +65,7 @@ public class QuestionController {
 
             topicService.checkMember(topic, viewerAccount, model);
 
-            return "questionFormView";
+            return "createQuestionFormView";
         }
 
         //topicService.checkMember(topic, viewerAccount, model);

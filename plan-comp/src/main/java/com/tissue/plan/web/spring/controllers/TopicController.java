@@ -44,8 +44,9 @@ public class TopicController {
 
     @RequestMapping(value="/topics/_create")
     public String showTopicFormView(Map model) {
+        model.put("selected", "topics");
         model.put("topicForm", new TopicForm());
-        return "topicFormView";
+        return "createTopicFormView";
 
     }
 
@@ -56,7 +57,7 @@ public class TopicController {
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         
         if(result.hasErrors()) {
-            return "topicFormView";
+            return "createTopicFormView";
         }
 
         form.setAccount(viewerAccount);
@@ -65,7 +66,11 @@ public class TopicController {
     }
 
     @RequestMapping(value="/topics/{topicId}/_update")
-    public String updateTopicFormView(@PathVariable("topicId") Topic topic,Map model) {
+    public String updateTopicFormView(@PathVariable("topicId") Topic topic,Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        model.put("selected", "objective");
+        model.put("topic", topic);
+        topicService.checkMember(topic, viewerAccount, model);
 
         model.put("topicForm", topic);
         return "updateTopicFormView";

@@ -49,12 +49,12 @@ public class ArticleController {
     public String newPost(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewer") Account viewerAccount) {
 
         model.put("selected", "all");
-        model.put("topic", topic);
 
         topicService.checkMember(topic, viewerAccount, model);
+        model.put("topic", topic);
 
         model.put("articleForm", new PostForm());
-        return "articleFormView";
+        return "createArticleFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/articles/_create", method=POST)
@@ -65,7 +65,7 @@ public class ArticleController {
             model.put("topic", topic);
 
             topicService.checkMember(topic, viewerAccount, model);
-            return "articleFormView";
+            return "createArticleFormView";
         }
 
         topicService.checkMember(topic, viewerAccount, model);

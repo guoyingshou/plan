@@ -135,20 +135,17 @@
                  </#if>
               </ul>
 
-<#--
-<#if !(topic.deleted || article.deleted) && isMember>
-    <@messageForm />
-    <@replyForm />
-    <@commonGadgets.deleteConfirmForm />
-<#else>
-    <@sec.authorize access="hasRole('ROLE_ADMIN')">
-        <@messageForm />
-        <@replyForm />
-        <@commonGadgets.deleteConfirmForm />
-    </@sec.authorize>
-</#if>
--->
-
+              <#if !(topic.deleted || article.deleted) && isMember>
+              <@topicGadgets.messageForm />
+              <@topicGadgets.replyForm />
+              <@commonGadgets.deleteConfirmForm />
+              <#else>
+              <@sec.authorize access="hasRole('ROLE_ADMIN')">
+              <@topicGadgets.messageForm />
+              <@topicGadgets.replyForm />
+              <@commonGadgets.deleteConfirmForm />
+              </@sec.authorize>
+              </#if>
 
             </div>
         </div>

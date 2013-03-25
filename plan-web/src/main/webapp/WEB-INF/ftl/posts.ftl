@@ -1,7 +1,6 @@
 <#import "spring.ftl" as spring />
 <#import "commonGadgets.ftl" as commonGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
-<#import "postGadgets.ftl" as postGadgets />
 <#import "commonGadgets.ftl" as commonGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
@@ -30,7 +29,7 @@
             </div>
 
            <div id="main-content">
-               <@postGadgets.showPosts />
+               <@topicGadgets.showPosts />
                <@commonGadgets.showPager />
            </div>
        </div>
