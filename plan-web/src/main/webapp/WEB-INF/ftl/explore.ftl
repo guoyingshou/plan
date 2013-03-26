@@ -27,11 +27,11 @@
                 <@userGadgets.showUsers />
             </div>
 
-            <div id="main-mid">
+            <div id="main-mid" class="layout3-mid">
                 <@topicGadgets.showPosts />
             </div>
 
-            <div id="main-content">
+            <div id="main-content" class="layout3-content">
                 <ul>
                     <#list topics as topic>
                     <li>

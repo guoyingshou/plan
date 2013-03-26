@@ -24,7 +24,7 @@
     <div id="page-main-wrapper">
         <@spring.bind "topicForm.*" />
       
-        <form id="topicForm" method="post" action="<@spring.url '/topics/_create' />">
+        <form class="standalone-medium" method="post" action="<@spring.url '/topics/_create' />">
             <div class="error">
                 <@spring.showErrors "<br>" />
             </div>
