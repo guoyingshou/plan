@@ -46,14 +46,13 @@ public class ArticleController {
     private ArticleService articleService;
 
     @RequestMapping(value="/topics/{topicId}/articles/_create")
-    public String newPost(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewer") Account viewerAccount) {
+    public String newPost(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "all");
-
-        topicService.checkMember(topic, viewerAccount, model);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
         model.put("topic", topic);
-
         model.put("articleForm", new PostForm());
+
         return "createArticleFormView";
     }
 
@@ -64,11 +63,9 @@ public class ArticleController {
             model.put("selected", "all");
             model.put("topic", topic);
 
-            topicService.checkMember(topic, viewerAccount, model);
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
             return "createArticleFormView";
         }
-
-        topicService.checkMember(topic, viewerAccount, model);
 
         form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
@@ -92,7 +89,7 @@ public class ArticleController {
         model.put("article", article);
         model.put("topic", topic);
 
-        topicService.checkMember(topic, viewerAccount, model);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         return "articleDetail";
     }
@@ -103,8 +100,8 @@ public class ArticleController {
         model.put("selected", article.getType());
 
         Topic topic = article.getPlan().getTopic();
-        topicService.checkMember(topic, viewerAccount, model);
         model.put("topic", topic);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         model.put("articleForm", article);
         return "updateArticleFormView";
@@ -117,8 +114,8 @@ public class ArticleController {
         if(result.hasErrors()) {
             model.put("selected", article.getType());
             Topic topic = article.getPlan().getTopic();
-            topicService.checkMember(topic, viewerAccount, model);
             model.put("topic", topic);
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
 
             return "updateArticleFormView";
         }

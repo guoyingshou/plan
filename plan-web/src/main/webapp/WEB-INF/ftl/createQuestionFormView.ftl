@@ -2,8 +2,7 @@
 <#import "commonGadgets.ftl" as commonGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in commonGadgets>
 
 <#assign title="topic" in commonGadgets>
 
@@ -22,11 +21,6 @@
 
     <div id="page-main-wrapper">
         <div id="page-main">
-            <div id="main-sidebar">
-                <@topicGadgets.showPlanLive/>
-                <@topicGadgets.showPlansArchived/>
-            </div>
-
            <div id="main-content">
                <@spring.bind "questionForm.*" />
                <form id="createQuestionForm" method="post" action="<@spring.url '/topics/${topic.id?replace("#", "")}/questions/_create'/>">
@@ -43,13 +37,13 @@
                           <label for="title">
                               <@spring.message "Label.questionForm.title" />
                           </label>
-                          <@spring.formInput "questionForm.title" 'class="sum"' />
+                          <@spring.formInput "questionForm.title" />
                       </li>
                       <li>
                           <label for="content">
                              <@spring.message "Label.questionForm.content" />
                           </label>
-                          <@spring.formTextarea "questionForm.content" 'class="sum"' />
+                          <@spring.formTextarea "questionForm.content" />
                       </li>
                       <li>
                           <input type="hidden" name="type" value="question" />
@@ -66,6 +60,11 @@
                });
            </script>
            </div>
+
+            <div id="main-sidebar">
+                <@topicGadgets.showPlanLive/>
+                <@topicGadgets.showPlansArchived/>
+            </div>
        </div>
     </div>
 </@commonGadgets.layout>

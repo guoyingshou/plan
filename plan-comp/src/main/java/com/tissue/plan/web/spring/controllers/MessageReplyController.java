@@ -51,8 +51,10 @@ public class MessageReplyController {
     @RequestMapping(value="/messages/{messageId}/messageReplies/_create", method=POST)
     public String addMessageReply(@PathVariable("messageId") Message message, @Valid MessageReplyForm form, BindingResult resutl, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        /**
         Topic topic = message.getArticle().getPlan().getTopic();
-        //topicService.checkMember(topic, viewerAccount, model);
+        topicService.checkMember(topic, viewerAccount, model);
+        */
 
         form.setMessage(message);
         form.setAccount(viewerAccount);
@@ -68,8 +70,10 @@ public class MessageReplyController {
     @RequestMapping(value="/messageReplies/{replyId}/_update", method=POST)
     public String updateMessageReply(@PathVariable("replyId") MessageReply messageReply, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        /**
         Topic topic = messageReply.getMessage().getArticle().getPlan().getTopic();
         topicService.checkMember(topic, viewerAccount, model);
+        */
 
         form.setId(messageReply.getId());
         messageReplyService.updateContent(form);
@@ -84,8 +88,10 @@ public class MessageReplyController {
     @RequestMapping(value="/messageReplies/{replyId}/_delete", method=POST)
     public String deleteMessageReply(@PathVariable("replyId") MessageReply messageReply, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        /**
         Topic topic = messageReply.getMessage().getArticle().getPlan().getTopic();
         topicService.checkMember(topic, viewerAccount, model);
+        */
 
         messageReplyService.deleteContent(messageReply.getId());
         return "redirect:/articles/" + messageReply.getMessage().getArticle().getId().replace("#", "");

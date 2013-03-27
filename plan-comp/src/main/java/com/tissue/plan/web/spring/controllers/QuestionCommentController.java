@@ -53,8 +53,7 @@ public class QuestionCommentController {
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
-        Topic topic = question.getPlan().getTopic();
-        topicService.checkMember(topic, viewerAccount, model);
+        //Topic topic = question.getPlan().getTopic();
 
         form.setQuestion(question);
         form.setAccount(viewerAccount);
@@ -73,8 +72,10 @@ public class QuestionCommentController {
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
+        /**
         Topic topic = questionComment.getQuestion().getPlan().getTopic();
         topicService.checkMember(topic, viewerAccount, model);
+        */
 
         form.setId(questionComment.getId());
         questionCommentService.updateContent(form);
@@ -88,8 +89,10 @@ public class QuestionCommentController {
     @RequestMapping(value="/questionComments/{commentId}/_delete", method=POST)
     public String deleteQuestionComment(@PathVariable("commentId") QuestionComment questionComment, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        /**
         Topic topic = questionComment.getQuestion().getPlan().getTopic();
         topicService.checkMember(topic, viewerAccount, model);
+        */
 
         questionCommentService.deleteContent(questionComment.getId());
         return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");

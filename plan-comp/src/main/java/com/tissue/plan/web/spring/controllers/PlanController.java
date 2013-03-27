@@ -48,7 +48,7 @@ public class PlanController {
 
         model.put("selected", "objective");
         model.put("topic", topic);
-        topicService.checkMember(topic, viewerAccount, model);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         model.put("planForm", new PlanForm());
         return "createPlanFormView";
@@ -87,7 +87,7 @@ public class PlanController {
 
         Topic topic = plan.getTopic();
         model.put("topic", topic);
-        topicService.checkMember(topic, viewerAccount, model);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;

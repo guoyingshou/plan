@@ -24,10 +24,6 @@
 
     <div id="page-main-wrapper">
         <div id="page-main">
-            <div id="main-sidebar">
-                <@topicGadgets.showPlanSidebar />
-            </div>
-
            <div id="main-content">
                <div class="ts">
                    <span>
@@ -62,6 +58,12 @@
                </#if>
                </#if>
            </div>
+
+            <div id="main-sidebar">
+                <@topicGadgets.showPlanSidebar />
+            </div>
+
+
        </div>
     </div>
 </@commonGadgets.layout>

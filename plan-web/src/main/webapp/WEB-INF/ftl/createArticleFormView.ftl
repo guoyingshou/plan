@@ -22,11 +22,6 @@
 
     <div id="page-main-wrapper">
         <div id="page-main">
-            <div id="main-sidebar">
-                <@topicGadgets.showPlanLive />
-                <@topicGadgets.showPlansArchived/>
-            </div>
-
            <div id="main-content">
                <@spring.bind "articleForm.*" />
                <form id="createArticleForm" method="post" action="<@spring.url '/topics/${topic.id?replace("#", "")}/articles/_create'/>">
@@ -63,13 +58,13 @@
                            <label for="title">
                                <@spring.message "Label.articleForm.title" />
                            </label>
-                           <@spring.formInput "articleForm.title" 'class="sum"' />
+                           <@spring.formInput "articleForm.title" />
                        </li>
                        <li>
                            <label for="content">
                                <@spring.message "Label.articleForm.content" />
                            </label>
-                           <@spring.formTextarea "articleForm.content" 'class="sum"' />
+                           <@spring.formTextarea "articleForm.content" />
                        </li>
                        <li>
                            <input type="submit" value="<@spring.message 'Publish.button'/>" />
@@ -82,7 +77,13 @@
                     filebrowserUploadUrl: '/media/images/_create' 
                  });
               </script>
-           </div>
+            </div>
+
+            <div id="main-sidebar">
+                <@topicGadgets.showPlanLive />
+                <@topicGadgets.showPlansArchived/>
+            </div>
+
         </div>
     </div>
 </@commonGadgets.layout>

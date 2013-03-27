@@ -2,8 +2,7 @@
 <#import "commonGadgets.ftl" as commonGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in commonGadgets>
 
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
@@ -24,9 +23,6 @@
 
     <div id="page-main-wrapper">
         <div id="page-main">
-            <div id="main-sidebar">
-               <@topicGadgets.showPlanSidebar />
-            </div>
             <div id="main-content">
                 <div class="article">
                     <div class="item-ts">
@@ -37,7 +33,7 @@
 
                         <@sec.authorize access="hasRole('ROLE_ADMIN')">
                         <a class="delete action" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
-                            <@spring.message 'Delete.post' />
+                            <@spring.message 'Delete.article' />
                         </a>
                         </@sec.authorize>
                     </div>
@@ -56,14 +52,14 @@
                    <div class="response">
                        <#if !(topic.deleted || article.deleted) && isMember>
                        <a class="create-message action" data-action="<@spring.url '/articles/${article.id?replace("#","")}/messages/_create' />" href="#">
-                           <@spring.message 'AddMessage.post' />
+                           <@spring.message 'AddMessage.article' />
                        </a>
                        <#if article.isOwner(viewerAccount.id)>
                        <a class="delete action" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
-                           <@spring.message 'Delete.post' />
+                           <@spring.message 'Delete.article' />
                        </a>
                        <a class="action" href="<@spring.url '/articles/${article.id?replace("#","")}/_update' />">
-                           <@spring.message 'Update.post' />
+                           <@spring.message 'Update.article' />
                        </a>
                        </#if>
                        </#if>
@@ -146,8 +142,12 @@
               <@commonGadgets.deleteConfirmForm />
               </@sec.authorize>
               </#if>
-
             </div>
+
+            <div id="main-sidebar">
+               <@topicGadgets.showPlanSidebar />
+            </div>
+
         </div>
     </div>
 </@commonGadgets.layout>

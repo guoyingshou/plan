@@ -48,8 +48,7 @@ public class QuestionController {
     public String createQustionForm(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "question");
-
-        topicService.checkMember(topic, viewerAccount, model);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
         model.put("topic", topic);
 
         model.put("questionForm", new PostForm());
@@ -63,12 +62,10 @@ public class QuestionController {
             model.put("selected", "question");
             model.put("topic", topic);
 
-            topicService.checkMember(topic, viewerAccount, model);
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
 
             return "createQuestionFormView";
         }
-
-        //topicService.checkMember(topic, viewerAccount, model);
 
         form.setPlan(topic.getActivePlan());
         form.setAccount(viewerAccount);
@@ -91,8 +88,8 @@ public class QuestionController {
 
         model.put("question", question);
         model.put("topic", topic);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
-        topicService.checkMember(topic, viewerAccount, model);
         return "questionDetail";
     }
 
@@ -103,9 +100,7 @@ public class QuestionController {
 
         Topic topic = question.getPlan().getTopic();
         model.put("topic", topic);
-
-        topicService.checkMember(topic, viewerAccount, model);
-
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
         model.put("questionForm", question);
 
         return "updateQuestionFormView";
@@ -120,8 +115,7 @@ public class QuestionController {
 
             Topic topic = question.getPlan().getTopic();
             model.put("topic", topic);
-
-            topicService.checkMember(topic, viewerAccount, model);
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
 
             return "updateQuestionFormView";
         }

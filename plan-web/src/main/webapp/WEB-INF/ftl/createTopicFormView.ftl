@@ -3,8 +3,7 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "commonGadgets.ftl" as commonGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
-<#assign mystyles=["/tissue/css/layout3.css"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in commonGadgets>
 
 <#assign title="explore" in commonGadgets>
 
@@ -24,7 +23,7 @@
     <div id="page-main-wrapper">
         <@spring.bind "topicForm.*" />
       
-        <form class="standalone-medium" method="post" action="<@spring.url '/topics/_create' />">
+        <form id="topicForm" method="post" action="<@spring.url '/topics/_create' />">
             <div class="error">
                 <@spring.showErrors "<br>" />
             </div>
@@ -36,19 +35,19 @@
                     <label for="title">
                         <@spring.message "Label.topicForm.title" />
                     </label>
-                    <@spring.formInput "topicForm.title" 'class="sum"'/>
+                    <@spring.formInput "topicForm.title" />
                 </li>
                 <li>
                     <label for="content">
                         <@spring.message "Label.topicForm.objective" />
                     </label>
-                   <@spring.formTextarea "topicForm.content" 'class="sum"' />
+                   <@spring.formTextarea "topicForm.content" />
                 </li>
                 <li>
                     <label for="tags">
                         <@spring.message "Label.topicForm.tags" />
                      </label>
-                    <@spring.formInput "topicForm.tags" 'class="sum"' />
+                    <@spring.formInput "topicForm.tags" />
                 </li>
 
                 <li>

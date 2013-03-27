@@ -102,32 +102,13 @@ public class TopicService extends ContentService {
         return postDao.getPagedPostsByType(topicId, type, page, size);
     }
 
-    /**
-     * utils
-    public void checkOwner(Topic topic, Account viewerAccount) {
-        Account ownerAccount = topic.getAccount();
-        if(!viewerAccount.equals(ownerAccount)) {
-            throw new IllegalAccessException("illegal access: " + topic.getId() + ", viewer: " + viewerAccount.getUsername());
-        }
-    }
-
-    public void checkActivePlan(Topic topic, Account viewerAccount) {
-        Plan activePlan = topic.getActivePlan();
-        if(activePlan == null) {
-            throw new IllegalArgumentException("no active plan for topic: " + topic.getId());
-        }
-        if(!activePlan.isOwner(viewerAccount.getId()) && !activePlan.isMember(viewerAccount.getId())) {
-            throw new IllegalArgumentException(viewerAccount.getUsername() + " is not owner or member for active plan in topic: " + topic.getId());
-        }
-    }
-     */
-
-    public void checkMember(Topic topic, Account viewerAccount, Map model) {
+    public Boolean isMember(Topic topic, Account viewerAccount) {
         Boolean isMember = false;
         Plan plan = topic.getActivePlan();
         if((plan != null) && (viewerAccount != null)) {
             isMember = planDao.isMember(plan.getId(), viewerAccount.getId());
         }
-        model.put("isMember", isMember);
+        return isMember;
+        //model.put("isMember", isMember);
     }
 }

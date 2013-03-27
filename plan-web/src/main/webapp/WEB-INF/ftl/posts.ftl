@@ -3,8 +3,7 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "commonGadgets.ftl" as commonGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in commonGadgets>
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
 <#assign title="topic" in commonGadgets>
@@ -24,13 +23,12 @@
 
     <div id="page-main-wrapper">
         <div id="page-main">
-            <div id="main-sidebar">
-                <@topicGadgets.showPlanSidebar />
-            </div>
-
            <div id="main-content">
                <@topicGadgets.showPosts />
                <@commonGadgets.showPager />
+           </div>
+           <div id="main-sidebar">
+                <@topicGadgets.showPlanSidebar />
            </div>
        </div>
     </div>
