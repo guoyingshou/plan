@@ -13,26 +13,29 @@
 
     <div id="page-main-wrapper">
         <div id="page-main">
-            <div id="main-content" class="layout3-content">
-                <ul id="content-topics">
-                    <#list topics as topic>
-                    <li>
-                        <div class="ts">
-                            <a href="/social/users/${topic.account.user.id?replace("#", "")}/posts">${topic.account.user.displayName}</a>
-                            [ <@site.showTimeBefore topic.timeBefore /> ]
-                        </div>
-                        <div class="title">
-                            <a href="/group/topics/${topic.id?replace("#", "")}/objective">${topic.title}</a>
-                        </div>
-                    </li>
-                    </#list>
-                </ul>
+            <div id="main-content">
+                <div id="content-topics">
+                    <ul class="topics">
+                        <#list topics as topic>
+                        <li>
+                            <div class="ts">
+                                <a href="/social/users/${topic.account.user.id?replace("#", "")}/posts">${topic.account.user.displayName}</a>
+                                [ <@site.showTimeBefore topic.timeBefore /> ]
+                            </div>
+                            <div>
+                                <a href="/group/topics/${topic.id?replace("#", "")}/objective">${topic.title}</a>
+                            </div>
+                        </li>
+                        </#list>
+                    </ul>
+                    <#if pager??>
+                        <@site.showPager />
+                    </#if>
+                </div>
 
-                <#if pager??>
-                <@site.showPager />
-                </#if>
-
-                <@topicGadgets.showPosts />
+                <div id="content-posts">
+                    <@topicGadgets.showPosts />
+                </div>
             </div>
 
             <div id="main-sidebar">
