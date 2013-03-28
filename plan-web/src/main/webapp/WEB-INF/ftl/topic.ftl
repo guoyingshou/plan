@@ -1,26 +1,15 @@
 <#import "spring.ftl" as spring />
-<#import "commonGadgets.ftl" as commonGadgets />
+<#import "siteGadgets.ftl" as site />
 <#import "topicGadgets.ftl" as topicGadgets />
-<#import "commonGadgets.ftl" as commonGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
-<#assign title="topic" in commonGadgets>
+<#assign title="topic" in site>
 
-<@commonGadgets.layout>
-    <div id="page-logo-wrapper">
-        <div id="page-logo">
-        <@topicGadgets.topicLogo />
-        </div>
-    </div>
+<@site.layout>
 
-    <div id="page-menu-wrapper">
-        <div id="page-menu">
-        <@topicGadgets.topicMenu />
-        </div>
-    </div>
+    <#include "topicHeader.ftl" />
 
     <div id="page-main-wrapper">
         <div id="page-main">
@@ -28,7 +17,7 @@
                <div class="ts">
                    <span>
                       ${topic.account.user.displayName}
-                      [ <@commonGadgets.showTimeBefore topic.timeBefore /> ]
+                      [ <@site.showTimeBefore topic.timeBefore /> ]
                    </span>
                </div>
                <div class="tags">
@@ -41,7 +30,7 @@
                </div>
 
                <#if !topic.deleted>
-               <@commonGadgets.deleteConfirmForm />
+               <@site.deleteConfirmForm />
                <#if viewerAccount?? && topic.isOwner(viewerAccount.id)>
                <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
                    <@spring.message 'Update.topic' />
@@ -66,4 +55,4 @@
 
        </div>
     </div>
-</@commonGadgets.layout>
+</@site.layout>

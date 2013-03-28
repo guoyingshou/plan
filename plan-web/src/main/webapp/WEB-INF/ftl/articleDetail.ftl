@@ -1,25 +1,16 @@
 <#import "spring.ftl" as spring />
-<#import "commonGadgets.ftl" as commonGadgets />
+<#import "siteGadgets.ftl" as site />
 <#import "topicGadgets.ftl" as topicGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
-<#assign title="post detail" in commonGadgets>
+<#assign title="post detail" in site>
 
-<@commonGadgets.layout>
-    <div id="page-logo-wrapper">
-        <div id="page-logo">
-            <@topicGadgets.topicLogo />
-        </div>
-    </div>
+<@site.layout>
 
-    <div id="page-menu-wrapper">
-        <div id="page-menu">
-            <@topicGadgets.topicMenu />
-        </div>
-    </div>
+    <#include "topicHeader.ftl" />
 
     <div id="page-main-wrapper">
         <div id="page-main">
@@ -29,7 +20,7 @@
                         <a href="/social/users/${article.account.user.id?replace("#", "")}/posts">
                             ${article.account.user.displayName} 
                         </a>
-                        [ <@commonGadgets.showTimeBefore article.timeBefore /> ] 
+                        [ <@site.showTimeBefore article.timeBefore /> ] 
 
                         <@sec.authorize access="hasRole('ROLE_ADMIN')">
                         <a class="delete action" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
@@ -74,7 +65,7 @@
                            <a href="/social/users/${msg.account.user.id?replace("#","")}/posts">
                                ${msg.account.user.displayName}  
                            </a>
-                           [ <@commonGadgets.showTimeBefore msg.timeBefore /> ]
+                           [ <@site.showTimeBefore msg.timeBefore /> ]
                        </div>
 
                        <div id="message-${msg.id?replace("#", "")?replace(":", "-")}-content" class="item-content">
@@ -106,7 +97,7 @@
                                  <a href="/social/users/${reply.account.user.id?replace("#", "")}/posts">
                                      ${reply.account.user.displayName} 
                                  </a>
-                                 [ <@commonGadgets.showTimeBefore reply.timeBefore /> ]
+                                 [ <@site.showTimeBefore reply.timeBefore /> ]
                              </div>
                             <div id="message-reply-${reply.id?replace("#", "")?replace(":", "-")}-content" class="item-content">
                                  ${reply.content}
@@ -134,12 +125,12 @@
               <#if !(topic.deleted || article.deleted) && isMember>
               <@topicGadgets.messageForm />
               <@topicGadgets.replyForm />
-              <@commonGadgets.deleteConfirmForm />
+              <@site.deleteConfirmForm />
               <#else>
               <@sec.authorize access="hasRole('ROLE_ADMIN')">
               <@topicGadgets.messageForm />
               <@topicGadgets.replyForm />
-              <@commonGadgets.deleteConfirmForm />
+              <@site.deleteConfirmForm />
               </@sec.authorize>
               </#if>
             </div>
@@ -150,4 +141,4 @@
 
         </div>
     </div>
-</@commonGadgets.layout>
+</@site.layout>

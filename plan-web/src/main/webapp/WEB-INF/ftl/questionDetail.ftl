@@ -1,26 +1,14 @@
 <#import "spring.ftl" as spring />
-<#import "commonGadgets.ftl" as commonGadgets />
+<#import "siteGadgets.ftl" as site />
 <#import "topicGadgets.ftl" as topicGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in commonGadgets>
-
+<#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
+<#assign title="question" in site />
 
-<#assign title="question" in commonGadgets />
+<@site.layout>
 
-<@commonGadgets.layout>
-    <div id="page-logo-wrapper">
-        <div id="page-logo">
-            <@topicGadgets.topicLogo />
-        </div>
-    </div>
-
-    <div id="page-menu-wrapper">
-        <div id="page-menu">
-            <@topicGadgets.topicMenu />
-        </div>
-    </div>
+    <#include "topicHeader.ftl" />
 
     <div id="page-main-wrapper">
         <div id="page-main">
@@ -33,7 +21,7 @@
                         <a href="/social/users/${question.account.user.id?replace("#","")}/questions">
                             ${question.account.user.displayName} 
                         </a>
-                        [ <@commonGadgets.showTimeBefore question.timeBefore /> ]
+                        [ <@site.showTimeBefore question.timeBefore /> ]
                         <#if !(topic.deleted || question.deleted)>
                         <@sec.authorize access="hasRole('ROLE_ADMIN')">
                         <a class="delete  action" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />">
@@ -77,7 +65,7 @@
                            <a href="/social/users/${questionComment.account.user.id?replace("#","")}/questions">
                                ${questionComment.account.user.displayName} 
                            </a>
-                           [ <@commonGadgets.showTimeBefore questionComment.timeBefore /> ]
+                           [ <@site.showTimeBefore questionComment.timeBefore /> ]
                        </div>
 
                        <div id="question-comment-${questionComment.id?replace("#","")?replace(":", "-")}-content" class="item-content">
@@ -107,7 +95,7 @@
                              <a href="/social/users/${answer.account.user.id?replace("#","")}/questions">
                                  ${answer.account.user.displayName} 
                              </a>
-                             [ <@commonGadgets.showTimeBefore answer.timeBefore /> ]
+                             [ <@site.showTimeBefore answer.timeBefore /> ]
                          </div>
                          <div id="answer-${answer.id?replace("#", "")?replace(":", "-")}-content" class="item-content">
                              ${answer.content}
@@ -138,7 +126,7 @@
                                 <a href="/social/users/${comment.account.user.id?replace("#","")}/questions">
                                     ${comment.account.user.displayName} 
                                 </a>
-                                [ <@commonGadgets.showTimeBefore comment.timeBefore /> ]
+                                [ <@site.showTimeBefore comment.timeBefore /> ]
                             </div>
 
                            <div id="answer-comment-${comment.id?replace("#", "")?replace(":", "-")}-content" class="item-content">
@@ -168,18 +156,18 @@
                <@topicGadgets.questionCommentForm />
                <@topicGadgets.answerForm />
                <@topicGadgets.answerCommentForm />
-               <@commonGadgets.deleteConfirmForm />
+               <@site.deleteConfirmForm />
                <#else>
                <@sec.authorize access="hasRole('ROLE_ADMIN')">
                <@topicGadgets.questionCommentForm />
                <@topicGadgets.answerForm />
                <@topicGadgets.answerCommentForm />
-               <@commonGadgets.deleteConfirmForm />
+               <@site.deleteConfirmForm />
                </@sec.authorize>
                </#if>
             </div>
         </div>
     </div>
-</@commonGadgets.layout>
+</@site.layout>
 
 

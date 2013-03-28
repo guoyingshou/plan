@@ -1,24 +1,12 @@
 <#import "spring.ftl" as spring />
-<#import "userGadgets.ftl" as userGadgets />
-<#import "topicGadgets.ftl" as topicGadgets />
-<#import "commonGadgets.ftl" as commonGadgets />
+<#import "siteGadgets.ftl" as site />
 
-<#assign myscripts=["/ckeditor/ckeditor.js"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in site>
+<#assign title="explore" in site>
 
-<#assign title="explore" in commonGadgets>
+<@site.layout>
 
-<@commonGadgets.layout>
-    <div id="page-logo-wrapper">
-        <div id="page-logo">
-            <@topicGadgets.topicLogo />
-        </div>
-    </div>
-
-    <div id="page-menu-wrapper">
-        <div id="page-menu">
-            <@topicGadgets.topicMenu />
-        </div>
-    </div>
+    <#include "topicHeader.ftl" />
 
     <div id="page-main-wrapper">
         <@spring.bind "topicForm.*" />
@@ -65,4 +53,4 @@
             });
         </script>
    </div>
-</@commonGadgets.layout>
+</@site.layout>

@@ -1,25 +1,14 @@
 <#import "spring.ftl" as spring />
-<#import "commonGadgets.ftl" as commonGadgets />
+<#import "siteGadgets.ftl" as site />
 <#import "topicGadgets.ftl" as topicGadgets />
 <#import "userGadgets.ftl" as userGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in commonGadgets>
-<#assign mystyles=["/tissue/css/layout2.css"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in site>
+<#assign title="tags" in site>
 
-<#assign title="tags" in commonGadgets>
+<@site.layout>
 
-<@commonGadgets.layout>
-    <div id="page-logo-wrapper">
-        <div id="page-logo">
-            <@topicGadgets.exploreLogo />
-        </div>
-    </div>
-
-    <div id="page-menu-wrapper">
-        <div id="page-menu">
-            <@topicGadgets.exploreMenu/>
-        </div>
-    </div>
+    <#include "exploreHeader.ftl" />
 
     <div id="page-main-wrapper">
         <div id="page-main">
@@ -37,4 +26,4 @@
         </div>
     </div>
 
-</@commonGadgets.layout>
+</@site.layout>

@@ -57,6 +57,7 @@ public class TopicController {
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         
         if(result.hasErrors()) {
+            model.put("selected", "topics");
             return "createTopicFormView";
         }
 
@@ -83,6 +84,9 @@ public class TopicController {
     public String updateTopic(@PathVariable("topicId") Topic topic, @Valid TopicForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
+            model.put("selected", "objective");
+            model.put("topic", topic);
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
             return "updateTopicFormView";
         }
 

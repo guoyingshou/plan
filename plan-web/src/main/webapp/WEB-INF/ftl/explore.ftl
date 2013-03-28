@@ -1,24 +1,15 @@
 <#import "spring.ftl" as spring />
 <#import "userGadgets.ftl" as userGadgets />
 <#import "topicGadgets.ftl" as topicGadgets />
-<#import "commonGadgets.ftl" as commonGadgets />
+<#import "siteGadgets.ftl" as site />
 
-<#assign myscripts=["/ckeditor/ckeditor.js"] in commonGadgets>
+<#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 
-<#assign title="explore" in commonGadgets>
+<#assign title="explore" in site>
 
-<@commonGadgets.layout>
-    <div id="page-logo-wrapper">
-        <div id="page-logo">
-            <@topicGadgets.exploreLogo />
-        </div>
-    </div>
+<@site.layout>
 
-    <div id="page-menu-wrapper">
-        <div id="page-menu">
-            <@topicGadgets.exploreMenu />
-        </div>
-    </div>
+    <#include "exploreHeader.ftl" />
 
     <div id="page-main-wrapper">
         <div id="page-main">
@@ -28,7 +19,7 @@
                     <li>
                         <div class="ts">
                             <a href="/social/users/${topic.account.user.id?replace("#", "")}/posts">${topic.account.user.displayName}</a>
-                            [ <@commonGadgets.showTimeBefore topic.timeBefore /> ]
+                            [ <@site.showTimeBefore topic.timeBefore /> ]
                         </div>
                         <div class="title">
                             <a href="/group/topics/${topic.id?replace("#", "")}/objective">${topic.title}</a>
@@ -38,7 +29,7 @@
                 </ul>
 
                 <#if pager??>
-                <@commonGadgets.showPager />
+                <@site.showPager />
                 </#if>
 
                 <@topicGadgets.showPosts />
@@ -50,4 +41,4 @@
 
         </div>
    </div>
-</@commonGadgets.layout>
+</@site.layout>
