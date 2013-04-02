@@ -8,6 +8,7 @@ import com.tissue.plan.Topic;
 import com.tissue.plan.Post;
 import com.tissue.plan.services.ExploreService;
 import com.tissue.plan.services.TopicService;
+import com.tissue.plan.services.PlanService;
 import com.tissue.plan.services.PostService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +40,16 @@ public class ExploreController {
     private TopicService topicService;
 
     @Autowired
+    private PlanService planService;
+
+    @Autowired
     private PostService postService;
 
     @RequestMapping("/explore")
     public String exploreTrending(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "trending");
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         List<Topic> topics = topicService.getTrendingTopics(15);
         model.put("topics", topics);
@@ -63,6 +68,7 @@ public class ExploreController {
     public String exploreFeatured(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "featured");
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         List<Topic> topics = topicService.getFeaturedTopics(15);
         model.put("topics", topics);
@@ -81,6 +87,7 @@ public class ExploreController {
     public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "topics");
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;
@@ -105,6 +112,7 @@ public class ExploreController {
     public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "tags");
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 15 : size;
@@ -129,8 +137,9 @@ public class ExploreController {
     public String exploreTags(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "tags");
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
-        List<String> tags = topicService.getTopicTags();
+        Set<String> tags = topicService.getTopicTags();
         model.put("tags", tags);
 
         String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();

@@ -43,14 +43,18 @@ public class ArticleController {
     private TopicService topicService;
 
     @Autowired
+    private PlanService planService;
+
+    @Autowired
     private ArticleService articleService;
 
     @RequestMapping(value="/topics/{topicId}/articles/_create")
     public String newPost(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "all");
-        model.put("isMember", topicService.isMember(topic, viewerAccount));
         model.put("topic", topic);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
         model.put("articleForm", new PostForm());
 
         return "createArticleFormView";
@@ -64,6 +68,8 @@ public class ArticleController {
             model.put("topic", topic);
 
             model.put("isMember", topicService.isMember(topic, viewerAccount));
+            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+
             return "createArticleFormView";
         }
 
@@ -90,6 +96,7 @@ public class ArticleController {
         model.put("topic", topic);
 
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         return "articleDetail";
     }
@@ -102,6 +109,7 @@ public class ArticleController {
         Topic topic = article.getPlan().getTopic();
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         model.put("articleForm", article);
         return "updateArticleFormView";
@@ -116,6 +124,7 @@ public class ArticleController {
             Topic topic = article.getPlan().getTopic();
             model.put("topic", topic);
             model.put("isMember", topicService.isMember(topic, viewerAccount));
+            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
             return "updateArticleFormView";
         }

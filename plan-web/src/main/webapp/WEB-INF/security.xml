@@ -60,6 +60,9 @@
 
     <bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
         <property name="loginFormUrl" value="http://www.tissue.com/social/signin"/>
+        <!--
+        <property name="loginFormUrl" value="${security.loginFormUrl}"/>
+        -->
     </bean>
 
     <bean id="accessDeniedHandler" class="org.springframework.security.web.access.AccessDeniedHandlerImpl">

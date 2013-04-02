@@ -13,6 +13,7 @@
            http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 		   
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
+
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" p:basenames="nav, logo, menu, timestamp, topic, topicForm" p:defaultEncoding="utf-8"/>
  
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
@@ -33,15 +34,10 @@
 	    <property name="suffix" value=".ftl"/>
 	    <property name="exposeSpringMacroHelpers" value="true"/>
     </bean>
-    
-    <mvc:resources mapping="/resources/**" location="/" />
 
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
-                <!--
-                <ref bean="tagsConverter" />
-                -->
                 <ref bean="idToTopicConverter" />
                 <ref bean="idToPlanConverter" />
                 <ref bean="idToArticleConverter" />
@@ -55,12 +51,12 @@
         </property>
     </bean>
  
+    <mvc:resources mapping="/resources/**" location="/" />
     <mvc:annotation-driven conversion-service="conversionService" />
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" /> 
     </mvc:interceptors>
 
     <import resource="plan-controller.xml" />
-    <import resource="commons-controller.xml" />
 
 </beans>

@@ -1,4 +1,4 @@
-package com.tissue.commons.controllers;
+package com.tissue.plan.web.spring.controllers;
 
 import org.springframework.stereotype.Controller;
 

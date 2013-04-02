@@ -1,5 +1,6 @@
 package com.tissue.plan.services;
 
+import com.tissue.core.Account;
 import com.tissue.plan.command.PlanCommand;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Plan;
@@ -46,12 +47,6 @@ public class PlanService {
     }
 
     /**
-    public Boolean isMember(String planId, String accountId) {
-        return planDao.isMember(planId, accountId);
-    }
-    */
-
-    /**
      * topic
      */
     public Topic getTopic(String planId) {
@@ -67,6 +62,21 @@ public class PlanService {
 
     public List<Post> getPagedPosts(String planId, int page, int size) {
         return postDao.getPagedPostsByPlan(planId, page, size);
+    }
+
+    public int getViewerActivePlansCount(Account viewerAccount) {
+        if(viewerAccount == null) {
+            return 0;
+        }
+
+        int count = 0;
+        List<Plan> plans = planDao.getPlansByAccount(viewerAccount.getId());
+        for(Plan plan : plans) {
+            if(plan.isActive()) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }

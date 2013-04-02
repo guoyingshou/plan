@@ -42,14 +42,18 @@ public class QuestionController {
     private TopicService topicService;
 
     @Autowired
+    private PlanService planService;
+
+    @Autowired
     private QuestionService questionService;
 
     @RequestMapping(value="/topics/{topicId}/questions/_create")
     public String createQustionForm(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         model.put("selected", "question");
-        model.put("isMember", topicService.isMember(topic, viewerAccount));
         model.put("topic", topic);
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         model.put("questionForm", new PostForm());
         return "createQuestionFormView";
@@ -63,6 +67,7 @@ public class QuestionController {
             model.put("topic", topic);
 
             model.put("isMember", topicService.isMember(topic, viewerAccount));
+            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
             return "createQuestionFormView";
         }
@@ -89,6 +94,7 @@ public class QuestionController {
         model.put("question", question);
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         return "questionDetail";
     }
@@ -101,6 +107,8 @@ public class QuestionController {
         Topic topic = question.getPlan().getTopic();
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+
         model.put("questionForm", question);
 
         return "updateQuestionFormView";
@@ -116,6 +124,7 @@ public class QuestionController {
             Topic topic = question.getPlan().getTopic();
             model.put("topic", topic);
             model.put("isMember", topicService.isMember(topic, viewerAccount));
+            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
             return "updateQuestionFormView";
         }

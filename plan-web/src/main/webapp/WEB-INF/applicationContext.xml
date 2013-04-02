@@ -14,6 +14,11 @@
      http://www.springframework.org/schema/util
      http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
+     <!--
+     <context:annotation-config />
+     <context:property-placeholder />
+     -->
+
      <bean id="dataSource" class="com.tissue.core.util.OrientDataSource" destroy-method="destroy">
          <constructor-arg value="remote:www.tissue.com/test1" />
          <constructor-arg value="guo" />
@@ -22,7 +27,7 @@
          <constructor-arg value="40" />
      </bean>
 
-  <import resource="dao.xml" />
-  <import resource="security.xml" />
+    <import resource="dao.xml" />
+    <import resource="security.xml" />
 
 </beans>

@@ -9,6 +9,7 @@ import com.tissue.plan.Post;
 import com.tissue.plan.Question;
 import com.tissue.plan.web.model.TopicForm;
 import com.tissue.plan.services.TopicService;
+import com.tissue.plan.services.PlanService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -41,13 +42,16 @@ public class TopicController {
     @Autowired
     private TopicService topicService;
 
+    @Autowired
+    private PlanService planService;
 
     @RequestMapping(value="/topics/_create")
-    public String showTopicFormView(Map model) {
+    public String showTopicFormView(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         model.put("selected", "topics");
         model.put("topicForm", new TopicForm());
-        return "createTopicFormView";
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
+        return "createTopicFormView";
     }
 
     /**
@@ -72,6 +76,8 @@ public class TopicController {
         model.put("selected", "objective");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+
         model.put("topicForm", topic);
 
         return "updateTopicFormView";
@@ -114,8 +120,8 @@ public class TopicController {
 
         model.put("selected", "objective");
         model.put("topic", topic);
-
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         return "topic";
     }
@@ -129,6 +135,7 @@ public class TopicController {
         model.put("selected", "all");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -151,6 +158,7 @@ public class TopicController {
         model.put("selected", "concept");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -173,6 +181,7 @@ public class TopicController {
         model.put("selected", "note");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -195,6 +204,7 @@ public class TopicController {
         model.put("selected", "tutorial");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
@@ -217,6 +227,7 @@ public class TopicController {
         model.put("selected", "question");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;

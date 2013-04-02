@@ -49,6 +49,7 @@ public class PlanController {
         model.put("selected", "objective");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         model.put("planForm", new PlanForm());
         return "createPlanFormView";
@@ -88,6 +89,7 @@ public class PlanController {
         Topic topic = plan.getTopic();
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
+        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;

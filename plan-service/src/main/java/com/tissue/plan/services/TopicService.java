@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
 
 @Component
 public class TopicService extends ContentService {
@@ -71,7 +72,7 @@ public class TopicService extends ContentService {
         return topicDao.getPagedTopics(page, size);
     }
 
-    public List<String> getTopicTags() {
+    public Set<String> getTopicTags() {
         return topicDao.getTopicTags();
     }
 
@@ -109,6 +110,6 @@ public class TopicService extends ContentService {
             isMember = planDao.isMember(plan.getId(), viewerAccount.getId());
         }
         return isMember;
-        //model.put("isMember", isMember);
     }
+
 }
