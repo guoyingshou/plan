@@ -55,17 +55,14 @@
                    <a class="pop" data-form-selector="#questionCommentForm" data-editor-name="questionComment-editor" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/questionComments/_create' />" href="#">
                            <@spring.message 'Comment.question' />
                    </a>
-                   <a class="pop" data-form-selector="#answerForm" data-editor-name="answer-editor" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/answers/_create' />" href="#">
-                           <@spring.message 'Answer.question' />
-                   </a>
                 </div>
                 </#if>
 
                 <#if question.comments??>
                 <ul class="question-comments">
                    <#list question.comments as questionComment>
-                   <li class="question-comment">
-                       <div id="question-comment-${questionComment.id?replace("#","")?replace(":","-")}">
+                   <li>
+                       <div class="question-comment" id="question-comment-${questionComment.id?replace("#","")?replace(":","-")}">
                            <div class="owner">
                                <span class="ts">
                                    <a href="/social/users/${questionComment.account.user.id?replace("#","")}/posts">
@@ -78,9 +75,6 @@
                                <span class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
                                        <@spring.message 'Delete.comment' />
-                                   </a>
-                                   <a class="pop" data-form-selector="#questionCommentForm" data-editor-name="questionComment-editor" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_update' />" data-target-selector="#question-comment-${questionComment.id?replace('#', '')?replace(':', '-')} .content" href="#">
-                                       <@spring.message 'Update.comment' />
                                    </a>
                                </span>
                                </#if>
@@ -95,11 +89,33 @@
                 </ul>
                 </#if>
 
+                <#if !(topic.deleted || question.deleted) && isMember>
+                <div class="member">
+                   <form id="answerForm" method="post" action="<@spring.url '/questions/${question.id?replace("#", "")}/answers/_create' />">
+                       <legend>
+                           Answer
+                       </legend>
+                       <ul>
+                           <li>
+                               <textarea id="answer-editor" name="content"></textarea>
+                           </li>
+                           <li>
+                               <input type="submit" value="submit"/>
+                           </li>
+                       </ul>
+                    </form>
+                    <script type="text/javascript">
+                        CKEDITOR.replace("answer-editor");
+                    </script>
+                </div>
+                </#if>
+
+
                 <#if question.answers??>
                 <ul class="answers">
                      <#list question.answers as answer>
-                     <li class="answer">
-                         <div id="answer-${answer.id?replace("#","")?replace(":","-")}">
+                     <li>
+                         <div class="answer" id="answer-${answer.id?replace("#","")?replace(":","-")}">
                              <div class="owner">
                                  <span class="ts">
                                      <a href="/social/users/${answer.account.user.id?replace("#","")}/posts">
@@ -112,9 +128,6 @@
                                  <span class="owner-action">
                                      <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
                                          <@spring.message 'Delete.answer' />
-                                     </a>
-                                     <a class="pop" data-form-selector="#answerForm" data-editor-name="answer-editor" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_update' />" data-target-selector="#answer-${answer.id?replace('#', '')?replace(':', '-')} .content" href="#">
-                                         <@spring.message 'Update.answer' />
                                      </a>
                                  </span>
                                  </#if>
@@ -136,8 +149,8 @@
                          <#if answer.comments??>
                          <ul class="answer-comments">
                              <#list answer.comments as comment>
-                             <li class="answer-comment">
-                                 <div id="answer-comment-${comment.id?replace('#','')?replace(':','-')}">
+                             <li>
+                                 <div class="answer-comment" id="answer-comment-${comment.id?replace('#','')?replace(':','-')}">
                                      <div class="owner">
                                          <span class="ts">
                                              <a href="/social/users/${comment.account.user.id?replace('#','')}/posts">
@@ -150,9 +163,6 @@
                                          <span class="owner-action">
                                              <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answerComments/${comment.id?replace("#","")}/_delete' />" href="#">
                                                  <@spring.message 'Delete.comment' />
-                                             </a>
-                                             <a class="pop" data-form-selector="#answerCommentForm" data-editor-name="answerComment-editor" data-action="<@spring.url '/answerComments/${comment.id?replace("#", "")}/_update'/>" data-target-selector="#answer-comment-${comment.id?replace('#', '')?replace(':', '-')} .content" href="#">
-                                                 <@spring.message 'Update.comment' />
                                              </a>
                                          </span>
                                          </#if>
@@ -173,13 +183,11 @@
 
                <#if !(topic.deleted || question.deleted) && isMember>
                <@topicGadgets.questionCommentForm />
-               <@topicGadgets.answerForm />
                <@topicGadgets.answerCommentForm />
                <@site.confirmForm />
                <#else>
                <@sec.authorize access="hasRole('ROLE_ADMIN')">
                <@topicGadgets.questionCommentForm />
-               <@topicGadgets.answerForm />
                <@topicGadgets.answerCommentForm />
                <@site.confirmForm />
                </@sec.authorize>

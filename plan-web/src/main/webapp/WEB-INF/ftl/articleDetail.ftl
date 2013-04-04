@@ -29,7 +29,7 @@
                             [ <@site.showTimeBefore article.timeBefore /> ] 
                         </span>
 
-                        <#if article.isOwner(viewerAccount.id)>
+                        <#if viewerAccount?? && article.isOwner(viewerAccount.id)>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
                                 <@spring.message 'Delete.article' />
@@ -54,19 +54,32 @@
                     </div>
                 </div>
 
-                <#if !(topic.deleted || article.deleted) && isMember>
+                <#if !(topic.deleted || article.deleted) && viewerAccount?? && isMember>
                 <div class="member">
-                   <a class="pop" data-editor-name="message-editor" data-form-selector="#messageForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#","")}/messages/_create' />" href="#">
-                       <@spring.message 'AddMessage.article' />
-                   </a>
+                    <form method="post" action="<@spring.url '/articles/${article.id?replace("#","")}/messages/_create' />">
+                        <legend>
+                            Message
+                        </legend>
+                        <ul>
+                            <li>
+                                <textarea id="message-editor" name="content"></textarea>
+                            </li>
+                            <li>
+                                <input type="submit" value="submit"/>
+                            </li>
+                        </ul>
+                   </form>
+                   <script type="text/javascript">
+                       CKEDITOR.replace("message-editor");
+                   </script>
                 </div>
                 </#if>
 
                 <#if article.messages??>
                 <ul class="messages">
                    <#list article.messages as msg>
-                   <li class="message">
-                       <div id="message-${msg.id?replace("#","")?replace(":","-")}">
+                   <li>
+                       <div class="message" id="message-${msg.id?replace("#","")?replace(":","-")}">
                            <div class="owner">
                                <span class="ts">
                                    <a href="/social/users/${msg.account.user.id?replace("#","")}/posts">
@@ -75,13 +88,10 @@
                                    [ <@site.showTimeBefore msg.timeBefore /> ]
                                </span>
 
-                               <#if msg.isOwner(viewerAccount.id)>
+                               <#if viewerAccount?? && msg.isOwner(viewerAccount.id)>
                                <span class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
                                        <@spring.message 'Delete.message' />
-                                   </a>
-                                   <a class="pop" data-editor-name="message-editor" data-form-selector="#messageForm" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/_update' />" data-target-selector="#message-${msg.id?replace('#', '')?replace(':', '-')} .content" data-dialog-width="650" href="#">
-                                       <@spring.message 'Update.message' />
                                    </a>
                                </span>
                                </#if>
@@ -103,8 +113,8 @@
                        <#if msg.replies??>
                        <ul class="replies">
                            <#list msg.replies as reply>
-                           <li class="reply">
-                               <div id="reply-${reply.id?replace('#','')?replace(':','-')}">
+                           <li>
+                               <div class="reply" id="reply-${reply.id?replace('#','')?replace(':','-')}">
                                    <div class="owner"> 
                                        <span class="ts">
                                            <a href="/social/users/${reply.account.user.id?replace('#', '')}/posts">
@@ -113,13 +123,10 @@
                                            [ <@site.showTimeBefore reply.timeBefore /> ]
                                        </span>
 
-                                       <#if !(topic.deleted || article.deleted) && reply.isOwner(viewerAccount.id)>
+                                       <#if !(topic.deleted || article.deleted) && viewerAccount?? && reply.isOwner(viewerAccount.id)>
                                        <span class="owner-action">
                                            <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
                                                <@spring.message 'Delete.reply' />
-                                           </a>
-                                           <a class="pop" data-form-selector="#replyForm" data-editor-name="reply-editor" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_update' />" data-target-selector='#reply-${reply.id?replace("#","")?replace(":", "-")} .content' href="#">
-                                               <@spring.message 'Update.reply' />
                                            </a>
                                        </span>
                                        </#if>
@@ -139,12 +146,10 @@
                </#if>
 
               <#if !(topic.deleted || article.deleted) && isMember>
-              <@topicGadgets.messageForm />
               <@topicGadgets.replyForm />
               <@site.confirmForm />
               <#else>
               <@sec.authorize access="hasRole('ROLE_ADMIN')">
-              <@topicGadgets.messageForm />
               <@topicGadgets.replyForm />
               <@site.confirmForm />
               </@sec.authorize>
