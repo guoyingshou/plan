@@ -30,7 +30,7 @@
                </div>
 
                <#if !topic.deleted>
-               <@site.deleteConfirmForm />
+               <@site.confirmForm />
                <#if viewerAccount?? && topic.isOwner(viewerAccount.id)>
                <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
                    <@spring.message 'Update.topic' />

@@ -11,26 +11,26 @@
     <div id="page-main-wrapper">
         <form id="createPlanForm" action="<@spring.url '/topics/${topic.id?replace("#", "")}/plans/_create' />" method="post">
             <legend>
-                <@spring.message 'Legend.planForm' />
+                <@spring.message 'planForm' />
             </legend>
 
             <ul>
                 <li>
                     <label>
                         <input type="radio" name="duration" checked value="1" />
-                        <@spring.message 'Label.planForm.duration1' />
+                        <@spring.message 'planForm.duration1' />
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" name="duration" value="3" />
-                        <@spring.message 'Label.planForm.duration2' />
+                        <@spring.message 'planForm.duration2' />
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" name="duration" value="6" />
-                        <@spring.message 'Label.planForm.duration3' />
+                        <@spring.message 'planForm.duration3' />
                     </label>
                 </li>
                 <li>

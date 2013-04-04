@@ -19,7 +19,7 @@
 
                <fieldset>
                    <legend>
-                       <@spring.message "Legend.articleForm" />
+                       <@spring.message "articleForm" />
                    </legend>
 
                    <ul>
@@ -28,13 +28,13 @@
                        </li>
                        <li>
                            <label for="title">
-                               <@spring.message "Label.articleForm.title" />
+                               <@spring.message "articleForm.title" />
                            </label>
                            <@spring.formInput "articleForm.title" 'class="sum"' />
                        </li>
                        <li>
                            <label for="content">
-                               <@spring.message "Label.articleForm.content" />
+                               <@spring.message "articleForm.content" />
                            </label>
                            <@spring.formTextarea "articleForm.content" 'class="sum"' />
                        </li>

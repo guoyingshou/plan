@@ -18,7 +18,7 @@
               </div>
               <fieldset>
                   <legend>
-                      <@spring.message "Legend.questionForm" />
+                      <@spring.message "questionForm" />
                   </legend>
 
                   <ul>
@@ -28,13 +28,13 @@
                       </li>
                       <li>
                           <label for="title">
-                              <@spring.message "Label.questionForm.title" />
+                              <@spring.message "questionForm.title" />
                           </label>
                           <@spring.formInput "questionForm.title" 'class="sum"' />
                       </li>
                       <li>
                           <label for="content">
-                             <@spring.message "Label.questionForm.content" />
+                             <@spring.message "questionForm.content" />
                           </label>
                           <@spring.formTextarea "questionForm.content" 'class="sum"' />
                       </li>

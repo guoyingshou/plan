@@ -4,7 +4,7 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 
-<#assign title="topic" in site>
+<#assign title="Create Question" in site>
 
 <@site.layout>
     <#include "topicHeader.ftl" />
@@ -19,19 +19,19 @@
               </div>
               <fieldset>
                   <legend>
-                      <@spring.message "Legend.questionForm" />
+                      <@spring.message "questionForm" />
                   </legend>
 
                   <ul>
                       <li>
                           <label for="title">
-                              <@spring.message "Label.questionForm.title" />
+                              <@spring.message "questionForm.title" />
                           </label>
                           <@spring.formInput "questionForm.title" />
                       </li>
                       <li>
                           <label for="content">
-                             <@spring.message "Label.questionForm.content" />
+                             <@spring.message "questionForm.content" />
                           </label>
                           <@spring.formTextarea "questionForm.content" />
                       </li>

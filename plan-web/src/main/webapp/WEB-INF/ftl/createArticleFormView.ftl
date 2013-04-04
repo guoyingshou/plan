@@ -22,38 +22,38 @@
 
                <fieldset class="post-type">
                    <legend>
-                       <@spring.message 'Legend.articleForm.type' />
+                       <@spring.message 'articleForm.type' />
                    </legend>
 
                    <label>
-                      <@spring.message 'Label.articleForm.concept' />
+                      <@spring.message 'articleForm.concept' />
                       <input type="radio" name="type" value="concept" />
                    </label>
                    <label>
-                       <@spring.message 'Label.articleForm.note' />
+                       <@spring.message 'articleForm.note' />
                        <input type="radio" name="type" value="note" />
                    </label>
                    <label>
-                       <@spring.message 'Label.articleForm.tutorial' />
+                       <@spring.message 'articleForm.tutorial' />
                        <input type="radio" name="type" value="tutorial" />
                    </label>
                </fieldset>
 
                <fieldset>
                    <legend>
-                       <@spring.message "Legend.articleForm" />
+                       <@spring.message "articleForm" />
                    </legend>
 
                    <ul>
                        <li>
                            <label for="title">
-                               <@spring.message "Label.articleForm.title" />
+                               <@spring.message "articleForm.title" />
                            </label>
                            <@spring.formInput "articleForm.title" />
                        </li>
                        <li>
                            <label for="content">
-                               <@spring.message "Label.articleForm.content" />
+                               <@spring.message "articleForm.content" />
                            </label>
                            <@spring.formTextarea "articleForm.content" />
                        </li>

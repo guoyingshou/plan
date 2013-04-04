@@ -3,7 +3,7 @@
 <#import "siteGadgets.ftl" as site />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
-<#assign title="explore" in site>
+<#assign title = "Create Topic"  in site>
 
 <@site.layout>
     <#include "exploreHeader.ftl" />
@@ -16,24 +16,24 @@
                 <@spring.showErrors "<br>" />
             </div>
             <legend>
-                <@spring.message "Legend.topicForm" />
+                <@spring.message "topicForm" />
             </legend>
             <ul>
                 <li>
                     <label for="title">
-                        <@spring.message "Label.topicForm.title" />
+                        <@spring.message "topicForm.title" />
                     </label>
                     <@spring.formInput "topicForm.title" />
                 </li>
                 <li>
                     <label for="content">
-                        <@spring.message "Label.topicForm.objective" />
+                        <@spring.message "topicForm.content" />
                     </label>
                    <@spring.formTextarea "topicForm.content" />
                 </li>
                 <li>
                     <label for="tags">
-                        <@spring.message "Label.topicForm.tags" />
+                        <@spring.message "topicForm.tags" />
                      </label>
                     <@spring.formInput "topicForm.tags" />
                 </li>

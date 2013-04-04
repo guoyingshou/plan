@@ -8,12 +8,14 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class PostForm extends ContentForm implements PostCommand {
 
     @NotNull
     @NotEmpty
+    @Size(min=3, max=32)
     private String title;
     
     @NotNull

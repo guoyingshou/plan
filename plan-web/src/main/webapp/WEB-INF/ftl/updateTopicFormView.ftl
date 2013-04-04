@@ -16,7 +16,7 @@
                 <@spring.showErrors "<br>" />
             </div>
             <legend>
-                <@spring.message "Legend.topicForm" />
+                <@spring.message "topicForm" />
             </legend>
             <ul>
                 <li>
@@ -24,21 +24,21 @@
                 </li>
                 <li>
                     <label for="title">
-                        <@spring.message "Label.topicForm.title" />
+                        <@spring.message "topicForm.title" />
                     </label>
-                    <@spring.formInput "topicForm.title" 'class="sum"'/>
+                    <@spring.formInput "topicForm.title"/>
                 </li>
                 <li>
                     <label for="content">
-                        <@spring.message "Label.topicForm.objective" />
+                        <@spring.message "topicForm.content" />
                     </label>
-                   <@spring.formTextarea "topicForm.content" 'class="sum"' />
+                   <@spring.formTextarea "topicForm.content" />
                 </li>
                 <li>
                     <label for="tags">
-                        <@spring.message "Label.topicForm.tags" />
+                        <@spring.message "topicForm.tags" />
                      </label>
-                    <@spring.formInput "topicForm.tags" 'class="sum"' />
+                    <@spring.formInput "topicForm.tags" />
                 </li>
 
                 <li>

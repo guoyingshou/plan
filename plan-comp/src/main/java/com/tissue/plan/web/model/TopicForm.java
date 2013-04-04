@@ -6,6 +6,7 @@ import com.tissue.plan.command.TopicCommand;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -16,6 +17,7 @@ public class TopicForm implements TopicCommand {
 
     @NotNull
     @NotEmpty
+    @Size(min=3, max=32)
     private String title;
 
     @NotNull

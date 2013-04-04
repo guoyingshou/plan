@@ -21,114 +21,132 @@
                         </#if>
                     </h3>
 
-                    <div class="ts">
-                        <a href="/social/users/${article.account.user.id?replace("#", "")}/posts">
-                            ${article.account.user.displayName} 
-                        </a>
-                        [ <@site.showTimeBefore article.timeBefore /> ] 
+                    <div class="owner">
+                        <span class="ts">
+                            <a href="/social/users/${article.account.user.id?replace("#", "")}/posts">
+                                ${article.account.user.displayName} 
+                            </a>
+                            [ <@site.showTimeBefore article.timeBefore /> ] 
+                        </span>
 
+                        <#if article.isOwner(viewerAccount.id)>
+                        <span class="owner-action">
+                            <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
+                                <@spring.message 'Delete.article' />
+                            </a>
+                            <a href="<@spring.url '/articles/${article.id?replace("#","")}/_update' />">
+                                <@spring.message 'Update.article' />
+                            </a>
+                        </span>
+                        <#else>
                         <@sec.authorize access="hasRole('ROLE_ADMIN')">
-                        <a class="delete" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
+                        <span class="admin">
+                        <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
                             <@spring.message 'Delete.article' />
                         </a>
                         </@sec.authorize>
+                        </span>
+                        </#if>
                     </div>
 
                     <div class="content">
                        ${article.content}
                     </div>
-
-                    <div class="response">
-                       <#if !(topic.deleted || article.deleted) && isMember>
-                       <a class="create-message" data-action="<@spring.url '/articles/${article.id?replace("#","")}/messages/_create' />" href="#">
-                           <@spring.message 'AddMessage.article' />
-                       </a>
-                       <#if article.isOwner(viewerAccount.id)>
-                       <a class="delete" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
-                           <@spring.message 'Delete.article' />
-                       </a>
-                       <a href="<@spring.url '/articles/${article.id?replace("#","")}/_update' />">
-                           <@spring.message 'Update.article' />
-                       </a>
-                       </#if>
-                       </#if>
-                    </div>
                 </div>
 
-               <ul class="messages">
-                   <#if article.messages??>
+                <#if !(topic.deleted || article.deleted) && isMember>
+                <div class="member">
+                   <a class="pop" data-editor-name="message-editor" data-form-selector="#messageForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#","")}/messages/_create' />" href="#">
+                       <@spring.message 'AddMessage.article' />
+                   </a>
+                </div>
+                </#if>
+
+                <#if article.messages??>
+                <ul class="messages">
                    <#list article.messages as msg>
-                   <li id="message-${msg.id?replace("#","")?replace(":","-")}">
-                       <div class="ts">
-                           <a href="/social/users/${msg.account.user.id?replace("#","")}/posts">
-                               ${msg.account.user.displayName}  
-                           </a>
-                           [ <@site.showTimeBefore msg.timeBefore /> ]
+                   <li class="message">
+                       <div id="message-${msg.id?replace("#","")?replace(":","-")}">
+                           <div class="owner">
+                               <span class="ts">
+                                   <a href="/social/users/${msg.account.user.id?replace("#","")}/posts">
+                                       ${msg.account.user.displayName}  
+                                   </a>
+                                   [ <@site.showTimeBefore msg.timeBefore /> ]
+                               </span>
+
+                               <#if msg.isOwner(viewerAccount.id)>
+                               <span class="owner-action">
+                                   <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
+                                       <@spring.message 'Delete.message' />
+                                   </a>
+                                   <a class="pop" data-editor-name="message-editor" data-form-selector="#messageForm" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/_update' />" data-target-selector="#message-${msg.id?replace('#', '')?replace(':', '-')} .content" data-dialog-width="650" href="#">
+                                       <@spring.message 'Update.message' />
+                                   </a>
+                               </span>
+                               </#if>
+                           </div>
+
+                           <div class="content">
+                               ${msg.content}
+                           </div>
                        </div>
 
-                       <div class="content">
-                           ${msg.content}
-                       </div>
-
-                       <div class="response">
-                          <#if !(topic.deleted || article.deleted) && isMember>
-                          <a class="create-reply" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/messageReplies/_create' />" href="#">
+                       <#if !(topic.deleted || article.deleted) && isMember>
+                       <div class="member">
+                          <a class="pop" data-editor-name="reply-editor" data-form-selector="#replyForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/messageReplies/_create' />" href="#">
                               <@spring.message 'Reply.message' />
                           </a>
-
-                          <#if msg.isOwner(viewerAccount.id)>
-                          <a class="delete" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
-                              <@spring.message 'Delete.message' />
-                          </a>
-                          <a class="update-message" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/_update' />" data-target="#message-${msg.id?replace("#", "")?replace(":", "-")} .content" href="#">
-                              <@spring.message 'Update.message' />
-                          </a>
-                          </#if>
-                          </#if>
                        </div>
+                       </#if>
 
+                       <#if msg.replies??>
                        <ul class="replies">
-                           <#if msg.replies??>
                            <#list msg.replies as reply>
-                           <li id="reply-${reply.id?replace("#","")?replace(":","-")}">
-                               <div class="ts"> 
-                                   <a href="/social/users/${reply.account.user.id?replace("#", "")}/posts">
-                                     ${reply.account.user.displayName} 
-                                   </a>
-                                   [ <@site.showTimeBefore reply.timeBefore /> ]
-                               </div>
-                               <div class="content">
-                                   ${reply.content}
-                               </div>
+                           <li class="reply">
+                               <div id="reply-${reply.id?replace('#','')?replace(':','-')}">
+                                   <div class="owner"> 
+                                       <span class="ts">
+                                           <a href="/social/users/${reply.account.user.id?replace('#', '')}/posts">
+                                               ${reply.account.user.displayName} 
+                                           </a>
+                                           [ <@site.showTimeBefore reply.timeBefore /> ]
+                                       </span>
 
-                               <div class="response">
-                                   <#if !(topic.deleted || article.deleted) && isMember && reply.isOwner(viewerAccount.id)>
-                                   <a class="delete" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
-                                        <@spring.message 'Delete.reply' />
-                                   </a>
-                                   <a class="update-reply action" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_update"}' />" data-target="#reply-${reply.id?replace("#","")?replace(":", "-")} .content" href="#">
-                                        <@spring.message 'Update.reply' />
-                                   </a>
-                                   </#if>
+                                       <#if !(topic.deleted || article.deleted) && reply.isOwner(viewerAccount.id)>
+                                       <span class="owner-action">
+                                           <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
+                                               <@spring.message 'Delete.reply' />
+                                           </a>
+                                           <a class="pop" data-form-selector="#replyForm" data-editor-name="reply-editor" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_update' />" data-target-selector='#reply-${reply.id?replace("#","")?replace(":", "-")} .content' href="#">
+                                               <@spring.message 'Update.reply' />
+                                           </a>
+                                       </span>
+                                       </#if>
+                                   </div>
+
+                                   <div class="content">
+                                       ${reply.content}
+                                   </div>
                                </div>
                            </li>
                            </#list>
-                           </#if>
                        </ul>
+                       </#if>
                    </li>
                    </#list>
-                   </#if>
                </ul>
+               </#if>
 
               <#if !(topic.deleted || article.deleted) && isMember>
               <@topicGadgets.messageForm />
               <@topicGadgets.replyForm />
-              <@site.deleteConfirmForm />
+              <@site.confirmForm />
               <#else>
               <@sec.authorize access="hasRole('ROLE_ADMIN')">
               <@topicGadgets.messageForm />
               <@topicGadgets.replyForm />
-              <@site.deleteConfirmForm />
+              <@site.confirmForm />
               </@sec.authorize>
               </#if>
             </div>

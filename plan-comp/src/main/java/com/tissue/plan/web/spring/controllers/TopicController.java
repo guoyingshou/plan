@@ -48,8 +48,9 @@ public class TopicController {
     @RequestMapping(value="/topics/_create")
     public String showTopicFormView(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
         model.put("selected", "topics");
-        model.put("topicForm", new TopicForm());
         model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+
+        model.put("topicForm", new TopicForm());
 
         return "createTopicFormView";
     }
@@ -62,6 +63,7 @@ public class TopicController {
         
         if(result.hasErrors()) {
             model.put("selected", "topics");
+            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
             return "createTopicFormView";
         }
 
@@ -93,10 +95,9 @@ public class TopicController {
             model.put("selected", "objective");
             model.put("topic", topic);
             model.put("isMember", topicService.isMember(topic, viewerAccount));
+            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
             return "updateTopicFormView";
         }
-
-        //topicService.checkOwner(topic, viewerAccount);
  
         form.setId(topic.getId());
         topicService.updateTopic(form);
@@ -106,8 +107,6 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/_delete", method=POST)
     public String deleteTopic(@PathVariable("topicId") Topic topic, @ModelAttribute("viewerAccount") Account viewerAccount) {
         
-        //topicService.checkOwner(topic, viewerAccount);
- 
         topicService.deleteContent(topic.getId());
         return "redirect:/topics";
     }
