@@ -66,7 +66,6 @@ public class AnswerCommentController {
 
     /**
      * Update an answer comment.
-     */
     @RequestMapping(value="/answerComments/{commentId}/_update", method=POST)
     public String updateAnswerComment(@PathVariable("commentId") AnswerComment answerComment, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
@@ -80,6 +79,7 @@ public class AnswerCommentController {
         answerCommentService.updateContent(form);
         return "redirect:/questions/" + answerComment.getAnswer().getQuestion().getId().replace("#","");
     }
+     */
 
     /**
      * Delete an answer comment.

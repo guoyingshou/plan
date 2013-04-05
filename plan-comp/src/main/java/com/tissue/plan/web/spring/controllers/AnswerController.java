@@ -11,6 +11,7 @@ import com.tissue.plan.web.model.ContentForm;
 import com.tissue.plan.web.model.AnswerForm;
 import com.tissue.plan.services.AnswerService;
 import com.tissue.plan.services.TopicService;
+import com.tissue.plan.services.PlanService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,9 @@ public class AnswerController {
     private TopicService topicService;
 
     @Autowired
+    private PlanService planService;
+
+    @Autowired
     private AnswerService answerService;
 
     /**
@@ -54,11 +58,19 @@ public class AnswerController {
     public String addAnswer(@PathVariable("questionId") Question question, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
+            model.put("selected", "question");
+
+            Topic topic = question.getPlan().getTopic();
+
+            model.put("question", question);
+            model.put("topic", topic);
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
+            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+
+            return "questionDetail";
         }
 
         Topic topic = question.getPlan().getTopic();
-        //topicService.checkMember(topic, viewerAccount, model);
 
         form.setQuestion(question);
         form.setAccount(viewerAccount);
@@ -69,7 +81,6 @@ public class AnswerController {
 
     /**
      * Update an answer.
-     */
     @RequestMapping(value="/answers/{answerId}/_update", method=POST)
     public String updateAnswer(@PathVariable("answerId") Answer answer, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
@@ -78,13 +89,13 @@ public class AnswerController {
         }
 
         Topic topic = answer.getQuestion().getPlan().getTopic();
-        //topicService.checkMember(topic, viewerAccount, model);
 
         form.setId(answer.getId());
         answerService.updateContent(form);
 
         return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");
     }
+     */
 
     /**
      * Delete an answer.
@@ -93,7 +104,6 @@ public class AnswerController {
     public String deleteAnswer(@PathVariable("answerId") Answer answer, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         Topic topic = answer.getQuestion().getPlan().getTopic();
-        //topicService.checkMember(topic, viewerAccount, model);
         answerService.deleteContent(answer.getId());
 
         return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");

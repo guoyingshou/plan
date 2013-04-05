@@ -13,25 +13,25 @@
         <div id="page-main">
            <div id="main-content">
                <@spring.bind "questionForm.*" />
-               <form id="createQuestionForm" method="post" action="<@spring.url '/topics/${topic.id?replace("#", "")}/questions/_create'/>">
+               <form method="post" action="<@spring.url '/topics/${topic.id?replace("#", "")}/questions/_create'/>">
               <div class="error">
                   <@spring.showErrors "<br>" />
               </div>
               <fieldset>
                   <legend>
-                      <@spring.message "questionForm" />
+                      <@spring.message "question" />
                   </legend>
 
                   <ul>
                       <li>
                           <label for="title">
-                              <@spring.message "questionForm.title" />
+                              <@spring.message "title" />
                           </label>
                           <@spring.formInput "questionForm.title" />
                       </li>
                       <li>
                           <label for="content">
-                             <@spring.message "questionForm.content" />
+                             <@spring.message "content" />
                           </label>
                           <@spring.formTextarea "questionForm.content" />
                       </li>

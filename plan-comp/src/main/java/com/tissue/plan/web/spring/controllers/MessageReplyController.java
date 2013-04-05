@@ -66,20 +66,15 @@ public class MessageReplyController {
     /**
      * Update a PostMessageComment.
      * The post type can be 'concept', 'note' or 'tutorial'.
-     */
     @RequestMapping(value="/messageReplies/{replyId}/_update", method=POST)
     public String updateMessageReply(@PathVariable("replyId") MessageReply messageReply, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        /**
-        Topic topic = messageReply.getMessage().getArticle().getPlan().getTopic();
-        topicService.checkMember(topic, viewerAccount, model);
-        */
 
         form.setId(messageReply.getId());
         messageReplyService.updateContent(form);
 
         return "redirect:/articles/" + messageReply.getMessage().getArticle().getId().replace("#", "");
     }
+     */
 
     /**
      * Delete a PostMessageComment.

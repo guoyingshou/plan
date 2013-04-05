@@ -21,19 +21,19 @@
             <ul>
                 <li>
                     <label for="title">
-                        <@spring.message "topicForm.title" />
+                        <@spring.message "title" />
                     </label>
                     <@spring.formInput "topicForm.title" />
                 </li>
                 <li>
                     <label for="content">
-                        <@spring.message "topicForm.content" />
+                        <@spring.message "objective" />
                     </label>
                    <@spring.formTextarea "topicForm.content" />
                 </li>
                 <li>
                     <label for="tags">
-                        <@spring.message "topicForm.tags" />
+                        <@spring.message "tags" />
                      </label>
                     <@spring.formInput "topicForm.tags" />
                 </li>

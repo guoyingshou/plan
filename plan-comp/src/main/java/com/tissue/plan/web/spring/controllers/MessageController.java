@@ -7,8 +7,9 @@ import com.tissue.plan.Article;
 import com.tissue.plan.Message;
 import com.tissue.plan.web.model.ContentForm;
 import com.tissue.plan.web.model.MessageForm;
-import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.MessageService;
+import com.tissue.plan.services.TopicService;
+import com.tissue.plan.services.PlanService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -39,6 +40,12 @@ public class MessageController {
     private static Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
+    private TopicService topicService;
+
+    @Autowired
+    private PlanService planService;
+
+    @Autowired
     private MessageService messageService;
 
     /**
@@ -46,24 +53,26 @@ public class MessageController {
      */
     @RequestMapping(value="/articles/{articleId}/messages/_create", method=POST)
     public String addMessage(@PathVariable("articleId") Article article, @Valid MessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if(result.hasErrors()) {
+            model.put("selected", article.getType());
+            Topic topic = article.getPlan().getTopic();
+
+            model.put("article", article);
+            model.put("topic", topic);
+
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
+            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+
+            return "articleDetail";
+        }
+
         form.setArticle(article);
         form.setAccount(viewerAccount);
         messageService.addMessage(form);
         return "redirect:/articles/" + article.getId().replace("#", "");
     }
  
-    /**
-     * Update a message.
-     */
-    @RequestMapping(value="/messages/{msgId}/_update", method=POST)
-    public String updateMessage(@PathVariable("msgId") Message message, @Valid ContentForm form, BindingResult result, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        form.setId(message.getId());
-        messageService.updateContent(form);
-
-        return "redirect:/articles/" + message.getArticle().getId().replace("#", "");
-    }
-
     /**
      * Delete a message.
      */

@@ -29,6 +29,7 @@
                             [ <@site.showTimeBefore article.timeBefore /> ] 
                         </span>
 
+                        <#if !topic.deleted>
                         <#if viewerAccount?? && article.isOwner(viewerAccount.id)>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
@@ -47,33 +48,13 @@
                         </@sec.authorize>
                         </span>
                         </#if>
+                        </#if>
                     </div>
 
                     <div class="content">
                        ${article.content}
                     </div>
                 </div>
-
-                <#if !(topic.deleted || article.deleted) && viewerAccount?? && isMember>
-                <div class="member">
-                    <form method="post" action="<@spring.url '/articles/${article.id?replace("#","")}/messages/_create' />">
-                        <legend>
-                            Message
-                        </legend>
-                        <ul>
-                            <li>
-                                <textarea id="message-editor" name="content"></textarea>
-                            </li>
-                            <li>
-                                <input type="submit" value="submit"/>
-                            </li>
-                        </ul>
-                   </form>
-                   <script type="text/javascript">
-                       CKEDITOR.replace("message-editor");
-                   </script>
-                </div>
-                </#if>
 
                 <#if article.messages??>
                 <ul class="messages">
@@ -88,7 +69,7 @@
                                    [ <@site.showTimeBefore msg.timeBefore /> ]
                                </span>
 
-                               <#if viewerAccount?? && msg.isOwner(viewerAccount.id)>
+                               <#if !topic.deleted && viewerAccount?? && msg.isOwner(viewerAccount.id)>
                                <span class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
                                        <@spring.message 'Delete.message' />
@@ -144,6 +125,33 @@
                    </#list>
                </ul>
                </#if>
+
+                <#if !(topic.deleted || article.deleted) && viewerAccount?? && isMember>
+                <div class="member">
+                    <@spring.bind "messageForm.*" />
+                    <div class="error">
+                        <@spring.showErrors "<br>" />
+                    </div>
+
+                    <form method="post" action="<@spring.url '/articles/${article.id?replace("#","")}/messages/_create' />">
+                        <legend>
+                            <@spring.message "message" />
+                        </legend>
+                        <ul>
+                            <li>
+                                <@spring.formTextarea "messageForm.content" />
+                            </li>
+                            <li>
+                                <input type="submit" value='<@spring.message "Submit.button"/>' />
+                            </li>
+                        </ul>
+                   </form>
+                   <script type="text/javascript">
+                       CKEDITOR.replace("content");
+                   </script>
+                </div>
+                </#if>
+
 
               <#if !(topic.deleted || article.deleted) && isMember>
               <@topicGadgets.replyForm />

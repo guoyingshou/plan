@@ -6,6 +6,7 @@ import com.tissue.plan.Topic;
 import com.tissue.plan.Plan;
 import com.tissue.plan.Question;
 import com.tissue.plan.web.model.PostForm;
+import com.tissue.plan.web.model.AnswerForm;
 import com.tissue.plan.services.TopicService;
 import com.tissue.plan.services.PlanService;
 import com.tissue.plan.services.QuestionService;
@@ -95,6 +96,8 @@ public class QuestionController {
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
         model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+
+        model.put("answerForm", new AnswerForm());
 
         return "questionDetail";
     }

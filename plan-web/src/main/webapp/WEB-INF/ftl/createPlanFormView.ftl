@@ -9,7 +9,7 @@
     <#include "topicHeader.ftl" />
 
     <div id="page-main-wrapper">
-        <form id="createPlanForm" action="<@spring.url '/topics/${topic.id?replace("#", "")}/plans/_create' />" method="post">
+        <form id="planForm" action="<@spring.url '/topics/${topic.id?replace("#", "")}/plans/_create' />" method="post">
             <legend>
                 <@spring.message 'planForm' />
             </legend>
@@ -18,19 +18,19 @@
                 <li>
                     <label>
                         <input type="radio" name="duration" checked value="1" />
-                        <@spring.message 'planForm.duration1' />
+                        <@spring.message 'duration1' />
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" name="duration" value="3" />
-                        <@spring.message 'planForm.duration2' />
+                        <@spring.message 'duration2' />
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" name="duration" value="6" />
-                        <@spring.message 'planForm.duration3' />
+                        <@spring.message 'duration3' />
                     </label>
                 </li>
                 <li>

@@ -15,26 +15,26 @@
         <div id="page-main">
            <div id="main-content">
                <@spring.bind "articleForm.*" />
-               <form id="createArticleForm" method="post" action="<@spring.url '/topics/${topic.id?replace("#", "")}/articles/_create'/>">
+               <form method="post" action="<@spring.url '/topics/${topic.id?replace("#", "")}/articles/_create'/>">
                <div class="error">
                    <@spring.showErrors "<br>" />
                </div>
 
                <fieldset class="post-type">
                    <legend>
-                       <@spring.message 'articleForm.type' />
+                       <@spring.message 'type' />
                    </legend>
 
                    <label>
-                      <@spring.message 'articleForm.concept' />
+                      <@spring.message 'concept' />
                       <input type="radio" name="type" value="concept" />
                    </label>
                    <label>
-                       <@spring.message 'articleForm.note' />
+                       <@spring.message 'note' />
                        <input type="radio" name="type" value="note" />
                    </label>
                    <label>
-                       <@spring.message 'articleForm.tutorial' />
+                       <@spring.message 'tutorial' />
                        <input type="radio" name="type" value="tutorial" />
                    </label>
                </fieldset>
@@ -47,13 +47,13 @@
                    <ul>
                        <li>
                            <label for="title">
-                               <@spring.message "articleForm.title" />
+                               <@spring.message "title" />
                            </label>
                            <@spring.formInput "articleForm.title" />
                        </li>
                        <li>
                            <label for="content">
-                               <@spring.message "articleForm.content" />
+                               <@spring.message "content" />
                            </label>
                            <@spring.formTextarea "articleForm.content" />
                        </li>

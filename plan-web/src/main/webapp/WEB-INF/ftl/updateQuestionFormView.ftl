@@ -12,13 +12,13 @@
         <div id="page-main">
            <div id="main-content">
                <@spring.bind "questionForm.*" />
-               <form id="updateQuestionForm" method="post" action="<@spring.url '/questions/${questionForm.id?replace("#","")}/_update'/>">
+               <form method="post" action="<@spring.url '/questions/${questionForm.id?replace("#","")}/_update'/>">
               <div class="error">
                   <@spring.showErrors "<br>" />
               </div>
               <fieldset>
                   <legend>
-                      <@spring.message "questionForm" />
+                      <@spring.message "question" />
                   </legend>
 
                   <ul>
@@ -28,15 +28,15 @@
                       </li>
                       <li>
                           <label for="title">
-                              <@spring.message "questionForm.title" />
+                              <@spring.message "title" />
                           </label>
-                          <@spring.formInput "questionForm.title" 'class="sum"' />
+                          <@spring.formInput "questionForm.title" />
                       </li>
                       <li>
                           <label for="content">
-                             <@spring.message "questionForm.content" />
+                             <@spring.message "content" />
                           </label>
-                          <@spring.formTextarea "questionForm.content" 'class="sum"' />
+                          <@spring.formTextarea "questionForm.content" />
                       </li>
                       <li>
                           <input type="hidden" name="type" value="question" />

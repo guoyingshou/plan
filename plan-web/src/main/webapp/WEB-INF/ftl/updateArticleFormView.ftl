@@ -12,7 +12,7 @@
         <div id="page-main">
            <div id="main-content">
                <@spring.bind "articleForm.*" />
-               <form id="createArticleForm" method="post" action="<@spring.url '/articles/${articleForm.id?replace("#","")}/_update'/>">
+               <form method="post" action="<@spring.url '/articles/${articleForm.id?replace("#","")}/_update'/>">
                <div class="error">
                    <@spring.showErrors "<br>" />
                </div>
@@ -28,15 +28,15 @@
                        </li>
                        <li>
                            <label for="title">
-                               <@spring.message "articleForm.title" />
+                               <@spring.message "title" />
                            </label>
-                           <@spring.formInput "articleForm.title" 'class="sum"' />
+                           <@spring.formInput "articleForm.title" />
                        </li>
                        <li>
                            <label for="content">
-                               <@spring.message "articleForm.content" />
+                               <@spring.message "content" />
                            </label>
-                           <@spring.formTextarea "articleForm.content" 'class="sum"' />
+                           <@spring.formTextarea "articleForm.content" />
                        </li>
                        <li>
                            <@spring.formHiddenInput "articleForm.type" />

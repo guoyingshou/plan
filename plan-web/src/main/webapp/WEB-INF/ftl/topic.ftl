@@ -35,12 +35,12 @@
                <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
                    <@spring.message 'Update.topic' />
                </a>
-               <a class="delete" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
+               <a class="pop" data-form-selector="#confirmForm" data-dialog-width="320" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
                    <@spring.message 'Delete.topic' />
                </a>
                <#else>
                <@sec.authorize access="hasRole('ROLE_ADMIN')">
-               <a class="delete" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
+               <a class="pop" data-form-selector="#confirmForm" data-dialog-width="320" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
                    <@spring.message 'Delete.topic' />
                </a>
                </@sec.authorize>

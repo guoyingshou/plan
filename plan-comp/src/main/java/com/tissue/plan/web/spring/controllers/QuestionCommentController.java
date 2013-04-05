@@ -65,23 +65,18 @@ public class QuestionCommentController {
  
     /**
      * Update a QuestionComment.
-     */
     @RequestMapping(value="/questionComments/{commentId}/_update", method=POST)
     public String updateQuestionComment(@PathVariable("commentId") QuestionComment questionComment, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
-        /**
-        Topic topic = questionComment.getQuestion().getPlan().getTopic();
-        topicService.checkMember(topic, viewerAccount, model);
-        */
-
         form.setId(questionComment.getId());
         questionCommentService.updateContent(form);
 
         return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");
     }
+     */
 
     /**
      * Delete a QuestionComment.

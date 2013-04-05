@@ -89,27 +89,6 @@
                 </ul>
                 </#if>
 
-                <#if !(topic.deleted || question.deleted) && isMember>
-                <div class="member">
-                   <form id="answerForm" method="post" action="<@spring.url '/questions/${question.id?replace("#", "")}/answers/_create' />">
-                       <legend>
-                           Answer
-                       </legend>
-                       <ul>
-                           <li>
-                               <textarea id="answer-editor" name="content"></textarea>
-                           </li>
-                           <li>
-                               <input type="submit" value="submit"/>
-                           </li>
-                       </ul>
-                    </form>
-                    <script type="text/javascript">
-                        CKEDITOR.replace("answer-editor");
-                    </script>
-                </div>
-                </#if>
-
 
                 <#if question.answers??>
                 <ul class="answers">
@@ -124,7 +103,7 @@
                                      [ <@site.showTimeBefore answer.timeBefore /> ]
                                  </span>
 
-                                 <#if answer.isOwner(viewerAccount.id)>
+                                 <#if !topic.deleted && answer.isOwner(viewerAccount.id)>
                                  <span class="owner-action">
                                      <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
                                          <@spring.message 'Delete.answer' />
@@ -179,6 +158,32 @@
                     </li>
                     </#list>
                 </ul>
+                </#if>
+
+                <#if !(topic.deleted || question.deleted) && isMember>
+                <div class="member">
+                   <@spring.bind "answerForm.*" />
+                   <div class="error">
+                       <@spring.showErrors "<br>" />
+                   </div>
+
+                   <form id="answerForm" method="post" action="<@spring.url '/questions/${question.id?replace("#", "")}/answers/_create' />">
+                       <legend>
+                           <@spring.message "answer" />
+                       </legend>
+                       <ul>
+                           <li>
+                               <@spring.formTextarea "answerForm.content" />
+                           </li>
+                           <li>
+                               <input type="submit" value="submit"/>
+                           </li>
+                       </ul>
+                    </form>
+                    <script type="text/javascript">
+                        CKEDITOR.replace("content");
+                    </script>
+                </div>
                 </#if>
 
                <#if !(topic.deleted || question.deleted) && isMember>
