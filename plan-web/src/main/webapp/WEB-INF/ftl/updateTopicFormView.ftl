@@ -1,12 +1,13 @@
 <#import "spring.ftl" as spring />
 <#import "siteGadgets.ftl" as site />
+<#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
-<#assign title="explore" in site>
+<#assign title=topic.title in site>
 
 <@site.layout>
 
-    <#include "topicHeader.ftl" />
+    <@topicGadgets.topicHeader />
 
     <div id="page-main-wrapper">
         <@spring.bind "topicForm.*" />

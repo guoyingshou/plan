@@ -107,6 +107,10 @@ public class ArticleController {
     @RequestMapping(value="/articles/{articleId}/_update")
     public String updateArticleFormView(@PathVariable("articleId") Article article, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        if((article == null) || !article.getAccount().getId().equals(viewerAccount.getId())) {
+            return "accessDenied";
+        }
+
         model.put("selected", article.getType());
 
         Topic topic = article.getPlan().getTopic();
@@ -121,6 +125,10 @@ public class ArticleController {
 
     @RequestMapping(value="/articles/{articleId}/_update", method=POST)
     public String updatePost(@PathVariable("articleId") Article article, @Valid @ModelAttribute("articleForm") PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if((article == null) || !article.getAccount().getId().equals(viewerAccount.getId())) {
+            return "accessDenied";
+        }
 
         if(result.hasErrors()) {
             model.put("selected", article.getType());
@@ -140,6 +148,11 @@ public class ArticleController {
 
     @RequestMapping(value="/articles/{articleId}/_delete", method=POST)
     public String deletePost(@PathVariable("articleId") Article article, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if((article == null) || !article.getAccount().getId().equals(viewerAccount.getId())) {
+            return "accessDenied";
+        }
+
         articleService.deleteContent(article.getId());
         return "redirect:/articles/" + article.getId().replace("#","");
     }

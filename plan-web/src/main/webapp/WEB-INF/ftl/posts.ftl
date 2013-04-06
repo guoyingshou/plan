@@ -5,11 +5,11 @@
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
-<#assign title="topic" in site>
+<#assign title=topic.title in site>
 
 <@site.layout>
 
-    <#include "topicHeader.ftl" />
+    <@topicGadgets.topicHeader />
 
     <div id="page-main-wrapper">
         <div id="page-main">

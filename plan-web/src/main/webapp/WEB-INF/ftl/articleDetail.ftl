@@ -4,11 +4,11 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
-<#assign title="post detail" in site>
+<#assign title= article.title  in site>
 
 <@site.layout>
 
-    <#include "topicHeader.ftl" />
+    <@topicGadgets.topicHeader />
 
     <div id="page-main-wrapper">
         <div id="page-main">
@@ -29,7 +29,7 @@
                             [ <@site.showTimeBefore article.timeBefore /> ] 
                         </span>
 
-                        <#if !topic.deleted>
+                        <#if !topic.deleted && !article.deleted>
                         <#if viewerAccount?? && article.isOwner(viewerAccount.id)>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
@@ -62,19 +62,31 @@
                    <li>
                        <div class="message" id="message-${msg.id?replace("#","")?replace(":","-")}">
                            <div class="owner">
-                               <span class="ts">
+                               <div class="ts">
                                    <a href="/social/users/${msg.account.user.id?replace("#","")}/posts">
                                        ${msg.account.user.displayName}  
                                    </a>
                                    [ <@site.showTimeBefore msg.timeBefore /> ]
-                               </span>
+                               </div>
 
-                               <#if !topic.deleted && viewerAccount?? && msg.isOwner(viewerAccount.id)>
-                               <span class="owner-action">
+                               <#if !topic.deleted && !article.deleted>
+
+                               <#if isMember>
+                               <div class="member-action">
+                                   <a class="pop" data-editor-name="reply-editor" data-form-selector="#replyForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/messageReplies/_create' />" href="#">
+                                       <@spring.message 'Reply.message' />
+                                   </a>
+                               </div>
+                               </#if>
+
+                               <#if viewerAccount?? && msg.isOwner(viewerAccount.id)>
+                               <div class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
                                        <@spring.message 'Delete.message' />
                                    </a>
-                               </span>
+                               </div>
+                               </#if>
+
                                </#if>
                            </div>
 
@@ -83,6 +95,7 @@
                            </div>
                        </div>
 
+<#--
                        <#if !(topic.deleted || article.deleted) && isMember>
                        <div class="member">
                           <a class="pop" data-editor-name="reply-editor" data-form-selector="#replyForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/messageReplies/_create' />" href="#">
@@ -90,6 +103,7 @@
                           </a>
                        </div>
                        </#if>
+                       -->
 
                        <#if msg.replies??>
                        <ul class="replies">
@@ -127,7 +141,7 @@
                </#if>
 
                 <#if !(topic.deleted || article.deleted) && viewerAccount?? && isMember>
-                <div class="member">
+                <div class="member-form">
                     <@spring.bind "messageForm.*" />
                     <div class="error">
                         <@spring.showErrors "<br>" />

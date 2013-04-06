@@ -55,7 +55,6 @@ public class AnswerCommentController {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
         Topic topic = answer.getQuestion().getPlan().getTopic();
-        //topicService.checkMember(topic, viewerAccount, model);
 
         form.setAnswer(answer);
         form.setAccount(viewerAccount);
@@ -65,31 +64,16 @@ public class AnswerCommentController {
     }
 
     /**
-     * Update an answer comment.
-    @RequestMapping(value="/answerComments/{commentId}/_update", method=POST)
-    public String updateAnswerComment(@PathVariable("commentId") AnswerComment answerComment, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
-        }
-        Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
-        //topicService.checkMember(topic, viewerAccount, model);
-
-        form.setId(answerComment.getId());
-        answerCommentService.updateContent(form);
-        return "redirect:/questions/" + answerComment.getAnswer().getQuestion().getId().replace("#","");
-    }
-     */
-
-    /**
      * Delete an answer comment.
      */
     @RequestMapping(value="/answerComments/{commentId}/_delete", method=POST)
     public String deleteAnswerComment(@PathVariable("commentId") AnswerComment answerComment, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
-        //topicService.checkMember(topic, viewerAccount, model);
+        if((answerComment == null) || !answerComment.getAccount().getId().equals(viewerAccount.getId())) {
+            return "accessDenied";
+        }
 
+        Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
         answerCommentService.deleteContent(answerComment.getId());
         return "redirect:/questions/" + answerComment.getAnswer().getQuestion().getId().replace("#","");
     }

@@ -51,6 +51,10 @@ public class QuestionController {
     @RequestMapping(value="/topics/{topicId}/questions/_create")
     public String createQustionForm(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        if(topic == null) {
+            return "accessDenied";
+        }
+
         model.put("selected", "question");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));
@@ -104,6 +108,10 @@ public class QuestionController {
 
     @RequestMapping(value="/questions/{questionId}/_update")
     public String updateQuestionFormView(@PathVariable("questionId") Question question, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+
+        if((question == null) || !question.getAccount().getId().equals(viewerAccount.getId())) {
+            return "accessDenied";
+        }
 
         model.put("selected", "question");
 

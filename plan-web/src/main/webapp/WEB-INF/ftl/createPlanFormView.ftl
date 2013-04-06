@@ -1,12 +1,13 @@
 <#import "spring.ftl" as spring />
 <#import "siteGadgets.ftl" as site />
+<#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 
 <#assign title="explore" in site>
 
 <@site.layout>
-    <#include "topicHeader.ftl" />
+    <@topicGadgets.topicHeader/>
 
     <div id="page-main-wrapper">
         <form id="planForm" action="<@spring.url '/topics/${topic.id?replace("#", "")}/plans/_create' />" method="post">

@@ -4,10 +4,10 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 
-<#assign title="Create Question" in site>
+<#assign title=topic.title in site>
 
 <@site.layout>
-    <#include "topicHeader.ftl" />
+    <@topicGadgets.topicHeader />
 
     <div id="page-main-wrapper">
         <div id="page-main">

@@ -3,10 +3,10 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
-<#assign title="update article" in site>
+<#assign title=articleForm.title in site>
 
 <@site.layout>
-    <#include "topicHeader.ftl" />
+    <@topicGadgets.topicHeader />
 
     <div id="page-main-wrapper">
         <div id="page-main">

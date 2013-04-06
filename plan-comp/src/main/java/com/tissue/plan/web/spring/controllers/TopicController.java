@@ -75,6 +75,10 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/_update")
     public String updateTopicFormView(@PathVariable("topicId") Topic topic,Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        if((topic == null) || !topic.getAccount().getId().equals(viewerAccount.getId())) {
+            return "accessDenied";
+        }
+
         model.put("selected", "objective");
         model.put("topic", topic);
         model.put("isMember", topicService.isMember(topic, viewerAccount));

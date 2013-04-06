@@ -4,11 +4,12 @@
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 <#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
-<#assign title="question" in site />
+
+<#assign title= question.title in site />
 
 <@site.layout>
 
-    <#include "topicHeader.ftl" />
+    <@topicGadgets.topicHeader />
 
     <div id="page-main-wrapper">
         <div id="page-main">
@@ -16,25 +17,34 @@
                 <div class="question">
                     <h3 class="title">${question.title}</h3>
                     <div class="owner">
-                        <span class="ts">
+                        <div class="ts">
                             <a href="/social/users/${question.account.user.id?replace("#","")}/posts">
                                 ${question.account.user.displayName} 
                             </a>
                             [ <@site.showTimeBefore question.timeBefore /> ]
-                        </span>
+                        </div>
 
-                        <#if !(topic.deleted || question.deleted)>
+                        <#if !topic.deleted && !question.deleted>
+
+                        <#if isMember>
+                        <div class="member-action">
+                            <a class="pop" data-form-selector="#questionCommentForm" data-editor-name="questionComment-editor" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/questionComments/_create' />" href="#">
+                                <@spring.message 'Comment.question' />
+                           </a>
+                        </div>
+                        </#if>
+
                         <#if question.isOwner(viewerAccount.id)>
-                        <span class="owner-action">
+                        <div class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />" href="#">
                                <@spring.message 'Delete.question' />
                             </a>
                             <a href="<@spring.url '/questions/${question.id?replace("#", "")}/_update' />">
                                 <@spring.message 'Update.question' />
                             </a>
-                        </span>
+                        </div>
                         <#else>
-                        <span class="owner-action">
+                        <span class="admin-action">
                             <@sec.authorize access="hasRole('ROLE_ADMIN')">
                             <a class="pop" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />">
                                 <@spring.message 'Delete.question' />
@@ -42,53 +52,49 @@
                             </@sec.authorize>
                         </span>
                         </#if>
+
                         </#if>
                     </div>
 
                     <div class="content">
                         ${question.content}
                     </div>
-                </div>
 
-                <#if !(topic.deleted || question.deleted) && isMember>
-                <div class="member">
-                   <a class="pop" data-form-selector="#questionCommentForm" data-editor-name="questionComment-editor" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/questionComments/_create' />" href="#">
-                           <@spring.message 'Comment.question' />
-                   </a>
-                </div>
-                </#if>
+                    <#if question.comments??>
+                    <ul class="question-comments">
+                       <#list question.comments as questionComment>
+                       <li>
+                           <div class="question-comment" id="question-comment-${questionComment.id?replace("#","")?replace(":","-")}">
+                               <div class="owner">
+                                   <span class="ts">
+                                       <a href="/social/users/${questionComment.account.user.id?replace("#","")}/posts">
+                                           ${questionComment.account.user.displayName} 
+                                       </a>
+                                       [ <@site.showTimeBefore questionComment.timeBefore /> ]
+                                   </span>
 
-                <#if question.comments??>
-                <ul class="question-comments">
-                   <#list question.comments as questionComment>
-                   <li>
-                       <div class="question-comment" id="question-comment-${questionComment.id?replace("#","")?replace(":","-")}">
-                           <div class="owner">
-                               <span class="ts">
-                                   <a href="/social/users/${questionComment.account.user.id?replace("#","")}/posts">
-                                       ${questionComment.account.user.displayName} 
-                                   </a>
-                                   [ <@site.showTimeBefore questionComment.timeBefore /> ]
-                               </span>
+                                   <#if !topic.deleted && !question.deleted>
+                                   
+                                   <#if questionComment.isOwner(viewerAccount.id)>
+                                   <div class="owner-action">
+                                       <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
+                                           <@spring.message 'Delete.comment' />
+                                       </a>
+                                   </div>
+                                   </#if>
 
-                               <#if !(topic.deleted || question.deleted) && questionComment.isOwner(viewerAccount.id)>
-                               <span class="owner-action">
-                                   <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
-                                       <@spring.message 'Delete.comment' />
-                                   </a>
-                               </span>
-                               </#if>
+                                   </#if>
+                               </div>
+
+                               <div class="content">
+                                   ${questionComment.content}
+                               </div>
                            </div>
-
-                           <div class="content">
-                               ${questionComment.content}
-                           </div>
-                       </div>
-                   </li>
-                   </#list>
-                </ul>
-                </#if>
-
+                       </li>
+                       </#list>
+                    </ul>
+                    </#if>
+                </div>
 
                 <#if question.answers??>
                 <ul class="answers">
@@ -103,12 +109,24 @@
                                      [ <@site.showTimeBefore answer.timeBefore /> ]
                                  </span>
 
-                                 <#if !topic.deleted && answer.isOwner(viewerAccount.id)>
-                                 <span class="owner-action">
+                                 <#if !topic.deleted && !answer.deleted>
+
+                                 <#if isMember>
+                                 <div class="member-action">
+                                     <a class="pop" data-form-selector="#answerCommentForm" data-editor-name="answerComment-editor" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/comments/_create' />" href="#">
+                                         <@spring.message 'Comment.answer' />
+                                     </a>
+                                 </div>
+                                 </#if>
+                                
+                                 <#if answer.isOwner(viewerAccount.id)>
+                                 <div class="owner-action">
                                      <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
                                          <@spring.message 'Delete.answer' />
                                      </a>
-                                 </span>
+                                 </div>
+                                 </#if>
+
                                  </#if>
                              </div>
 
@@ -116,14 +134,6 @@
                                  ${answer.content}
                              </div>
                          </div>
-
-                         <#if !(topic.deleted || question.deleted) && isMember>
-                         <div class="member">
-                             <a class="pop" data-form-selector="#answerCommentForm" data-editor-name="answerComment-editor" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/comments/_create' />" href="#">
-                                <@spring.message 'Comment.answer' />
-                             </a>
-                         </div>
-                         </#if>
 
                          <#if answer.comments??>
                          <ul class="answer-comments">
@@ -138,7 +148,7 @@
                                              [ <@site.showTimeBefore comment.timeBefore /> ]
                                          </span>
 
-                                         <#if !(topic.deleted ||question.deleted) && comment.isOwner(viewerAccount.id)>
+                                         <#if !topic.deleted && !question.deleted && comment.isOwner(viewerAccount.id)>
                                          <span class="owner-action">
                                              <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answerComments/${comment.id?replace("#","")}/_delete' />" href="#">
                                                  <@spring.message 'Delete.comment' />
@@ -160,8 +170,8 @@
                 </ul>
                 </#if>
 
-                <#if !(topic.deleted || question.deleted) && isMember>
-                <div class="member">
+                <#if !topic.deleted && !question.deleted && isMember>
+                <div class="member-form">
                    <@spring.bind "answerForm.*" />
                    <div class="error">
                        <@spring.showErrors "<br>" />

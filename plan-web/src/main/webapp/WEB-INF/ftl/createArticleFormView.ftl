@@ -5,11 +5,11 @@
 <#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in site>
 <#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in site>
 
-<#assign title="topic" in site>
+<#assign title=topic.title in site>
 
 <@site.layout>
 
-    <#include "topicHeader.ftl" />
+    <@topicGadgets.topicHeader/>
 
     <div id="page-main-wrapper">
         <div id="page-main">

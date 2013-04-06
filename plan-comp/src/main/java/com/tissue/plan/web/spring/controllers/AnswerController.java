@@ -57,6 +57,10 @@ public class AnswerController {
     @RequestMapping(value="/questions/{questionId}/answers/_create", method=POST)
     public String addAnswer(@PathVariable("questionId") Question question, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
+        if(question == null) {
+            return "accessDenied";
+        }
+
         if(result.hasErrors()) {
             model.put("selected", "question");
 
@@ -78,24 +82,6 @@ public class AnswerController {
 
         return "redirect:/questions/" + question.getId().replace("#","");
     }
-
-    /**
-     * Update an answer.
-    @RequestMapping(value="/answers/{answerId}/_update", method=POST)
-    public String updateAnswer(@PathVariable("answerId") Answer answer, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
-        }
-
-        Topic topic = answer.getQuestion().getPlan().getTopic();
-
-        form.setId(answer.getId());
-        answerService.updateContent(form);
-
-        return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");
-    }
-     */
 
     /**
      * Delete an answer.

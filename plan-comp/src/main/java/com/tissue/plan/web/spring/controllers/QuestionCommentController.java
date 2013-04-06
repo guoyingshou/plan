@@ -53,7 +53,6 @@ public class QuestionCommentController {
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
-        //Topic topic = question.getPlan().getTopic();
 
         form.setQuestion(question);
         form.setAccount(viewerAccount);
@@ -64,30 +63,14 @@ public class QuestionCommentController {
     }
  
     /**
-     * Update a QuestionComment.
-    @RequestMapping(value="/questionComments/{commentId}/_update", method=POST)
-    public String updateQuestionComment(@PathVariable("commentId") QuestionComment questionComment, @Valid ContentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        if(result.hasErrors()) {
-            throw new IllegalArgumentException(result.getAllErrors().toString());
-        }
-        form.setId(questionComment.getId());
-        questionCommentService.updateContent(form);
-
-        return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");
-    }
-     */
-
-    /**
      * Delete a QuestionComment.
      */
     @RequestMapping(value="/questionComments/{commentId}/_delete", method=POST)
     public String deleteQuestionComment(@PathVariable("commentId") QuestionComment questionComment, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        /**
-        Topic topic = questionComment.getQuestion().getPlan().getTopic();
-        topicService.checkMember(topic, viewerAccount, model);
-        */
+        if((questionComment == null) || !questionComment.getAccount().getId().equals(viewerAccount.getId())) {
+            return "accessDenied";
+        }
 
         questionCommentService.deleteContent(questionComment.getId());
         return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");
