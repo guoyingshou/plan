@@ -21,8 +21,8 @@
                         </#if>
                     </h3>
 
-                    <div class="owner">
-                        <span class="ts">
+                    <div class="meta">
+                        <span class="owner">
                             <a href="/social/users/${article.account.user.id?replace("#", "")}/posts">
                                 ${article.account.user.displayName} 
                             </a>
@@ -41,7 +41,7 @@
                         </span>
                         <#else>
                         <@sec.authorize access="hasRole('ROLE_ADMIN')">
-                        <span class="admin">
+                        <span class="admin-action">
                         <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
                             <@spring.message 'Delete.article' />
                         </a>
@@ -61,8 +61,8 @@
                    <#list article.messages as msg>
                    <li>
                        <div class="message" id="message-${msg.id?replace("#","")?replace(":","-")}">
-                           <div class="owner">
-                               <div class="ts">
+                           <div class="meta">
+                               <div class="owner">
                                    <a href="/social/users/${msg.account.user.id?replace("#","")}/posts">
                                        ${msg.account.user.displayName}  
                                    </a>
@@ -95,23 +95,13 @@
                            </div>
                        </div>
 
-<#--
-                       <#if !(topic.deleted || article.deleted) && isMember>
-                       <div class="member">
-                          <a class="pop" data-editor-name="reply-editor" data-form-selector="#replyForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/messageReplies/_create' />" href="#">
-                              <@spring.message 'Reply.message' />
-                          </a>
-                       </div>
-                       </#if>
-                       -->
-
                        <#if msg.replies??>
                        <ul class="replies">
                            <#list msg.replies as reply>
                            <li>
                                <div class="reply" id="reply-${reply.id?replace('#','')?replace(':','-')}">
-                                   <div class="owner"> 
-                                       <span class="ts">
+                                   <div class="meta"> 
+                                       <span class="owner">
                                            <a href="/social/users/${reply.account.user.id?replace('#', '')}/posts">
                                                ${reply.account.user.displayName} 
                                            </a>
@@ -140,7 +130,8 @@
                </ul>
                </#if>
 
-                <#if !(topic.deleted || article.deleted) && viewerAccount?? && isMember>
+                <#if !topic.deleted && !article.deleted && viewerAccount?? && isMember>
+
                 <div class="member-form">
                     <@spring.bind "messageForm.*" />
                     <div class="error">
@@ -164,22 +155,22 @@
                        CKEDITOR.replace("content");
                    </script>
                 </div>
+
+                <@topicGadgets.replyForm />
+                <@site.confirmForm />
+
+                <#else>
+
+                <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                <@topicGadgets.replyForm />
+                <@site.confirmForm />
+                </@sec.authorize>
+
                 </#if>
-
-
-              <#if !(topic.deleted || article.deleted) && isMember>
-              <@topicGadgets.replyForm />
-              <@site.confirmForm />
-              <#else>
-              <@sec.authorize access="hasRole('ROLE_ADMIN')">
-              <@topicGadgets.replyForm />
-              <@site.confirmForm />
-              </@sec.authorize>
-              </#if>
             </div>
 
             <div id="main-sidebar">
-               <@topicGadgets.showPlanSidebar />
+               <@topicGadgets.showPlansArchived />
             </div>
 
         </div>

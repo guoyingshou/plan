@@ -49,7 +49,7 @@
            </div>
 
             <div id="main-sidebar">
-                <@topicGadgets.showPlanSidebar />
+                <@topicGadgets.showPlansArchived />
             </div>
 
 

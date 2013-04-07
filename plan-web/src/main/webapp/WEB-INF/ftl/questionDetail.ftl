@@ -16,8 +16,8 @@
             <div id="main-content">
                 <div class="question">
                     <h3 class="title">${question.title}</h3>
-                    <div class="owner">
-                        <div class="ts">
+                    <div class="meta">
+                        <div class="owner">
                             <a href="/social/users/${question.account.user.id?replace("#","")}/posts">
                                 ${question.account.user.displayName} 
                             </a>
@@ -65,8 +65,8 @@
                        <#list question.comments as questionComment>
                        <li>
                            <div class="question-comment" id="question-comment-${questionComment.id?replace("#","")?replace(":","-")}">
-                               <div class="owner">
-                                   <span class="ts">
+                               <div class="meta">
+                                   <span class="owner">
                                        <a href="/social/users/${questionComment.account.user.id?replace("#","")}/posts">
                                            ${questionComment.account.user.displayName} 
                                        </a>
@@ -101,8 +101,8 @@
                      <#list question.answers as answer>
                      <li>
                          <div class="answer" id="answer-${answer.id?replace("#","")?replace(":","-")}">
-                             <div class="owner">
-                                 <span class="ts">
+                             <div class="meta">
+                                 <span class="owner">
                                      <a href="/social/users/${answer.account.user.id?replace("#","")}/posts">
                                          ${answer.account.user.displayName} 
                                      </a>
@@ -140,8 +140,8 @@
                              <#list answer.comments as comment>
                              <li>
                                  <div class="answer-comment" id="answer-comment-${comment.id?replace('#','')?replace(':','-')}">
-                                     <div class="owner">
-                                         <span class="ts">
+                                     <div class="meta">
+                                         <span class="owner">
                                              <a href="/social/users/${comment.account.user.id?replace('#','')}/posts">
                                                  ${comment.account.user.displayName} 
                                              </a>
@@ -194,23 +194,24 @@
                         CKEDITOR.replace("content");
                     </script>
                 </div>
-                </#if>
 
-               <#if !(topic.deleted || question.deleted) && isMember>
-               <@topicGadgets.questionCommentForm />
-               <@topicGadgets.answerCommentForm />
-               <@site.confirmForm />
-               <#else>
-               <@sec.authorize access="hasRole('ROLE_ADMIN')">
-               <@topicGadgets.questionCommentForm />
-               <@topicGadgets.answerCommentForm />
-               <@site.confirmForm />
-               </@sec.authorize>
-               </#if>
+                <@topicGadgets.questionCommentForm />
+                <@topicGadgets.answerCommentForm />
+                <@site.confirmForm />
+
+                <#else>
+
+                <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                <@topicGadgets.questionCommentForm />
+                <@topicGadgets.answerCommentForm />
+                <@site.confirmForm />
+                </@sec.authorize>
+ 
+                </#if>
             </div>
 
             <div id="main-sidebar">
-                <@topicGadgets.showPlanSidebar />
+                <@topicGadgets.showPlansArchived />
             </div>
         </div>
     </div>

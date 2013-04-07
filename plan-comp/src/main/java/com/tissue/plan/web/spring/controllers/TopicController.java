@@ -76,7 +76,7 @@ public class TopicController {
     public String updateTopicFormView(@PathVariable("topicId") Topic topic,Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
         if((topic == null) || !topic.getAccount().getId().equals(viewerAccount.getId())) {
-            return "accessDenied";
+            return "redirect:/accessDenied";
         }
 
         model.put("selected", "objective");

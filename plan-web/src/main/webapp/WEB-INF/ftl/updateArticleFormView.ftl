@@ -55,7 +55,6 @@
            </div>
 
             <div id="main-sidebar">
-                <@topicGadgets.showPlanLive />
                 <@topicGadgets.showPlansArchived/>
             </div>
 
