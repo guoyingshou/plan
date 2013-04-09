@@ -14,12 +14,37 @@
     <div id="page-main-wrapper">
         <div id="page-main">
            <div id="main-content">
-               <div class="ts">
-                   <span>
+               <div class="meta">
+                   <span class="owner">
                       ${topic.account.user.displayName}
                       [ <@site.showTimeBefore topic.timeBefore /> ]
                    </span>
+
+                   <#if !topic.deleted>
+                   <@site.confirmForm />
+
+                   <#if viewerAccount?? && topic.isOwner(viewerAccount.id)>
+                   <span class="owner-action">
+                       <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
+                           <@spring.message 'Update' />
+                       </a>
+                       <a class="pop" data-form-selector="#confirmForm" data-dialog-width="320" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
+                           <@spring.message 'Delete' />
+                       </a>
+                   </span>
+                   <#else>
+                   <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                   <span class="admin-action">
+                       <a class="pop" data-form-selector="#confirmForm" data-dialog-width="320" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
+                           <@spring.message 'Delete' />
+                       </a>
+                   </span>
+                   </@sec.authorize>
+                   </#if>
+
+                   </#if>
                </div>
+
                <div class="tags">
                    <#list topic.tags as tag>
                    <span><a href="<@spring.url '/tags/${tag}' />">${tag}</a></span>
@@ -29,23 +54,6 @@
                    ${topic.content}
                </div>
 
-               <#if !topic.deleted>
-               <@site.confirmForm />
-               <#if viewerAccount?? && topic.isOwner(viewerAccount.id)>
-               <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
-                   <@spring.message 'Update.topic' />
-               </a>
-               <a class="pop" data-form-selector="#confirmForm" data-dialog-width="320" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
-                   <@spring.message 'Delete.topic' />
-               </a>
-               <#else>
-               <@sec.authorize access="hasRole('ROLE_ADMIN')">
-               <a class="pop" data-form-selector="#confirmForm" data-dialog-width="320" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
-                   <@spring.message 'Delete.topic' />
-               </a>
-               </@sec.authorize>
-               </#if>
-               </#if>
            </div>
 
             <div id="main-sidebar">

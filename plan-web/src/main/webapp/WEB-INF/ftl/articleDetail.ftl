@@ -33,20 +33,20 @@
                         <#if viewerAccount?? && article.isOwner(viewerAccount.id)>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
-                                <@spring.message 'Delete.article' />
+                                <@spring.message 'Delete' />
                             </a>
                             <a href="<@spring.url '/articles/${article.id?replace("#","")}/_update' />">
-                                <@spring.message 'Update.article' />
+                                <@spring.message 'Update' />
                             </a>
                         </span>
                         <#else>
                         <@sec.authorize access="hasRole('ROLE_ADMIN')">
                         <span class="admin-action">
                         <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
-                            <@spring.message 'Delete.article' />
+                            <@spring.message 'Delete' />
                         </a>
-                        </@sec.authorize>
                         </span>
+                        </@sec.authorize>
                         </#if>
                         </#if>
                     </div>
@@ -62,29 +62,38 @@
                    <li>
                        <div class="message" id="message-${msg.id?replace("#","")?replace(":","-")}">
                            <div class="meta">
-                               <div class="owner">
+                               <span class="owner">
                                    <a href="/social/users/${msg.account.user.id?replace("#","")}/posts">
                                        ${msg.account.user.displayName}  
                                    </a>
                                    [ <@site.showTimeBefore msg.timeBefore /> ]
-                               </div>
+                               </span>
 
                                <#if !topic.deleted && !article.deleted>
 
                                <#if isMember>
-                               <div class="member-action">
+                               <span class="member-action">
                                    <a class="pop" data-editor-name="reply-editor" data-form-selector="#replyForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/messageReplies/_create' />" href="#">
-                                       <@spring.message 'Reply.message' />
+                                       <@spring.message 'Reply' />
                                    </a>
-                               </div>
+                               </span>
                                </#if>
 
                                <#if viewerAccount?? && msg.isOwner(viewerAccount.id)>
-                               <div class="owner-action">
+                               <span class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
-                                       <@spring.message 'Delete.message' />
+                                       <@spring.message 'Delete' />
                                    </a>
-                               </div>
+                               </span>
+                               <#else>
+                               <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                               <span class="admin-action">
+                                   <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/_delete' />" href="#">
+                                       <@spring.message 'Delete' />
+                                   </a>
+                               </span>
+                               </@sec.authorize>
+
                                </#if>
 
                                </#if>
@@ -108,12 +117,26 @@
                                            [ <@site.showTimeBefore reply.timeBefore /> ]
                                        </span>
 
-                                       <#if !(topic.deleted || article.deleted) && viewerAccount?? && reply.isOwner(viewerAccount.id)>
+                                       <#if !topic.deleted && !article.deleted>
+
+                                       <#if viewerAccount?? && reply.isOwner(viewerAccount.id)>
                                        <span class="owner-action">
                                            <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
-                                               <@spring.message 'Delete.reply' />
+                                               <@spring.message 'Delete' />
                                            </a>
                                        </span>
+
+                                       <#else>
+
+                                       <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                                       <span class="admin-action">
+                                           <a class="pop" data-form-selector="#confirmForm" data-dialog-width="400" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
+                                               <@spring.message 'Delete' />
+                                           </a>
+                                       </span>
+                                       </@sec.authorize>
+
+                                       </#if>
                                        </#if>
                                    </div>
 
