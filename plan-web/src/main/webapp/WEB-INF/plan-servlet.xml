@@ -41,6 +41,17 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <set>
+                <bean class="com.tissue.plan.spring.converters.IdToTopicConverter" />
+                <bean class="com.tissue.plan.spring.converters.IdToPlanConverter" />
+                <bean class="com.tissue.plan.spring.converters.IdToArticleConverter" />
+                <bean class="com.tissue.plan.spring.converters.IdToMessageConverter" />
+                <bean class="com.tissue.plan.spring.converters.IdToMessageReplyConverter" />
+                <bean class="com.tissue.plan.spring.converters.IdToQuestionConverter" />
+                <bean class="com.tissue.plan.spring.converters.IdToQuestionCommentConverter" />
+                <bean class="com.tissue.plan.spring.converters.IdToAnswerConverter" />
+                <bean class="com.tissue.plan.spring.converters.IdToAnswerCommentConverter" />
+
+                <!--
                 <ref bean="idToTopicConverter" />
                 <ref bean="idToPlanConverter" />
                 <ref bean="idToArticleConverter" />
@@ -50,6 +61,7 @@
                 <ref bean="idToQuestionCommentConverter" />
                 <ref bean="idToAnswerConverter" />
                 <ref bean="idToAnswerCommentConverter" />
+                -->
             </set>
         </property>
     </bean>
@@ -60,6 +72,6 @@
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" /> 
     </mvc:interceptors>
 
-    <import resource="plan-controller.xml" />
+    <import resource="controller.xml" />
 
 </beans>
