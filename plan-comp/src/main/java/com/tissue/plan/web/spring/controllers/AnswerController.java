@@ -3,6 +3,7 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.Account;
 import com.tissue.core.User;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.util.SecurityUtil;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Post;
 import com.tissue.plan.Question;
@@ -50,16 +51,17 @@ public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
+    @ModelAttribute("viewerActivePlansCount")
+    private int setupViewerActivePlansCount() {
+        return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
+    }
+
     /**
      * Add an answer to a specific post.
      * The post's type can only be 'question'.
      */
     @RequestMapping(value="/questions/{questionId}/answers/_create", method=POST)
-    public String addAnswer(@PathVariable("questionId") Question question, @Valid AnswerForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        if(question == null) {
-            return "accessDenied";
-        }
+    public String addAnswer(@PathVariable("questionId") Question question, @Valid AnswerForm form, BindingResult result, Map model) {
 
         if(result.hasErrors()) {
             model.put("selected", "question");
@@ -68,8 +70,7 @@ public class AnswerController {
 
             model.put("question", question);
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, viewerAccount));
-            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
             return "questionDetail";
         }
@@ -77,9 +78,12 @@ public class AnswerController {
         Topic topic = question.getPlan().getTopic();
 
         form.setQuestion(question);
+        Account viewerAccount = new Account();
+        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
         answerService.addAnswer(form);
 
+        model.clear();
         return "redirect:/questions/" + question.getId().replace("#","");
     }
 
@@ -87,7 +91,7 @@ public class AnswerController {
      * Delete an answer.
      */
     @RequestMapping(value="/answers/{answerId}/_delete", method=POST)
-    public String deleteAnswer(@PathVariable("answerId") Answer answer, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String deleteAnswer(@PathVariable("answerId") Answer answer) {
 
         Topic topic = answer.getQuestion().getPlan().getTopic();
         answerService.deleteContent(answer.getId());

@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.util.SecurityUtil;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Plan;
 import com.tissue.plan.Post;
@@ -43,13 +44,17 @@ public class PlanController {
     @Autowired
     private PlanService planService;
 
+    @ModelAttribute("viewerActivePlansCount")
+    private int setupViewerActivePlansCount() {
+        return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
+    }
+
     @RequestMapping(value="/topics/{topicId}/plans/_create")
-    public String addPlan(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addPlan(@PathVariable("topicId") Topic topic, Map model) {
 
         model.put("selected", "objective");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount));
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
         model.put("planForm", new PlanForm());
         return "createPlanFormView";
@@ -60,12 +65,15 @@ public class PlanController {
      * Add a plan to the specific topic.
      */
     @RequestMapping(value="/topics/{topicId}/plans/_create", method=POST)
-    public String addPlan(@PathVariable("topicId") Topic topic, PlanForm form, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addPlan(@PathVariable("topicId") Topic topic, PlanForm form, Map model) {
 
         form.setTopic(topic);
+        Account viewerAccount = new Account();
+        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
 
         planService.addPlan(form);
+        model.clear();
         return "redirect:/topics/" + topic.getId().replace("#","") + "/objective";
     }
 
@@ -73,8 +81,8 @@ public class PlanController {
      * Join a plan.
      */
     @RequestMapping(value="/plans/{planId}/_join")
-    public String joinPlan(@PathVariable("planId") Plan plan, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-        planService.addMember(plan.getId(), viewerAccount.getId());
+    public String joinPlan(@PathVariable("planId") Plan plan, Map model) {
+        planService.addMember(plan.getId(), SecurityUtil.getViewerAccountId());
         return "redirect:/topics/" + plan.getTopic().getId().replace("#","") + "/posts";
     }
 
@@ -82,14 +90,13 @@ public class PlanController {
      * Get paged posts by planId.
      */
     @RequestMapping(value="/plans/{planId}/posts") 
-    public String getPosts(@PathVariable("planId") Plan plan,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String getPosts(@PathVariable("planId") Plan plan,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
         model.put("selected", "all");
 
         Topic topic = plan.getTopic();
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount));
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;

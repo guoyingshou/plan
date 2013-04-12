@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.util.SecurityUtil;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Article;
 import com.tissue.plan.Message;
@@ -48,11 +49,16 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @ModelAttribute("viewerActivePlansCount")
+    private int setupViewerActivePlansCount() {
+        return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
+    }
+
     /**
      * Add a message to a specific post.
      */
     @RequestMapping(value="/articles/{articleId}/messages/_create", method=POST)
-    public String addMessage(@PathVariable("articleId") Article article, @Valid MessageForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addMessage(@PathVariable("articleId") Article article, @Valid MessageForm form, BindingResult result, Map model) {
 
         if(result.hasErrors()) {
             model.put("selected", article.getType());
@@ -60,16 +66,17 @@ public class MessageController {
 
             model.put("article", article);
             model.put("topic", topic);
-
-            model.put("isMember", topicService.isMember(topic, viewerAccount));
-            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
             return "articleDetail";
         }
 
         form.setArticle(article);
+        Account viewerAccount = new Account();
+        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
         messageService.addMessage(form);
+        model.clear();
         return "redirect:/articles/" + article.getId().replace("#", "");
     }
  
@@ -77,8 +84,10 @@ public class MessageController {
      * Delete a message.
      */
     @RequestMapping(value="/messages/{msgId}/_delete", method=POST)
-    public String deleteMessage(@PathVariable("msgId") Message message, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String deleteMessage(@PathVariable("msgId") Message message, Map model) {
+
         messageService.deleteContent(message.getId());
+        
         return "redirect:/articles/" + message.getArticle().getId().replace("#", "");
     }
 

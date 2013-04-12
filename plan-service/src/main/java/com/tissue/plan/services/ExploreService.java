@@ -15,8 +15,8 @@ public class ExploreService {
     @Autowired
     private UserDao userDao;
 
-    public List<User> getNewUsers(String excludingUserId, int limit) {
-        return userDao.getNewUsers(excludingUserId, limit);
+    public List<User> getNewUsers(String excludingAccountId, int limit) {
+        return userDao.getNewUsers(excludingAccountId, limit);
     }
  
 }

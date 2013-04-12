@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.util.SecurityUtil;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Plan;
 import com.tissue.plan.Question;
@@ -48,36 +49,36 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @RequestMapping(value="/topics/{topicId}/questions/_create")
-    public String createQustionForm(@PathVariable("topicId") Topic topic, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    @ModelAttribute("viewerActivePlansCount")
+    private int setupViewerActivePlansCount() {
+        return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
+    }
 
-        if(topic == null) {
-            return "accessDenied";
-        }
+    @RequestMapping(value="/topics/{topicId}/questions/_create")
+    public String createQustionForm(@PathVariable("topicId") Topic topic, Map model) {
 
         model.put("selected", "question");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount));
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
         model.put("questionForm", new PostForm());
         return "createQuestionFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/questions/_create", method=POST)
-    public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("questionForm") @Valid PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("questionForm") @Valid PostForm form, BindingResult result, Map model) {
 
         if(result.hasErrors()) {
             model.put("selected", "question");
             model.put("topic", topic);
-
-            model.put("isMember", topicService.isMember(topic, viewerAccount));
-            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
             return "createQuestionFormView";
         }
 
         form.setPlan(topic.getActivePlan());
+        Account viewerAccount = new Account();
+        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
 
         String questionId = questionService.createPost(form);
@@ -90,7 +91,7 @@ public class QuestionController {
      * Get specific question.
      */
     @RequestMapping(value="/questions/{questionId}")
-    public String getPost(@PathVariable("questionId") Question question, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String getPost(@PathVariable("questionId") Question question, Map model) {
 
         model.put("selected", "question");
 
@@ -98,8 +99,7 @@ public class QuestionController {
 
         model.put("question", question);
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount));
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
         model.put("answerForm", new AnswerForm());
 
@@ -107,9 +107,9 @@ public class QuestionController {
     }
 
     @RequestMapping(value="/questions/{questionId}/_update")
-    public String updateQuestionFormView(@PathVariable("questionId") Question question, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updateQuestionFormView(@PathVariable("questionId") Question question, Map model) {
 
-        if((question == null) || !question.getAccount().getId().equals(viewerAccount.getId())) {
+        if((question == null) || !question.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
             return "accessDenied";
         }
 
@@ -117,8 +117,7 @@ public class QuestionController {
 
         Topic topic = question.getPlan().getTopic();
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount));
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
         model.put("questionForm", question);
 
@@ -127,15 +126,14 @@ public class QuestionController {
     }
 
     @RequestMapping(value="/questions/{questionId}/_update", method=POST)
-    public String updateQuestion(@PathVariable("questionId") Question question, @Valid @ModelAttribute("questionForm") PostForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String updateQuestion(@PathVariable("questionId") Question question, @Valid @ModelAttribute("questionForm") PostForm form, BindingResult result, Map model) {
 
         if(result.hasErrors()) {
             model.put("selected", "question");
 
             Topic topic = question.getPlan().getTopic();
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, viewerAccount));
-            model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
+            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
             return "updateQuestionFormView";
         }
@@ -147,7 +145,8 @@ public class QuestionController {
     }
 
     @RequestMapping(value="/questions/{questionId}/_delete", method=POST)
-    public String deletePost(@PathVariable("questionId") Question question, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String deletePost(@PathVariable("questionId") Question question) {
+
         questionService.deleteContent(question.getId());
         return "redirect:/questions/" + question.getId().replace("#","");
     }

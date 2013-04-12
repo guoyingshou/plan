@@ -3,6 +3,7 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.Account;
 import com.tissue.core.User;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.util.SecurityUtil;
 import com.tissue.social.Activity;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Post;
@@ -45,52 +46,51 @@ public class ExploreController {
     @Autowired
     private PostService postService;
 
+    @ModelAttribute("viewerActivePlansCount")
+    private int setupViewerActivePlansCount() {
+        return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
+    }
+
+    @ModelAttribute("users")
+    private List<User> setupNewUsers() {
+        return exploreService.getNewUsers(SecurityUtil.getViewerAccountId(), 12);
+    }
+
     @RequestMapping("/explore")
-    public String exploreTrending(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String exploreTrending(Map model) {
 
         model.put("selected", "trending");
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
-        List<Topic> topics = topicService.getTrendingTopics(15);
+        List<Topic> topics = topicService.getTrendingTopics(12);
         model.put("topics", topics);
 
-        List<Post> posts = postService.getLatestPosts(15);
+        List<Post> posts = postService.getLatestPosts(12);
         model.put("posts", posts);
-
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
 
         return "explore";
     }
 
     @RequestMapping("/featured")
-    public String exploreFeatured(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String exploreFeatured(Map model) {
 
         model.put("selected", "featured");
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
-        List<Topic> topics = topicService.getFeaturedTopics(15);
+        List<Topic> topics = topicService.getFeaturedTopics(12);
         model.put("topics", topics);
 
-        List<Post> posts = postService.getLatestPosts(15);
+        List<Post> posts = postService.getLatestPosts(12);
         model.put("posts", posts);
-
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
 
         return "explore";
     }
 
     @RequestMapping("/topics")
-    public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         model.put("selected", "topics");
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
-        size = (size == null) ? 15 : size;
+        size = (size == null) ? 12 : size;
         long total = topicService.getTopicsCount();
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
@@ -98,24 +98,19 @@ public class ExploreController {
         List<Topic> topics = topicService.getPagedTopics(page, size);
         model.put("topics", topics);
 
-        List<Post> posts = postService.getLatestPosts(15);
+        List<Post> posts = postService.getLatestPosts(12);
         model.put("posts", posts);
-
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
 
         return "explore";
     }
 
     @RequestMapping("/tags/{tag}")
-    public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         model.put("selected", "tags");
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         page = (page == null) ? 1 : page;
-        size = (size == null) ? 15 : size;
+        size = (size == null) ? 12 : size;
         long total = topicService.getTopicsCountByTag(tag);
         Pager pager = new Pager(total, page, size);
         model.put("pager", pager);
@@ -123,28 +118,19 @@ public class ExploreController {
         List<Topic> topics = topicService.getPagedTopicsByTag(tag, page, size);
         model.put("topics", topics);
 
-        List<Post> posts = postService.getLatestPosts(15);
+        List<Post> posts = postService.getLatestPosts(12);
         model.put("posts", posts);
-
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
 
         return "explore";
     }
 
     @RequestMapping("/tags")
-    public String exploreTags(Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String exploreTags(Map model) {
 
         model.put("selected", "tags");
-        model.put("viewerActivePlansCount", planService.getViewerActivePlansCount(viewerAccount));
 
         Set<String> tags = topicService.getTopicTags();
         model.put("tags", tags);
-
-        String viewerId = (viewerAccount == null) ? null : viewerAccount.getUser().getId();
-        List<User> users = exploreService.getNewUsers(viewerId, 10);
-        model.put("users", users);
 
         return "tags";
     }

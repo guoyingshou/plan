@@ -64,13 +64,13 @@ public class PlanService {
         return postDao.getPagedPostsByPlan(planId, page, size);
     }
 
-    public int getViewerActivePlansCount(Account viewerAccount) {
-        if(viewerAccount == null) {
+    public int getViewerActivePlansCount(String viewerAccountId) {
+        if(viewerAccountId == null) {
             return 0;
         }
 
         int count = 0;
-        List<Plan> plans = planDao.getPlansByAccount(viewerAccount.getId());
+        List<Plan> plans = planDao.getPlansByAccount(viewerAccountId);
         for(Plan plan : plans) {
             if(plan.isActive()) {
                 count++;
