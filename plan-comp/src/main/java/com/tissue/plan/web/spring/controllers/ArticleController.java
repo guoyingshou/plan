@@ -3,6 +3,7 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.util.SecurityUtil;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Plan;
 import com.tissue.plan.Article;
@@ -42,6 +43,9 @@ public class ArticleController {
     private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
+    private ViewerService viewerService;
+
+    @Autowired
     private TopicService topicService;
 
     @Autowired
@@ -57,6 +61,9 @@ public class ArticleController {
 
     @RequestMapping(value="/topics/{topicId}/articles/_create")
     public String newPost(@PathVariable("topicId") Topic topic, Map model) {
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "all");
         model.put("topic", topic);
@@ -94,6 +101,8 @@ public class ArticleController {
      */
     @RequestMapping(value="/articles/{articleId}", method=GET)
     public String getPost(@PathVariable("articleId") Article article, Map model) {
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         model.put("selected", article.getType());
 
@@ -111,7 +120,10 @@ public class ArticleController {
     @RequestMapping(value="/articles/{articleId}/_update")
     public String updateArticleFormView(@PathVariable("articleId") Article article, Map model) {
 
-        if((article == null) || !article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
+
+        if(!article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
             return "accessDenied";
         }
 
@@ -128,8 +140,8 @@ public class ArticleController {
 
     @RequestMapping(value="/articles/{articleId}/_update", method=POST)
     public String updatePost(@PathVariable("articleId") Article article, @Valid @ModelAttribute("articleForm") PostForm form, BindingResult result, Map model) {
-
-        if((article == null) || !article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
+  
+        if(!article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
             return "redirect:/accessDenied";
         }
 
@@ -152,7 +164,7 @@ public class ArticleController {
     @RequestMapping(value="/articles/{articleId}/_delete", method=POST)
     public String deletePost(@PathVariable("articleId") Article article) {
 
-        if((article == null) || !article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
+        if(!article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
             return "accessDenied";
         }
 

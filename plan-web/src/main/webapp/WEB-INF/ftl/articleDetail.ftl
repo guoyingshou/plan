@@ -3,7 +3,6 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
-<#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 <#assign title= article.title  in site>
 
 <@site.layout>
@@ -29,8 +28,8 @@
                             [ <@site.showTimeBefore article.timeBefore /> ] 
                         </span>
 
-                        <#if !topic.deleted && !article.deleted>
-                        <#if viewerAccount?? && article.isOwner(viewerAccount.id)>
+                        <#if !topic.deleted && !article.deleted && viewerAccount??>
+                        <#if article.isOwner(viewerAccount.id)>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
                                 <@spring.message 'Delete' />
@@ -39,14 +38,12 @@
                                 <@spring.message 'Update' />
                             </a>
                         </span>
-                        <#else>
-                        <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                        <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
                         <span class="admin-action">
                         <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
                             <@spring.message 'Delete' />
                         </a>
                         </span>
-                        </@sec.authorize>
                         </#if>
                         </#if>
                     </div>
@@ -79,21 +76,20 @@
                                </span>
                                </#if>
 
-                               <#if viewerAccount?? && msg.isOwner(viewerAccount.id)>
+                               <#if viewerAccount??>
+                               <#if msg.isOwner(viewerAccount.id)>
                                <span class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
                                        <@spring.message 'Delete' />
                                    </a>
                                </span>
-                               <#else>
-                               <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                               <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
                                <span class="admin-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/_delete' />" href="#">
                                        <@spring.message 'Delete' />
                                    </a>
                                </span>
-                               </@sec.authorize>
-
+                               </#if>
                                </#if>
 
                                </#if>
@@ -119,24 +115,22 @@
 
                                        <#if !topic.deleted && !article.deleted>
 
-                                       <#if viewerAccount?? && reply.isOwner(viewerAccount.id)>
+                                       <#if viewerAccount??>
+                                       <#if reply.isOwner(viewerAccount.id)>
                                        <span class="owner-action">
                                            <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
                                                <@spring.message 'Delete' />
                                            </a>
                                        </span>
-
-                                       <#else>
-
-                                       <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                                       <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
                                        <span class="admin-action">
                                            <a class="pop" data-form-selector="#confirmForm" data-dialog-width="400" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
                                                <@spring.message 'Delete' />
                                            </a>
                                        </span>
-                                       </@sec.authorize>
-
                                        </#if>
+                                       </#if>
+
                                        </#if>
                                    </div>
 
@@ -153,7 +147,7 @@
                </ul>
                </#if>
 
-                <#if !topic.deleted && !article.deleted && viewerAccount?? && isMember>
+                <#if !topic.deleted && !article.deleted && (isMember || (viewerAccount?? && viewerAccount.hasRole('ROLE_ADMIN')))>
 
                 <div class="member-form">
                     <@spring.bind "messageForm.*" />
@@ -175,22 +169,12 @@
                         </ul>
                    </form>
                    <script type="text/javascript">
-                       CKEDITOR.replace("content", {
-                           filebrowserUploadUrl: '/media/images/_create' 
-                       });
+                       CKEDITOR.replace("content");
                    </script>
                 </div>
 
                 <@topicGadgets.replyForm />
                 <@site.confirmForm />
-
-                <#else>
-
-                <@sec.authorize access="hasRole('ROLE_ADMIN')">
-                <@topicGadgets.replyForm />
-                <@site.confirmForm />
-                </@sec.authorize>
-
                 </#if>
             </div>
 

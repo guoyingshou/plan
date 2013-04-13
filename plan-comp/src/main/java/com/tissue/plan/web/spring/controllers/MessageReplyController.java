@@ -2,6 +2,8 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.util.SecurityUtil;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Post;
 import com.tissue.plan.Message;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import org.springframework.security.access.AccessDeniedException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -38,6 +41,10 @@ import org.slf4j.LoggerFactory;
 public class MessageReplyController {
 
     private static Logger logger = LoggerFactory.getLogger(MessageReplyController.class);
+
+    @Autowired
+    private ViewerService viewerService;
+
     @Autowired
     private TopicService topicService;
 
@@ -49,13 +56,11 @@ public class MessageReplyController {
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{messageId}/messageReplies/_create", method=POST)
-    public String addMessageReply(@PathVariable("messageId") Message message, @Valid MessageReplyForm form, BindingResult resutl, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
-
-        if(message == null) {
-            return "accessDenied";
-        }
+    public String addMessageReply(@PathVariable("messageId") Message message, @Valid MessageReplyForm form, BindingResult resutl, Map model) {
 
         //todo: process on binding error
+
+        Account viewerAccount = viewerService.getViewerAccount();
 
         form.setMessage(message);
         form.setAccount(viewerAccount);
@@ -71,8 +76,11 @@ public class MessageReplyController {
     @RequestMapping(value="/messageReplies/{replyId}/_delete", method=POST)
     public String deleteMessageReply(@PathVariable("replyId") MessageReply messageReply, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
 
-        if((messageReply == null) || messageReply.getAccount().getId().equals(viewerAccount.getId())) {
-            return "accessDenied";
+        //todo: process binding errors
+
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        if(!messageReply.getAccount().getId().equals(viewerAccountId)) {
+            throw new AccessDeniedException("resource: " + messageReply.getId() + ", user: " + viewerAccountId);
         }
 
         messageReplyService.deleteContent(messageReply.getId());

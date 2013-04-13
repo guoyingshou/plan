@@ -3,7 +3,6 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
-<#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
 <#assign title=topic.title in site>
 
@@ -23,7 +22,8 @@
                    <#if !topic.deleted>
                    <@site.confirmForm />
 
-                   <#if viewerAccount?? && topic.isOwner(viewerAccount.id)>
+                   <#if viewerAccount??>
+                   <#if topic.isOwner(viewerAccount.id)>
                    <span class="owner-action">
                        <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
                            <@spring.message 'Update' />
@@ -32,14 +32,13 @@
                            <@spring.message 'Delete' />
                        </a>
                    </span>
-                   <#else>
-                   <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                   <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
                    <span class="admin-action">
                        <a class="pop" data-form-selector="#confirmForm" data-dialog-width="320" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
                            <@spring.message 'Delete' />
                        </a>
                    </span>
-                   </@sec.authorize>
+                   </#if>
                    </#if>
 
                    </#if>

@@ -3,6 +3,8 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.Account;
 import com.tissue.core.User;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.util.SecurityUtil;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Answer;
 import com.tissue.plan.AnswerComment;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+import org.springframework.security.access.AccessDeniedException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -40,6 +44,9 @@ public class AnswerCommentController {
     private static Logger logger = LoggerFactory.getLogger(AnswerCommentController.class);
 
     @Autowired
+    private ViewerService viewerService;
+
+    @Autowired
     private TopicService topicService;
 
     @Autowired
@@ -49,7 +56,10 @@ public class AnswerCommentController {
      * Add a comment to the answer of a specific question.
      */
     @RequestMapping(value="/answers/{answerId}/comments/_create", method=POST)
-    public String addAnswerComment(@PathVariable("answerId") Answer answer, @Valid AnswerCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addAnswerComment(@PathVariable("answerId") Answer answer, @Valid AnswerCommentForm form, BindingResult result, Map model) {
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
@@ -67,10 +77,10 @@ public class AnswerCommentController {
      * Delete an answer comment.
      */
     @RequestMapping(value="/answerComments/{commentId}/_delete", method=POST)
-    public String deleteAnswerComment(@PathVariable("commentId") AnswerComment answerComment, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String deleteAnswerComment(@PathVariable("commentId") AnswerComment answerComment) {
 
-        if((answerComment == null) || !answerComment.getAccount().getId().equals(viewerAccount.getId())) {
-            return "accessDenied";
+        if(!answerComment.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
+            throw new AccessDeniedException("resouce: " + answerComment.getId() + ", user: " + SecurityUtil.getViewerAccountId());
         }
 
         Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();

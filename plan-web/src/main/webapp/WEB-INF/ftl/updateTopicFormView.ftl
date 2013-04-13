@@ -48,10 +48,7 @@
             </ul>
         </form>
         <script type="text/javascript">
-            CKEDITOR.replace('content', {
-                filebrowserUploadUrl: '/media/images/_create',
-                filebrowserBrowseUrl: '/media/browseImages'
-            });
+            CKEDITOR.replace('content');
         </script>
    </div>
 </@site.layout>

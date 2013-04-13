@@ -3,6 +3,7 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.util.SecurityUtil;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Article;
 import com.tissue.plan.Message;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import org.springframework.security.access.AccessDeniedException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -39,6 +41,9 @@ import org.slf4j.LoggerFactory;
 public class MessageController {
 
     private static Logger logger = LoggerFactory.getLogger(MessageController.class);
+
+    @Autowired
+    private ViewerService viewerService;
 
     @Autowired
     private TopicService topicService;
@@ -60,22 +65,25 @@ public class MessageController {
     @RequestMapping(value="/articles/{articleId}/messages/_create", method=POST)
     public String addMessage(@PathVariable("articleId") Article article, @Valid MessageForm form, BindingResult result, Map model) {
 
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
+
         if(result.hasErrors()) {
             model.put("selected", article.getType());
             Topic topic = article.getPlan().getTopic();
 
             model.put("article", article);
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+            model.put("isMember", topicService.isMember(topic, viewerAccount.getId()));
 
             return "articleDetail";
         }
 
         form.setArticle(article);
-        Account viewerAccount = new Account();
-        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
+
         messageService.addMessage(form);
+
         model.clear();
         return "redirect:/articles/" + article.getId().replace("#", "");
     }
@@ -85,6 +93,11 @@ public class MessageController {
      */
     @RequestMapping(value="/messages/{msgId}/_delete", method=POST)
     public String deleteMessage(@PathVariable("msgId") Message message, Map model) {
+
+        String viewerAccountId = SecurityUtil.getViewerAccountId();
+        if(!message.getAccount().getId().equals(viewerAccountId)) {
+            throw new AccessDeniedException("resource: " + message.getId() + ", user: " + viewerAccountId);
+        }
 
         messageService.deleteContent(message.getId());
         

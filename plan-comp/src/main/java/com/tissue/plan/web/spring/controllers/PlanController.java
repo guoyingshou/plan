@@ -3,6 +3,7 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.util.SecurityUtil;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Plan;
 import com.tissue.plan.Post;
@@ -39,6 +40,9 @@ public class PlanController {
     private static Logger logger = LoggerFactory.getLogger(PlanController.class);
 
     @Autowired
+    private ViewerService viewerService;
+
+    @Autowired
     private TopicService topicService;
 
     @Autowired
@@ -52,9 +56,12 @@ public class PlanController {
     @RequestMapping(value="/topics/{topicId}/plans/_create")
     public String addPlan(@PathVariable("topicId") Topic topic, Map model) {
 
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
+
         model.put("selected", "objective");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+        model.put("isMember", topicService.isMember(topic, viewerAccount.getId()));
 
         model.put("planForm", new PlanForm());
         return "createPlanFormView";
@@ -91,6 +98,9 @@ public class PlanController {
      */
     @RequestMapping(value="/plans/{planId}/posts") 
     public String getPosts(@PathVariable("planId") Plan plan,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "all");
 

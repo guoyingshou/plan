@@ -2,6 +2,7 @@ package com.tissue.plan.web.spring.controllers;
 
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Question;
 import com.tissue.plan.QuestionComment;
@@ -39,6 +40,9 @@ public class QuestionCommentController {
     private static Logger logger = LoggerFactory.getLogger(QuestionCommentController.class);
 
     @Autowired
+    private ViewerService viewerService;
+
+    @Autowired
     private TopicService topicService;
 
     @Autowired
@@ -48,11 +52,13 @@ public class QuestionCommentController {
      * Add a comment to a specific question(a kind of post).
      */
     @RequestMapping(value="/questions/{questionId}/questionComments/_create", method=POST)
-    public String addQuestionComment(@PathVariable("questionId") Question question, @Valid QuestionCommentForm form, BindingResult result, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String addQuestionComment(@PathVariable("questionId") Question question, @Valid QuestionCommentForm form, BindingResult result, Map model) {
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
+
+        Account viewerAccount = viewerService.getViewerAccount();
 
         form.setQuestion(question);
         form.setAccount(viewerAccount);
@@ -66,9 +72,11 @@ public class QuestionCommentController {
      * Delete a QuestionComment.
      */
     @RequestMapping(value="/questionComments/{commentId}/_delete", method=POST)
-    public String deleteQuestionComment(@PathVariable("commentId") QuestionComment questionComment, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String deleteQuestionComment(@PathVariable("commentId") QuestionComment questionComment, Map model) {
 
-        if((questionComment == null) || !questionComment.getAccount().getId().equals(viewerAccount.getId())) {
+        Account viewerAccount = viewerService.getViewerAccount();
+
+        if(!questionComment.getAccount().getId().equals(viewerAccount.getId())) {
             return "accessDenied";
         }
 

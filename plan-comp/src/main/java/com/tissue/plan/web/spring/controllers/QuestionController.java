@@ -3,6 +3,7 @@ package com.tissue.plan.web.spring.controllers;
 import com.tissue.core.Account;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.util.SecurityUtil;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Plan;
 import com.tissue.plan.Question;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+import org.springframework.security.access.AccessDeniedException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -41,6 +43,9 @@ public class QuestionController {
     private static Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     @Autowired
+    private ViewerService viewerService;
+
+    @Autowired
     private TopicService topicService;
 
     @Autowired
@@ -56,6 +61,9 @@ public class QuestionController {
 
     @RequestMapping(value="/topics/{topicId}/questions/_create")
     public String createQustionForm(@PathVariable("topicId") Topic topic, Map model) {
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "question");
         model.put("topic", topic);
@@ -83,6 +91,7 @@ public class QuestionController {
 
         String questionId = questionService.createPost(form);
 
+        model.clear();
         return "redirect:/questions/" + questionId.replace("#", "");
         
     }
@@ -92,6 +101,9 @@ public class QuestionController {
      */
     @RequestMapping(value="/questions/{questionId}")
     public String getPost(@PathVariable("questionId") Question question, Map model) {
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "question");
 
@@ -109,8 +121,11 @@ public class QuestionController {
     @RequestMapping(value="/questions/{questionId}/_update")
     public String updateQuestionFormView(@PathVariable("questionId") Question question, Map model) {
 
-        if((question == null) || !question.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
-            return "accessDenied";
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
+
+        if(!question.getAccount().getId().equals(viewerAccount.getId())) {
+            throw new AccessDeniedException("resource: " + question.getId() + ", user: " + viewerAccount.getId());
         }
 
         model.put("selected", "question");
@@ -128,6 +143,8 @@ public class QuestionController {
     @RequestMapping(value="/questions/{questionId}/_update", method=POST)
     public String updateQuestion(@PathVariable("questionId") Question question, @Valid @ModelAttribute("questionForm") PostForm form, BindingResult result, Map model) {
 
+        //todo: access control check
+
         if(result.hasErrors()) {
             model.put("selected", "question");
 
@@ -141,13 +158,17 @@ public class QuestionController {
         form.setId(question.getId());
         questionService.updatePost(form);
 
+        model.clear();
         return "redirect:/questions/" + question.getId().replace("#","");
     }
 
     @RequestMapping(value="/questions/{questionId}/_delete", method=POST)
-    public String deletePost(@PathVariable("questionId") Question question) {
+    public String deletePost(@PathVariable("questionId") Question question, Map model) {
 
+        //todo: access control check
         questionService.deleteContent(question.getId());
+
+        model.clear();
         return "redirect:/questions/" + question.getId().replace("#","");
     }
 

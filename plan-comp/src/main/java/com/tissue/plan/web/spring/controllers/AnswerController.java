@@ -4,6 +4,7 @@ import com.tissue.core.Account;
 import com.tissue.core.User;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.util.SecurityUtil;
+//import com.tissue.commons.service.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Post;
 import com.tissue.plan.Question;
@@ -41,6 +42,11 @@ import org.slf4j.LoggerFactory;
 public class AnswerController {
 
     private static Logger logger = LoggerFactory.getLogger(AnswerController.class);
+
+    /**
+    @Autowired
+    private ViewerService viewerService;
+    */
 
     @Autowired
     private TopicService topicService;

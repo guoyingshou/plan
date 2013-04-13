@@ -3,8 +3,6 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
-<#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
-
 <#assign title= question.title in site />
 
 <@site.layout>
@@ -34,7 +32,8 @@
                         </span>
                         </#if>
 
-                        <#if viewerAccount?? && question.isOwner(viewerAccount.id)>
+                        <#if viewerAccount??>
+                        <#if question.isOwner(viewerAccount.id)>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />" href="#">
                                <@spring.message 'Delete' />
@@ -44,16 +43,13 @@
                             </a>
                         </span>
 
-                        <#else>
-
-                        <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                        <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
                         <span class="admin-action">
-                            <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />">
+                            <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />" href="#">
                                 <@spring.message 'Delete' />
                             </a>
                         </span>
-                        </@sec.authorize>
-
+                        </#if>
                         </#if>
 
                         </#if>
@@ -78,23 +74,20 @@
 
                                    <#if !topic.deleted && !question.deleted>
                                    
-                                   <#if viewerAccount?? && questionComment.isOwner(viewerAccount.id)>
+                                   <#if viewerAccount??>
+                                   <#if questionComment.isOwner(viewerAccount.id)>
                                    <div class="owner-action">
                                        <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
                                            <@spring.message 'Delete' />
                                        </a>
                                    </div>
-
-                                   <#else>
-
-                                   <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                                   <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
                                    <span class="admin-action">
                                        <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />">
                                           <@spring.message 'Delete' />
                                        </a>
                                    </span>
-                                   </@sec.authorize>
-
+                                   </#if>
                                    </#if>
 
                                    </#if>
@@ -123,7 +116,7 @@
                                      [ <@site.showTimeBefore answer.timeBefore /> ]
                                  </span>
 
-                                 <#if !topic.deleted && !answer.deleted>
+                                 <#if !topic.deleted && !question.deleted>
 
                                  <#if isMember>
                                  <span class="member-action">
@@ -133,24 +126,20 @@
                                  </span>
                                  </#if>
                                 
-                                 <#if viwerAccount?? && answer.isOwner(viewerAccount.id)>
-
+                                 <#if viewerAccount??>
+                                 <#if answer.isOwner(viewerAccount.id)>
                                  <span class="owner-action">
                                      <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
                                          <@spring.message 'Delete' />
                                      </a>
                                  </span>
-
-                                 <#else>
-
-                                 <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                                 <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
                                  <span class="admin-action">
                                      <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />">
                                         <@spring.message 'Delete' />
                                      </a>
                                  </span>
-                                 </@sec.authorize>
-
+                                 </#if>
                                  </#if>
 
                                  </#if>
@@ -176,24 +165,20 @@
 
                                          <#if !topic.deleted && !question.deleted>
 
-                                         <#if viewerAccount?? && comment.isOwner(viewerAccount.id)>
-
+                                         <#if viewerAccount??>
+                                         <#if comment.isOwner(viewerAccount.id)>
                                          <span class="owner-action">
                                              <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answerComments/${comment.id?replace("#","")}/_delete' />" href="#">
                                                  <@spring.message 'Delete' />
                                              </a>
                                          </span>
-
-                                         <#else>
-
-                                         <@sec.authorize access="hasRole('ROLE_ADMIN')">
+                                         <#elseif viewerAccount.hasROLE('ROLE_ADMIN')>
                                          <span class="admin-action">
-                                             <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answerComments/${comment.id?replace("#", "")}/_delete' />">
+                                             <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answerComments/${comment.id?replace("#", "")}/_delete' />" href="#">
                                                  <@spring.message 'Delete' />
                                              </a>
                                          </span>
-                                         </@sec.authorize>
-
+                                         </#if>
                                          </#if>
 
                                          </#if>
@@ -212,7 +197,7 @@
                 </ul>
                 </#if>
 
-                <#if !topic.deleted && !question.deleted && isMember>
+                <#if !topic.deleted && !question.deleted && (isMember || (viewerAccount?? && viewerAccount.hasRole('ROLE_ADMIN')))>
                 <div class="member-form">
                    <@spring.bind "answerForm.*" />
                    <div class="error">
@@ -241,14 +226,6 @@
                 <@topicGadgets.answerCommentForm />
                 <@site.confirmForm />
 
-                <#else>
-
-                <@sec.authorize access="hasRole('ROLE_ADMIN')">
-                <@topicGadgets.questionCommentForm />
-                <@topicGadgets.answerCommentForm />
-                <@site.confirmForm />
-                </@sec.authorize>
- 
                 </#if>
             </div>
 

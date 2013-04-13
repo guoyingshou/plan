@@ -48,9 +48,7 @@
                </fieldset>
               </form>
               <script type="text/javascript">
-                CKEDITOR.replace("content", {
-                    filebrowserUploadUrl: '/media/images/_create' 
-                 });
+                CKEDITOR.replace("content");
               </script>
            </div>
 

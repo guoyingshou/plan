@@ -4,6 +4,7 @@ import com.tissue.core.Account;
 import com.tissue.core.User;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.util.SecurityUtil;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.social.Activity;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Post;
@@ -35,6 +36,9 @@ import java.util.Date;
 public class ExploreController {
 
     @Autowired
+    protected ViewerService viewerService;
+
+    @Autowired
     protected ExploreService exploreService;
 
     @Autowired
@@ -59,6 +63,9 @@ public class ExploreController {
     @RequestMapping("/explore")
     public String exploreTrending(Map model) {
 
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
+
         model.put("selected", "trending");
 
         List<Topic> topics = topicService.getTrendingTopics(12);
@@ -72,6 +79,8 @@ public class ExploreController {
 
     @RequestMapping("/featured")
     public String exploreFeatured(Map model) {
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "featured");
 
@@ -86,6 +95,9 @@ public class ExploreController {
 
     @RequestMapping("/topics")
     public String exploreTopics(@RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "topics");
 
@@ -107,6 +119,9 @@ public class ExploreController {
     @RequestMapping("/tags/{tag}")
     public String getTopicsByTag(@PathVariable("tag") String tag, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
+
         model.put("selected", "tags");
 
         page = (page == null) ? 1 : page;
@@ -126,6 +141,9 @@ public class ExploreController {
 
     @RequestMapping("/tags")
     public String exploreTags(Map model) {
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "tags");
 

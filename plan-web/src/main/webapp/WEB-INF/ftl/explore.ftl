@@ -9,7 +9,7 @@
 
 <@site.layout>
 
-    <#include "exploreHeader.ftl" />
+    <@topicGadgets.exploreHeader />
 
     <div id="page-main-wrapper">
         <div id="page-main">

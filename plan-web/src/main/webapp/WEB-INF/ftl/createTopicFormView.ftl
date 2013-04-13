@@ -6,7 +6,7 @@
 <#assign title = "Create Topic"  in site>
 
 <@site.layout>
-    <#include "exploreHeader.ftl" />
+    <@topicGadgets.exploreHeader />
 
     <div id="page-main-wrapper">
         <@spring.bind "topicForm.*" />
@@ -44,10 +44,7 @@
             </ul>
         </form>
         <script type="text/javascript">
-            CKEDITOR.replace('content', {
-                filebrowserUploadUrl: '/media/images/_create',
-                filebrowserBrowseUrl: '/media/browseImages'
-            });
+            CKEDITOR.replace('content');
         </script>
    </div>
 </@site.layout>

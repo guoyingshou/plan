@@ -3,7 +3,6 @@
 <#import "topicGadgets.ftl" as topicGadgets />
 
 <#assign myscripts=["/ckeditor/ckeditor.js"] in site>
-<#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] />
 
 <#assign title=topic.title in site>
 
