@@ -59,6 +59,7 @@ public class QuestionCommentController {
         }
 
         Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkMembership(question.getPlan().getTopic(), viewerAccount);
 
         form.setQuestion(question);
         form.setAccount(viewerAccount);
@@ -75,10 +76,7 @@ public class QuestionCommentController {
     public String deleteQuestionComment(@PathVariable("commentId") QuestionComment questionComment, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-
-        if(!questionComment.getAccount().getId().equals(viewerAccount.getId())) {
-            return "accessDenied";
-        }
+        viewerService.checkOwnership(questionComment, viewerAccount);
 
         questionCommentService.deleteContent(questionComment.getId());
         return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");

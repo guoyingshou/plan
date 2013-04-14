@@ -61,7 +61,6 @@ public class PlanController {
 
         model.put("selected", "objective");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount.getId()));
 
         model.put("planForm", new PlanForm());
         return "createPlanFormView";
@@ -74,9 +73,9 @@ public class PlanController {
     @RequestMapping(value="/topics/{topicId}/plans/_create", method=POST)
     public String addPlan(@PathVariable("topicId") Topic topic, PlanForm form, Map model) {
 
+        Account viewerAccount = viewerService.getViewerAccount();
+
         form.setTopic(topic);
-        Account viewerAccount = new Account();
-        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
 
         planService.addPlan(form);
@@ -97,7 +96,7 @@ public class PlanController {
      * Get paged posts by planId.
      */
     @RequestMapping(value="/plans/{planId}/posts") 
-    public String getPosts(@PathVariable("planId") Plan plan,  @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
+    public String getPosts(@PathVariable("planId") Plan plan, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
@@ -106,7 +105,6 @@ public class PlanController {
 
         Topic topic = plan.getTopic();
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;

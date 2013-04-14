@@ -103,13 +103,4 @@ public class TopicService extends ContentService {
         return postDao.getPagedPostsByType(topicId, type, page, size);
     }
 
-    public Boolean isMember(Topic topic, String viewerAccountId) {
-        Boolean isMember = false;
-        Plan plan = topic.getActivePlan();
-        if((plan != null) && (viewerAccountId != null)) {
-            isMember = planDao.isMember(plan.getId(), viewerAccountId);
-        }
-        return isMember;
-    }
-
 }

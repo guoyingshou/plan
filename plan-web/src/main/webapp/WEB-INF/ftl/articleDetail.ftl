@@ -29,7 +29,7 @@
                         </span>
 
                         <#if !topic.deleted && !article.deleted && viewerAccount??>
-                        <#if article.isOwner(viewerAccount.id)>
+                        <#if article.isOwner(viewerAccount)>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
                                 <@spring.message 'Delete' />
@@ -77,7 +77,7 @@
                                </#if>
 
                                <#if viewerAccount??>
-                               <#if msg.isOwner(viewerAccount.id)>
+                               <#if msg.isOwner(viewerAccount)>
                                <span class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
                                        <@spring.message 'Delete' />
@@ -116,7 +116,7 @@
                                        <#if !topic.deleted && !article.deleted>
 
                                        <#if viewerAccount??>
-                                       <#if reply.isOwner(viewerAccount.id)>
+                                       <#if reply.isOwner(viewerAccount)>
                                        <span class="owner-action">
                                            <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
                                                <@spring.message 'Delete' />

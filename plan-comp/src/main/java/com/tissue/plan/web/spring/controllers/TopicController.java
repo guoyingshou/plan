@@ -74,9 +74,9 @@ public class TopicController {
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
+        model.put("selected", "topics");
        
         if(result.hasErrors()) {
-            model.put("selected", "topics");
             return "createTopicFormView";
         }
 
@@ -93,15 +93,10 @@ public class TopicController {
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
 
-        if(!topic.getAccount().getId().equals(viewerAccount.getId())) {
-            model.clear();
-            return "redirect:/accessDenied";
-        }
+        viewerService.checkOwnership(topic, viewerAccount);
 
         model.put("selected", "objective");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount.getId()));
-
         model.put("topicForm", topic);
 
         return "updateTopicFormView";
@@ -113,10 +108,15 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/_update", method=POST)
     public String updateTopic(@PathVariable("topicId") Topic topic, @Valid TopicForm form, BindingResult result, Map model) {
 
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
+
+        viewerService.checkOwnership(topic, viewerAccount);
+
         if(result.hasErrors()) {
             model.put("selected", "objective");
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+            model.put("isMember", viewerService.isMember(topic, viewerAccount));
             return "updateTopicFormView";
         }
  
@@ -129,13 +129,12 @@ public class TopicController {
 
     @RequestMapping(value="/topics/{topicId}/_delete", method=POST)
     public String deleteTopic(@PathVariable("topicId") Topic topic, Map model) {
-        
-        model.clear();
 
-        if(!topic.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
-            throw new AccessDeniedException("resource: " + topic.getId() + ", user: " + SecurityUtil.getViewerAccountId());
-        }
+        Account viewerAccount = viewerService.getViewerAccount();
+        model.put("viewerAccount", viewerAccount);
 
+        viewerService.checkOwnership(topic, viewerAccount);
+       
         topicService.deleteContent(topic.getId());
         model.clear();
         return "redirect:/topics";
@@ -145,14 +144,14 @@ public class TopicController {
      * Show topic.
      */
     @RequestMapping(value="/topics/{topicId}/objective")
-    public String getTopic(@PathVariable("topicId") Topic topic, Map model) {
+    public String getObjective(@PathVariable("topicId") Topic topic, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "objective");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount.getId()));
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
 
         return "topic";
     }
@@ -161,14 +160,14 @@ public class TopicController {
      * Get paged posts by topicId.
      */
     @RequestMapping(value="/topics/{topicId}/posts")
-    public String getTopic(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
+    public String getPosts(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
 
         model.put("selected", "all");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount.getId()));
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 12 : size;
@@ -193,7 +192,7 @@ public class TopicController {
 
         model.put("selected", "concept");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, viewerAccount.getId()));
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 12 : size;
@@ -218,7 +217,7 @@ public class TopicController {
 
         model.put("selected", "note");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 12 : size;
@@ -243,7 +242,7 @@ public class TopicController {
 
         model.put("selected", "tutorial");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 12 : size;
@@ -268,7 +267,7 @@ public class TopicController {
 
         model.put("selected", "question");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 12 : size;

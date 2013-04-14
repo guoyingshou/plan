@@ -63,30 +63,34 @@ public class QuestionController {
     public String createQustionForm(@PathVariable("topicId") Topic topic, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkMembership(topic, viewerAccount);
+
         model.put("viewerAccount", viewerAccount);
-
-        model.put("selected", "question");
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
-
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        
+        model.put("selected", "question");
         model.put("questionForm", new PostForm());
+
         return "createQuestionFormView";
     }
 
     @RequestMapping(value="/topics/{topicId}/questions/_create", method=POST)
     public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("questionForm") @Valid PostForm form, BindingResult result, Map model) {
 
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkMembership(topic, viewerAccount);
+
         if(result.hasErrors()) {
-            model.put("selected", "question");
+            model.put("viewerAccount", viewerAccount);
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+            model.put("selected", "question");
+            model.put("isMember", viewerService.isMember(topic, viewerAccount));
 
             return "createQuestionFormView";
         }
 
         form.setPlan(topic.getActivePlan());
-        Account viewerAccount = new Account();
-        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
 
         String questionId = questionService.createPost(form);
@@ -102,17 +106,13 @@ public class QuestionController {
     @RequestMapping(value="/questions/{questionId}")
     public String getPost(@PathVariable("questionId") Question question, Map model) {
 
+        Topic topic = question.getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
-
         model.put("selected", "question");
-
-        Topic topic = question.getPlan().getTopic();
-
         model.put("question", question);
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
-
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
         model.put("answerForm", new AnswerForm());
 
         return "questionDetail";
@@ -122,18 +122,14 @@ public class QuestionController {
     public String updateQuestionFormView(@PathVariable("questionId") Question question, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
-
-        if(!question.getAccount().getId().equals(viewerAccount.getId())) {
-            throw new AccessDeniedException("resource: " + question.getId() + ", user: " + viewerAccount.getId());
-        }
-
-        model.put("selected", "question");
+        viewerService.checkOwnership(question, viewerAccount);
 
         Topic topic = question.getPlan().getTopic();
-        model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
 
+        model.put("viewerAccount", viewerAccount);
+        model.put("topic", topic);
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("selected", "question");
         model.put("questionForm", question);
 
         return "updateQuestionFormView";
@@ -143,14 +139,16 @@ public class QuestionController {
     @RequestMapping(value="/questions/{questionId}/_update", method=POST)
     public String updateQuestion(@PathVariable("questionId") Question question, @Valid @ModelAttribute("questionForm") PostForm form, BindingResult result, Map model) {
 
-        //todo: access control check
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(question, viewerAccount);
 
         if(result.hasErrors()) {
-            model.put("selected", "question");
-
             Topic topic = question.getPlan().getTopic();
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+            model.put("viewerAccount", viewerAccount);
+            model.put("isMember", viewerService.isMember(topic, viewerAccount));
+            model.put("selected", "question");
 
             return "updateQuestionFormView";
         }
@@ -165,12 +163,13 @@ public class QuestionController {
     @RequestMapping(value="/questions/{questionId}/_delete", method=POST)
     public String deletePost(@PathVariable("questionId") Question question, Map model) {
 
-        //todo: access control check
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(question, viewerAccount);
+
         questionService.deleteContent(question.getId());
 
         model.clear();
         return "redirect:/questions/" + question.getId().replace("#","");
     }
-
 
 }

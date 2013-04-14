@@ -33,7 +33,7 @@
                         </#if>
 
                         <#if viewerAccount??>
-                        <#if question.isOwner(viewerAccount.id)>
+                        <#if question.isOwner(viewerAccount)>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />" href="#">
                                <@spring.message 'Delete' />
@@ -75,7 +75,7 @@
                                    <#if !topic.deleted && !question.deleted>
                                    
                                    <#if viewerAccount??>
-                                   <#if questionComment.isOwner(viewerAccount.id)>
+                                   <#if questionComment.isOwner(viewerAccount)>
                                    <div class="owner-action">
                                        <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
                                            <@spring.message 'Delete' />
@@ -127,7 +127,7 @@
                                  </#if>
                                 
                                  <#if viewerAccount??>
-                                 <#if answer.isOwner(viewerAccount.id)>
+                                 <#if answer.isOwner(viewerAccount)>
                                  <span class="owner-action">
                                      <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
                                          <@spring.message 'Delete' />
@@ -166,7 +166,7 @@
                                          <#if !topic.deleted && !question.deleted>
 
                                          <#if viewerAccount??>
-                                         <#if comment.isOwner(viewerAccount.id)>
+                                         <#if comment.isOwner(viewerAccount)>
                                          <span class="owner-action">
                                              <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answerComments/${comment.id?replace("#","")}/_delete' />" href="#">
                                                  <@spring.message 'Delete' />

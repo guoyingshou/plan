@@ -56,11 +56,15 @@ public class MessageReplyController {
      * The post's type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messages/{messageId}/messageReplies/_create", method=POST)
-    public String addMessageReply(@PathVariable("messageId") Message message, @Valid MessageReplyForm form, BindingResult resutl, Map model) {
+    public String addMessageReply(@PathVariable("messageId") Message message, @Valid MessageReplyForm form, BindingResult result, Map model) {
 
-        //todo: process on binding error
+        if(result.hasErrors()) {
+            throw new IllegalArgumentException(result.getAllErrors().toString());
+        }
 
+        Topic topic = message.getArticle().getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkMembership(topic, viewerAccount);
 
         form.setMessage(message);
         form.setAccount(viewerAccount);
@@ -74,16 +78,13 @@ public class MessageReplyController {
      * The post type can be 'concept', 'note' or 'tutorial'.
      */
     @RequestMapping(value="/messageReplies/{replyId}/_delete", method=POST)
-    public String deleteMessageReply(@PathVariable("replyId") MessageReply messageReply, Map model, @ModelAttribute("viewerAccount") Account viewerAccount) {
+    public String deleteMessageReply(@PathVariable("replyId") MessageReply messageReply, Map model) {
 
-        //todo: process binding errors
-
-        String viewerAccountId = SecurityUtil.getViewerAccountId();
-        if(!messageReply.getAccount().getId().equals(viewerAccountId)) {
-            throw new AccessDeniedException("resource: " + messageReply.getId() + ", user: " + viewerAccountId);
-        }
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(messageReply, viewerAccount);
 
         messageReplyService.deleteContent(messageReply.getId());
+        model.clear();
         return "redirect:/articles/" + messageReply.getMessage().getArticle().getId().replace("#", "");
     }
 

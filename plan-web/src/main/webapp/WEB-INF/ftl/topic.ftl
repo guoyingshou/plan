@@ -23,7 +23,7 @@
                    <@site.confirmForm />
 
                    <#if viewerAccount??>
-                   <#if topic.isOwner(viewerAccount.id)>
+                   <#if topic.isOwner(viewerAccount)>
                    <span class="owner-action">
                        <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
                            <@spring.message 'Update' />

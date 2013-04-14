@@ -65,16 +65,17 @@ public class MessageController {
     @RequestMapping(value="/articles/{articleId}/messages/_create", method=POST)
     public String addMessage(@PathVariable("articleId") Article article, @Valid MessageForm form, BindingResult result, Map model) {
 
+        Topic topic = article.getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkMembership(topic, viewerAccount);
+
         model.put("viewerAccount", viewerAccount);
 
         if(result.hasErrors()) {
             model.put("selected", article.getType());
-            Topic topic = article.getPlan().getTopic();
-
             model.put("article", article);
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, viewerAccount.getId()));
+            model.put("isMember", viewerService.isMember(topic, viewerAccount));
 
             return "articleDetail";
         }
@@ -94,13 +95,12 @@ public class MessageController {
     @RequestMapping(value="/messages/{msgId}/_delete", method=POST)
     public String deleteMessage(@PathVariable("msgId") Message message, Map model) {
 
-        String viewerAccountId = SecurityUtil.getViewerAccountId();
-        if(!message.getAccount().getId().equals(viewerAccountId)) {
-            throw new AccessDeniedException("resource: " + message.getId() + ", user: " + viewerAccountId);
-        }
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(message, viewerAccount);
 
         messageService.deleteContent(message.getId());
         
+        model.clear();
         return "redirect:/articles/" + message.getArticle().getId().replace("#", "");
     }
 

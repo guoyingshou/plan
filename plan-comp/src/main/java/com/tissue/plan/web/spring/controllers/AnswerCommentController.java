@@ -58,13 +58,13 @@ public class AnswerCommentController {
     @RequestMapping(value="/answers/{answerId}/comments/_create", method=POST)
     public String addAnswerComment(@PathVariable("answerId") Answer answer, @Valid AnswerCommentForm form, BindingResult result, Map model) {
 
+        Topic topic = answer.getQuestion().getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
+        viewerService.checkMembership(topic, viewerAccount);
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());
         }
-        Topic topic = answer.getQuestion().getPlan().getTopic();
 
         form.setAnswer(answer);
         form.setAccount(viewerAccount);
@@ -79,9 +79,8 @@ public class AnswerCommentController {
     @RequestMapping(value="/answerComments/{commentId}/_delete", method=POST)
     public String deleteAnswerComment(@PathVariable("commentId") AnswerComment answerComment) {
 
-        if(!answerComment.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
-            throw new AccessDeniedException("resouce: " + answerComment.getId() + ", user: " + SecurityUtil.getViewerAccountId());
-        }
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(answerComment, viewerAccount);
 
         Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
         answerCommentService.deleteContent(answerComment.getId());

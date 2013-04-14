@@ -4,7 +4,7 @@ import com.tissue.core.Account;
 import com.tissue.core.User;
 import com.tissue.commons.util.Pager;
 import com.tissue.commons.util.SecurityUtil;
-//import com.tissue.commons.service.ViewerService;
+import com.tissue.commons.services.ViewerService;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Post;
 import com.tissue.plan.Question;
@@ -43,10 +43,8 @@ public class AnswerController {
 
     private static Logger logger = LoggerFactory.getLogger(AnswerController.class);
 
-    /**
     @Autowired
     private ViewerService viewerService;
-    */
 
     @Autowired
     private TopicService topicService;
@@ -69,24 +67,22 @@ public class AnswerController {
     @RequestMapping(value="/questions/{questionId}/answers/_create", method=POST)
     public String addAnswer(@PathVariable("questionId") Question question, @Valid AnswerForm form, BindingResult result, Map model) {
 
+        Topic topic = question.getPlan().getTopic();
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkMembership(topic, viewerAccount);
+
+        model.put("viewerAccount", viewerAccount);
+        model.put("selected", "question");
+        model.put("question", question);
+        model.put("topic", topic);
+
         if(result.hasErrors()) {
-            model.put("selected", "question");
-
-            Topic topic = question.getPlan().getTopic();
-
-            model.put("question", question);
-            model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
-
             return "questionDetail";
         }
 
-        Topic topic = question.getPlan().getTopic();
-
         form.setQuestion(question);
-        Account viewerAccount = new Account();
-        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
+
         answerService.addAnswer(form);
 
         model.clear();
@@ -98,6 +94,9 @@ public class AnswerController {
      */
     @RequestMapping(value="/answers/{answerId}/_delete", method=POST)
     public String deleteAnswer(@PathVariable("answerId") Answer answer) {
+
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(answer, viewerAccount);
 
         Topic topic = answer.getQuestion().getPlan().getTopic();
         answerService.deleteContent(answer.getId());

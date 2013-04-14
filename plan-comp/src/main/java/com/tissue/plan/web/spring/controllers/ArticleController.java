@@ -63,11 +63,12 @@ public class ArticleController {
     public String newPost(@PathVariable("topicId") Topic topic, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
+        viewerService.checkMembership(topic, viewerAccount);
 
-        model.put("selected", "all");
+        model.put("viewerAccount", viewerAccount);
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("selected", "all");
         model.put("articleForm", new PostForm());
 
         return "createArticleFormView";
@@ -76,17 +77,19 @@ public class ArticleController {
     @RequestMapping(value="/topics/{topicId}/articles/_create", method=POST)
     public String addQuestion(@PathVariable("topicId") Topic topic, @ModelAttribute("articleForm") @Valid PostForm form, BindingResult result, Map model) {
 
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkMembership(topic, viewerAccount);
+
         if(result.hasErrors()) {
-            model.put("selected", "all");
+            model.put("viewerAccount", viewerAccount);
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+            model.put("isMember", viewerService.isMember(topic, viewerAccount));
+            model.put("selected", "all");
 
             return "createArticleFormView";
         }
 
         form.setPlan(topic.getActivePlan());
-        Account viewerAccount = new Account();
-        viewerAccount.setId(SecurityUtil.getViewerAccountId());
         form.setAccount(viewerAccount);
 
         String articleId = articleService.createPost(form);
@@ -101,17 +104,15 @@ public class ArticleController {
      */
     @RequestMapping(value="/articles/{articleId}", method=GET)
     public String getPost(@PathVariable("articleId") Article article, Map model) {
-        Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
-
-        model.put("selected", article.getType());
 
         Topic topic = article.getPlan().getTopic();
+        Account viewerAccount = viewerService.getViewerAccount();
 
+        model.put("viewerAccount", viewerAccount);
+        model.put("selected", article.getType());
         model.put("article", article);
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
-
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
         model.put("messageForm", new MessageForm());
 
         return "articleDetail";
@@ -120,36 +121,31 @@ public class ArticleController {
     @RequestMapping(value="/articles/{articleId}/_update")
     public String updateArticleFormView(@PathVariable("articleId") Article article, Map model) {
 
-        Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
-
-        if(!article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
-            return "accessDenied";
-        }
-
-        model.put("selected", article.getType());
-
         Topic topic = article.getPlan().getTopic();
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(article, viewerAccount);
+
+        model.put("viewerAccount", viewerAccount);
         model.put("topic", topic);
-        model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("selected", article.getType());
 
         model.put("articleForm", article);
         return "updateArticleFormView";
-
     }
 
     @RequestMapping(value="/articles/{articleId}/_update", method=POST)
     public String updatePost(@PathVariable("articleId") Article article, @Valid @ModelAttribute("articleForm") PostForm form, BindingResult result, Map model) {
   
-        if(!article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
-            return "redirect:/accessDenied";
-        }
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(article, viewerAccount);
 
         if(result.hasErrors()) {
-            model.put("selected", article.getType());
             Topic topic = article.getPlan().getTopic();
             model.put("topic", topic);
-            model.put("isMember", topicService.isMember(topic, SecurityUtil.getViewerAccountId()));
+            model.put("viewerAccount", viewerAccount);
+            model.put("isMember", viewerService.isMember(topic, viewerAccount));
+            model.put("selected", article.getType());
 
             return "updateArticleFormView";
         }
@@ -162,13 +158,14 @@ public class ArticleController {
     }
 
     @RequestMapping(value="/articles/{articleId}/_delete", method=POST)
-    public String deletePost(@PathVariable("articleId") Article article) {
+    public String deletePost(@PathVariable("articleId") Article article, Map model) {
 
-        if(!article.getAccount().getId().equals(SecurityUtil.getViewerAccountId())) {
-            return "accessDenied";
-        }
+        Account viewerAccount = viewerService.getViewerAccount();
+        viewerService.checkOwnership(article, viewerAccount); //access denied exception will be thrown if not owner
 
         articleService.deleteContent(article.getId());
+
+        model.clear();
         return "redirect:/articles/" + article.getId().replace("#","");
     }
 
