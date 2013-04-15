@@ -19,11 +19,19 @@
                         <#list topics as topic>
                         <li>
                             <div class="ts">
-                                <a href="/social/users/${topic.account.user.id?replace("#", "")}/posts">${topic.account.user.displayName}</a>
+                                <a class="username" href="/social/users/${topic.account.user.id?replace("#", "")}/posts">${topic.account.user.displayName}</a>
                                 [ <@site.showTimeBefore topic.timeBefore /> ]
                             </div>
                             <div>
-                                <a href="/group/topics/${topic.id?replace("#", "")}/objective">${topic.title}</a>
+                                <#if (topic.title?length > 18)>
+                                <a href="/group/topics/${topic.id?replace("#", "")}/objective">
+                                    ${topic.title?substring(0,18)} ...
+                                </a>
+                                <#else>
+                                <a href="/group/topics/${topic.id?replace("#", "")}/objective">
+                                    ${topic.title}
+                                </a>
+                                </#if>
                             </div>
                         </li>
                         </#list>

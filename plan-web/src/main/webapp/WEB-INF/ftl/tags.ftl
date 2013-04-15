@@ -19,7 +19,7 @@
             <div id="main-content">
             <#if tags??>
             <#list tags as tag>
-                <span><a href="/group/tags/${tag}">${tag}</a></span>
+                <a class="tag" href="/group/tags/${tag}">${tag}</a>
             </#list>
             </#if>
             </div>

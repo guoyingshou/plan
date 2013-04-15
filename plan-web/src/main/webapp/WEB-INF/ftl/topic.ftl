@@ -46,10 +46,11 @@
 
                <div class="tags">
                    <#list topic.tags as tag>
-                   <span><a href="<@spring.url '/tags/${tag}' />">${tag}</a></span>
+                   <a class="tag" href="<@spring.url '/tags/${tag}' />">${tag}</a>
                    </#list>
                </div>
-               <div class="content">
+
+               <div class="topic-content">
                    ${topic.content}
                </div>
 

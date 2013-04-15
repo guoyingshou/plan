@@ -13,10 +13,12 @@
         <div id="page-main">
             <div id="main-content">
                 <div class="question">
-                    <h3 class="title">${question.title}</h3>
-                    <div class="meta">
+                    <h2 class="title">
+                        ${question.title}
+                    </h2>
+                    <div class="post-meta">
                         <span class="owner">
-                            <a href="/social/users/${question.account.user.id?replace("#","")}/posts">
+                            <a class="username" href="/social/users/${question.account.user.id?replace("#","")}/posts">
                                 ${question.account.user.displayName} 
                             </a>
                             [ <@site.showTimeBefore question.timeBefore /> ]
@@ -66,7 +68,7 @@
                            <div class="question-comment" id="question-comment-${questionComment.id?replace("#","")?replace(":","-")}">
                                <div class="meta">
                                    <span class="owner">
-                                       <a href="/social/users/${questionComment.account.user.id?replace("#","")}/posts">
+                                       <a class="username" href="/social/users/${questionComment.account.user.id?replace("#","")}/posts">
                                            ${questionComment.account.user.displayName} 
                                        </a>
                                        [ <@site.showTimeBefore questionComment.timeBefore /> ]
@@ -110,7 +112,7 @@
                          <div class="answer" id="answer-${answer.id?replace("#","")?replace(":","-")}">
                              <div class="meta">
                                  <span class="owner">
-                                     <a href="/social/users/${answer.account.user.id?replace("#","")}/posts">
+                                     <a class="username" href="/social/users/${answer.account.user.id?replace("#","")}/posts">
                                          ${answer.account.user.displayName} 
                                      </a>
                                      [ <@site.showTimeBefore answer.timeBefore /> ]
@@ -157,7 +159,7 @@
                                  <div class="answer-comment" id="answer-comment-${comment.id?replace('#','')?replace(':','-')}">
                                      <div class="meta">
                                          <span class="owner">
-                                             <a href="/social/users/${comment.account.user.id?replace('#','')}/posts">
+                                             <a class="username" href="/social/users/${comment.account.user.id?replace('#','')}/posts">
                                                  ${comment.account.user.displayName} 
                                              </a>
                                              [ <@site.showTimeBefore comment.timeBefore /> ]
@@ -172,7 +174,7 @@
                                                  <@spring.message 'Delete' />
                                              </a>
                                          </span>
-                                         <#elseif viewerAccount.hasROLE('ROLE_ADMIN')>
+                                         <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
                                          <span class="admin-action">
                                              <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answerComments/${comment.id?replace("#", "")}/_delete' />" href="#">
                                                  <@spring.message 'Delete' />

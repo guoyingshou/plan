@@ -13,16 +13,16 @@
         <div id="page-main">
             <div id="main-content">
                 <div class="article">
-                    <h3 class="title">
+                    <h2 class="title">
                         ${article.title}
                         <#if article.deleted>
                         <span>[ closed ]</span>
                         </#if>
-                    </h3>
+                    </h2>
 
-                    <div class="meta">
+                    <div class="post-meta">
                         <span class="owner">
-                            <a href="/social/users/${article.account.user.id?replace("#", "")}/posts">
+                            <a class="username" href="/social/users/${article.account.user.id?replace("#", "")}/posts">
                                 ${article.account.user.displayName} 
                             </a>
                             [ <@site.showTimeBefore article.timeBefore /> ] 
@@ -60,7 +60,7 @@
                        <div class="message" id="message-${msg.id?replace("#","")?replace(":","-")}">
                            <div class="meta">
                                <span class="owner">
-                                   <a href="/social/users/${msg.account.user.id?replace("#","")}/posts">
+                                   <a class="username" href="/social/users/${msg.account.user.id?replace("#","")}/posts">
                                        ${msg.account.user.displayName}  
                                    </a>
                                    [ <@site.showTimeBefore msg.timeBefore /> ]
@@ -107,7 +107,7 @@
                                <div class="reply" id="reply-${reply.id?replace('#','')?replace(':','-')}">
                                    <div class="meta"> 
                                        <span class="owner">
-                                           <a href="/social/users/${reply.account.user.id?replace('#', '')}/posts">
+                                           <a class="username" href="/social/users/${reply.account.user.id?replace('#', '')}/posts">
                                                ${reply.account.user.displayName} 
                                            </a>
                                            [ <@site.showTimeBefore reply.timeBefore /> ]

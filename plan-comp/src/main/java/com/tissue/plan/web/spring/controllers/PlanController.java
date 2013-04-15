@@ -57,12 +57,13 @@ public class PlanController {
     public String addPlan(@PathVariable("topicId") Topic topic, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
+
         model.put("viewerAccount", viewerAccount);
-
-        model.put("selected", "objective");
         model.put("topic", topic);
-
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("selected", "objective");
         model.put("planForm", new PlanForm());
+
         return "createPlanFormView";
     }
 
@@ -98,13 +99,13 @@ public class PlanController {
     @RequestMapping(value="/plans/{planId}/posts") 
     public String getPosts(@PathVariable("planId") Plan plan, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size,  Map model) {
 
-        Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
-
-        model.put("selected", "all");
-
         Topic topic = plan.getTopic();
+        Account viewerAccount = viewerService.getViewerAccount();
+
+        model.put("viewerAccount", viewerAccount);
         model.put("topic", topic);
+        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("selected", "all");
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 50 : size;
