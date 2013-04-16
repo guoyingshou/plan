@@ -57,7 +57,7 @@ public class ExploreController {
 
     @ModelAttribute("users")
     private List<User> setupNewUsers() {
-        return exploreService.getNewUsers(SecurityUtil.getViewerAccountId(), 12);
+        return exploreService.getNewUsers(SecurityUtil.getViewerAccountId(), 6);
     }
 
     @RequestMapping("/explore")

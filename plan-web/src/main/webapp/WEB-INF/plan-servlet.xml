@@ -42,6 +42,8 @@
         <property name="converters">
             <set>
                 <bean class="com.tissue.plan.spring.converters.IdToTopicConverter" />
+                <bean class="com.tissue.plan.spring.converters.StringToSetConverter" />
+                <bean class="com.tissue.plan.spring.converters.SetToStringConverter" />
                 <bean class="com.tissue.plan.spring.converters.IdToPlanConverter" />
                 <bean class="com.tissue.plan.spring.converters.IdToArticleConverter" />
                 <bean class="com.tissue.plan.spring.converters.IdToMessageConverter" />

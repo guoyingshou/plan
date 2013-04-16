@@ -22,16 +22,10 @@
                                 <a class="username" href="/social/users/${topic.account.user.id?replace("#", "")}/posts">${topic.account.user.displayName}</a>
                                 [ <@site.showTimeBefore topic.timeBefore /> ]
                             </div>
-                            <div>
-                                <#if (topic.title?length > 18)>
-                                <a href="/group/topics/${topic.id?replace("#", "")}/objective">
-                                    ${topic.title?substring(0,18)} ...
-                                </a>
-                                <#else>
+                            <div class="topic-title">
                                 <a href="/group/topics/${topic.id?replace("#", "")}/objective">
                                     ${topic.title}
                                 </a>
-                                </#if>
                             </div>
                         </li>
                         </#list>
