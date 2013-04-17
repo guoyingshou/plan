@@ -15,7 +15,9 @@
            <div id="main-content">
                <div class="meta">
                    <span class="owner">
-                      ${topic.account.user.displayName}
+                      <a class="username" href="<@spring.url '/users/${topic.account.user.id?replace("#", "")}/posts' />">
+                          ${topic.account.user.displayName}
+                      </a>
                       [ <@site.showTimeBefore topic.timeBefore /> ]
                    </span>
 
