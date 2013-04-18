@@ -82,7 +82,7 @@
         <property name="securityMetadataSource">
             <sec:filter-security-metadata-source request-matcher="regex">
                 <sec:intercept-url pattern="/.*/_.*" access="ROLE_USER" />
-                <sec:intercept-url pattern="/*" access="ROLE_ANONYMOUS, ROLE_USER" />
+                <sec:intercept-url pattern="/*" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_EVIL" />
             </sec:filter-security-metadata-source>
         </property>
     </bean>
