@@ -42,6 +42,8 @@ public class ArticleController {
 
     private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
+    private static String ROLE_NAME = "ROLE_ADMIN";
+
     @Autowired
     private ViewerService viewerService;
 
@@ -123,7 +125,8 @@ public class ArticleController {
 
         Topic topic = article.getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(article, viewerAccount);
+        article.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(article, viewerAccount);
 
         model.put("viewerAccount", viewerAccount);
         model.put("topic", topic);
@@ -138,7 +141,8 @@ public class ArticleController {
     public String updatePost(@PathVariable("articleId") Article article, @Valid @ModelAttribute("articleForm") PostForm form, BindingResult result, Map model) {
   
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(article, viewerAccount);
+        article.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(article, viewerAccount);
 
         if(result.hasErrors()) {
             Topic topic = article.getPlan().getTopic();
@@ -161,7 +165,8 @@ public class ArticleController {
     public String deletePost(@PathVariable("articleId") Article article, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(article, viewerAccount); //access denied exception will be thrown if not owner
+        article.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(article, viewerAccount); //access denied exception will be thrown if not owner
 
         articleService.deleteContent(article.getId());
 

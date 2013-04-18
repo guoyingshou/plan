@@ -43,6 +43,8 @@ public class AnswerController {
 
     private static Logger logger = LoggerFactory.getLogger(AnswerController.class);
 
+    private static String ROLE_NAME = "ROLE_ADMIN";
+
     @Autowired
     private ViewerService viewerService;
 
@@ -96,7 +98,8 @@ public class AnswerController {
     public String deleteAnswer(@PathVariable("answerId") Answer answer) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(answer, viewerAccount);
+        answer.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(answer, viewerAccount);
 
         Topic topic = answer.getQuestion().getPlan().getTopic();
         answerService.deleteContent(answer.getId());

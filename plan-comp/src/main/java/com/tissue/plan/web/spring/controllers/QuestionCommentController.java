@@ -39,6 +39,8 @@ public class QuestionCommentController {
 
     private static Logger logger = LoggerFactory.getLogger(QuestionCommentController.class);
 
+    private static String ROLE_NAME = "ROLE_ADMIN";
+
     @Autowired
     private ViewerService viewerService;
 
@@ -76,7 +78,8 @@ public class QuestionCommentController {
     public String deleteQuestionComment(@PathVariable("commentId") QuestionComment questionComment, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(questionComment, viewerAccount);
+        questionComment.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(questionComment, viewerAccount);
 
         questionCommentService.deleteContent(questionComment.getId());
         return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");

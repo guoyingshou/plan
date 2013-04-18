@@ -28,8 +28,7 @@
                             [ <@site.showTimeBefore article.timeBefore /> ] 
                         </span>
 
-                        <#if !topic.deleted && !article.deleted && viewerAccount??>
-                        <#if article.isOwner(viewerAccount)>
+                        <#if !topic.deleted && !article.deleted && viewerAccount?? && article.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
                                 <@spring.message 'Delete' />
@@ -38,13 +37,6 @@
                                 <@spring.message 'Update' />
                             </a>
                         </span>
-                        <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
-                        <span class="admin-action">
-                        <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
-                            <@spring.message 'Delete' />
-                        </a>
-                        </span>
-                        </#if>
                         </#if>
                     </div>
 
@@ -76,20 +68,12 @@
                                </span>
                                </#if>
 
-                               <#if viewerAccount??>
-                               <#if msg.isOwner(viewerAccount)>
+                               <#if viewerAccount?? && msg.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                                <span class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
                                        <@spring.message 'Delete' />
                                    </a>
                                </span>
-                               <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
-                               <span class="admin-action">
-                                   <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/_delete' />" href="#">
-                                       <@spring.message 'Delete' />
-                                   </a>
-                               </span>
-                               </#if>
                                </#if>
 
                                </#if>
@@ -113,24 +97,12 @@
                                            [ <@site.showTimeBefore reply.timeBefore /> ]
                                        </span>
 
-                                       <#if !topic.deleted && !article.deleted>
-
-                                       <#if viewerAccount??>
-                                       <#if reply.isOwner(viewerAccount)>
+                                       <#if !topic.deleted && !article.deleted && viewerAccount?? && reply.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                                        <span class="owner-action">
                                            <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
                                                <@spring.message 'Delete' />
                                            </a>
                                        </span>
-                                       <#elseif viewerAccount.hasRole('ROLE_ADMIN')>
-                                       <span class="admin-action">
-                                           <a class="pop" data-form-selector="#confirmForm" data-dialog-width="400" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
-                                               <@spring.message 'Delete' />
-                                           </a>
-                                       </span>
-                                       </#if>
-                                       </#if>
-
                                        </#if>
                                    </div>
 

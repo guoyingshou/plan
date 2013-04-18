@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-import org.springframework.security.access.AccessDeniedException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -42,6 +40,8 @@ import org.slf4j.LoggerFactory;
 public class AnswerCommentController {
 
     private static Logger logger = LoggerFactory.getLogger(AnswerCommentController.class);
+
+    private static String ROLE_NAME = "ROLE_ADMIN";
 
     @Autowired
     private ViewerService viewerService;
@@ -80,7 +80,8 @@ public class AnswerCommentController {
     public String deleteAnswerComment(@PathVariable("commentId") AnswerComment answerComment) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(answerComment, viewerAccount);
+        answerComment.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(answerComment, viewerAccount);
 
         Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
         answerCommentService.deleteContent(answerComment.getId());

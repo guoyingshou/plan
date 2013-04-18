@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
-import org.springframework.security.access.AccessDeniedException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -42,6 +40,8 @@ import org.slf4j.LoggerFactory;
 public class TopicController {
 
     private static Logger logger = LoggerFactory.getLogger(TopicController.class);
+
+    private static String ROLE_NAME = "ROLE_ADMIN";
 
     @Autowired
     private ViewerService viewerService;
@@ -74,16 +74,17 @@ public class TopicController {
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        model.put("selected", "topics");
        
         if(result.hasErrors()) {
+            model.put("selected", "topics");
+            model.put("viewerAccount", viewerAccount);
             return "createTopicFormView";
         }
 
         form.setAccount(viewerAccount);
+        String topicId = topicService.addTopic(form);
 
         model.clear();
-        String topicId = topicService.addTopic(form);
         return "redirect:/topics/" + topicId.replace("#","") + "/posts";
     }
 
@@ -93,7 +94,8 @@ public class TopicController {
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
 
-        viewerService.checkOwnership(topic, viewerAccount);
+        topic.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(topic, viewerAccount);
 
         model.put("selected", "objective");
         model.put("topic", topic);
@@ -111,7 +113,8 @@ public class TopicController {
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
 
-        viewerService.checkOwnership(topic, viewerAccount);
+        topic.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(topic, viewerAccount);
 
         if(result.hasErrors()) {
             model.put("selected", "objective");
@@ -133,7 +136,8 @@ public class TopicController {
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
 
-        viewerService.checkOwnership(topic, viewerAccount);
+        topic.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(topic, viewerAccount);
        
         topicService.deleteContent(topic.getId());
         model.clear();

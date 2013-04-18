@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import org.springframework.security.access.AccessDeniedException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -41,6 +40,8 @@ import org.slf4j.LoggerFactory;
 public class MessageController {
 
     private static Logger logger = LoggerFactory.getLogger(MessageController.class);
+
+    private static String ROLE_NAME = "ROLE_ADMIN";
 
     @Autowired
     private ViewerService viewerService;
@@ -96,7 +97,8 @@ public class MessageController {
     public String deleteMessage(@PathVariable("msgId") Message message, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(message, viewerAccount);
+        message.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(message, viewerAccount);
 
         messageService.deleteContent(message.getId());
         

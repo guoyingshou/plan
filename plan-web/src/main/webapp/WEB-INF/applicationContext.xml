@@ -16,14 +16,6 @@
 
     <context:property-placeholder location="classpath:orientdb.properties" />
 
-    <bean id="dataSource" class="com.tissue.core.util.OrientDataSource" destroy-method="destroy">
-        <constructor-arg value="${db_url}" />
-        <constructor-arg value="${db_username}" />
-        <constructor-arg value="${db_password}" />
-        <constructor-arg value="${db_min}" />
-        <constructor-arg value="${db_max}" />
-     </bean>
-
     <import resource="dao.xml" />
     <import resource="security.xml" />
 

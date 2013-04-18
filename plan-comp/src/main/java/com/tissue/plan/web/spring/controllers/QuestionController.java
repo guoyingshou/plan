@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
-import org.springframework.security.access.AccessDeniedException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -41,6 +40,8 @@ import org.slf4j.LoggerFactory;
 public class QuestionController {
 
     private static Logger logger = LoggerFactory.getLogger(QuestionController.class);
+
+    private static String ROLE_NAME = "ROLE_ADMIN";
 
     @Autowired
     private ViewerService viewerService;
@@ -122,7 +123,8 @@ public class QuestionController {
     public String updateQuestionFormView(@PathVariable("questionId") Question question, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(question, viewerAccount);
+        question.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(question, viewerAccount);
 
         Topic topic = question.getPlan().getTopic();
 
@@ -141,7 +143,8 @@ public class QuestionController {
 
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(question, viewerAccount);
+        question.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(question, viewerAccount);
 
         if(result.hasErrors()) {
             Topic topic = question.getPlan().getTopic();
@@ -164,7 +167,8 @@ public class QuestionController {
     public String deletePost(@PathVariable("questionId") Question question, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkOwnership(question, viewerAccount);
+        question.checkPermission(viewerAccount, ROLE_NAME);
+        //viewerService.checkOwnership(question, viewerAccount);
 
         questionService.deleteContent(question.getId());
 
