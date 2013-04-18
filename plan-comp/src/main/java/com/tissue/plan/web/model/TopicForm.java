@@ -17,7 +17,7 @@ public class TopicForm implements TopicCommand {
 
     @NotNull
     @NotEmpty
-    @Size(min=3, max=128)
+    @Size(max=128)
     private String title;
 
     @NotNull

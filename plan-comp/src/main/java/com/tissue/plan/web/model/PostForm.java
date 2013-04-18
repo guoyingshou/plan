@@ -15,7 +15,7 @@ public class PostForm extends ContentForm implements PostCommand {
 
     @NotNull
     @NotEmpty
-    @Size(min=3, max=128)
+    @Size(max=128)
     private String title;
     
     @NotNull

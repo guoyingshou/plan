@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.security.AccessControlException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,10 +61,14 @@ public class TopicController {
     @RequestMapping(value="/topics/_create")
     public String showTopicFormView(Map model) {
         Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
+        if(viewerAccount.hasRole("ROLE_EVIL")) {
+            throw new AccessControlException("Evil account: " + viewerAccount);
+        }
 
+        model.put("viewerAccount", viewerAccount);
         model.put("selected", "topics");
         model.put("topicForm", new TopicForm());
+
         return "createTopicFormView";
     }
 
@@ -74,6 +79,9 @@ public class TopicController {
     public String addTopic(@Valid TopicForm form, BindingResult result, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
+        if(viewerAccount.hasRole("ROLE_EVIL")) {
+            throw new AccessControlException("Evil account: " + viewerAccount);
+        }
        
         if(result.hasErrors()) {
             model.put("selected", "topics");
@@ -92,11 +100,13 @@ public class TopicController {
     public String updateTopicFormView(@PathVariable("topicId") Topic topic,Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
-
+        if(viewerAccount.hasRole("ROLE_EVIL")) {
+            throw new AccessControlException("Evil account: " + viewerAccount);
+        }
+ 
         topic.checkPermission(viewerAccount, ROLE_NAME);
-        //viewerService.checkOwnership(topic, viewerAccount);
 
+        model.put("viewerAccount", viewerAccount);
         model.put("selected", "objective");
         model.put("topic", topic);
         model.put("topicForm", topic);
@@ -111,12 +121,13 @@ public class TopicController {
     public String updateTopic(@PathVariable("topicId") Topic topic, @Valid TopicForm form, BindingResult result, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
-
+        if(viewerAccount.hasRole("ROLE_EVIL")) {
+            throw new AccessControlException("Evil account: " + viewerAccount);
+        }
         topic.checkPermission(viewerAccount, ROLE_NAME);
-        //viewerService.checkOwnership(topic, viewerAccount);
 
         if(result.hasErrors()) {
+            model.put("viewerAccount", viewerAccount);
             model.put("selected", "objective");
             model.put("topic", topic);
             model.put("isMember", viewerService.isMember(topic, viewerAccount));
@@ -134,10 +145,10 @@ public class TopicController {
     public String deleteTopic(@PathVariable("topicId") Topic topic, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
-        model.put("viewerAccount", viewerAccount);
-
+        if(viewerAccount.hasRole("ROLE_EVIL")) {
+            throw new AccessControlException("Evil account: " + viewerAccount);
+        }
         topic.checkPermission(viewerAccount, ROLE_NAME);
-        //viewerService.checkOwnership(topic, viewerAccount);
        
         topicService.deleteContent(topic.getId());
         model.clear();
