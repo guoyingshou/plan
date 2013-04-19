@@ -15,24 +15,7 @@
         <div id="page-main">
             <div id="main-content">
                 <div id="content-topics">
-                    <ul class="topics">
-                        <#list topics as topic>
-                        <li>
-                            <div class="ts">
-                                <a class="username" href="/social/users/${topic.account.user.id?replace("#", "")}/posts">${topic.account.user.displayName}</a>
-                                [ <@site.showTimeBefore topic.timeBefore /> ]
-                            </div>
-                            <div class="topic-title">
-                                <a href="/group/topics/${topic.id?replace("#", "")}/objective">
-                                    ${topic.title}
-                                </a>
-                            </div>
-                        </li>
-                        </#list>
-                    </ul>
-                    <#if pager??>
-                        <@site.showPager />
-                    </#if>
+                    <@topicGadgets.showTopics />
                 </div>
 
                 <div id="content-posts">
