@@ -2,9 +2,7 @@
 <#import "siteGadgets.ftl" as site />
 <#import "topicGadgets.ftl" as topicGadgets />
 
-<#assign myscripts=["/ckeditor/ckeditor.js", "/tissue/js/topic.js"] in site>
-<#assign mystyles=["/tissue/css/layout2.css", "/tissue/css/topic.css"] in site>
-
+<#assign myscripts=["/ckeditor/ckeditor.js"] in site>
 <#assign title=topic.title in site>
 
 <@site.layout>
