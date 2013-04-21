@@ -95,7 +95,7 @@ public class AnswerController {
      * Delete an answer.
      */
     @RequestMapping(value="/answers/{answerId}/_delete", method=POST)
-    public String deleteAnswer(@PathVariable("answerId") Answer answer) {
+    public String deleteAnswer(@PathVariable("answerId") Answer answer, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
         answer.checkPermission(viewerAccount, ROLE_NAME);
@@ -104,6 +104,7 @@ public class AnswerController {
         Topic topic = answer.getQuestion().getPlan().getTopic();
         answerService.deleteContent(answer.getId());
 
+        model.clear();
         return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");
     }
 }

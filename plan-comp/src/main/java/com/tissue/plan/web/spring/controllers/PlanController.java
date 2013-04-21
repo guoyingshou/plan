@@ -90,6 +90,8 @@ public class PlanController {
     @RequestMapping(value="/plans/{planId}/_join")
     public String joinPlan(@PathVariable("planId") Plan plan, Map model) {
         planService.addMember(plan.getId(), SecurityUtil.getViewerAccountId());
+
+        model.clear();
         return "redirect:/topics/" + plan.getTopic().getId().replace("#","") + "/posts";
     }
 

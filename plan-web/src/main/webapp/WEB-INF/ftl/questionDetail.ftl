@@ -39,6 +39,8 @@
                             <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />" href="#">
                                <@spring.message 'Delete' />
                             </a>
+                        </span>
+                        <span class="owner-action">
                             <a href="<@spring.url '/questions/${question.id?replace("#", "")}/_update' />">
                                 <@spring.message 'Update' />
                             </a>

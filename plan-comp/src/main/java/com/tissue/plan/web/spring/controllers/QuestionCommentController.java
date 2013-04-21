@@ -68,6 +68,7 @@ public class QuestionCommentController {
 
         questionCommentService.addQuestionComment(form);
 
+        model.clear();
         return "redirect:/questions/" + question.getId().replace("#", "");
     }
  
@@ -82,6 +83,8 @@ public class QuestionCommentController {
         //viewerService.checkOwnership(questionComment, viewerAccount);
 
         questionCommentService.deleteContent(questionComment.getId());
+
+        model.clear();
         return "redirect:/questions/" + questionComment.getQuestion().getId().replace("#","");
     }
 

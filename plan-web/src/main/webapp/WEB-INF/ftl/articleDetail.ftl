@@ -30,13 +30,16 @@
 
                         <#if !topic.deleted && !article.deleted && viewerAccount?? && article.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                         <span class="owner-action">
-                            <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
-                                <@spring.message 'Delete' />
-                            </a>
                             <a href="<@spring.url '/articles/${article.id?replace("#","")}/_update' />">
                                 <@spring.message 'Update' />
                             </a>
                         </span>
+                        <span class="owner-action">
+                            <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
+                                <@spring.message 'Delete' />
+                            </a>
+                        </span>
+
                         </#if>
                     </div>
 

@@ -70,6 +70,7 @@ public class AnswerCommentController {
         form.setAccount(viewerAccount);
         answerCommentService.addAnswerComment(form);
 
+        model.clear();
         return "redirect:/questions/" + answer.getQuestion().getId().replace("#","");
     }
 
@@ -77,14 +78,15 @@ public class AnswerCommentController {
      * Delete an answer comment.
      */
     @RequestMapping(value="/answerComments/{commentId}/_delete", method=POST)
-    public String deleteAnswerComment(@PathVariable("commentId") AnswerComment answerComment) {
+    public String deleteAnswerComment(@PathVariable("commentId") AnswerComment answerComment, Map model) {
 
         Account viewerAccount = viewerService.getViewerAccount();
         answerComment.checkPermission(viewerAccount, ROLE_NAME);
-        //viewerService.checkOwnership(answerComment, viewerAccount);
 
         Topic topic = answerComment.getAnswer().getQuestion().getPlan().getTopic();
         answerCommentService.deleteContent(answerComment.getId());
+
+        model.clear();
         return "redirect:/questions/" + answerComment.getAnswer().getQuestion().getId().replace("#","");
     }
 }
