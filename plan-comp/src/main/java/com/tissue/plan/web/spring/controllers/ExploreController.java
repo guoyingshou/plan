@@ -52,27 +52,38 @@ public class ExploreController {
 
     @ModelAttribute("viewerActivePlansCount")
     private int setupViewerActivePlansCount() {
+        System.out.println("acvitvePlansCount");
+
         return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
     }
 
     @ModelAttribute("users")
     private List<User> setupNewUsers() {
+        System.out.println("users");
+
         return exploreService.getNewUsers(SecurityUtil.getViewerAccountId(), 6);
     }
 
     @RequestMapping("/explore")
     public String exploreTrending(Map model) {
 
+        System.out.println("in explore controller<<<<");
+
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
+
+        System.out.println(viewerAccount);
 
         model.put("selected", "trending");
 
         List<Topic> topics = topicService.getTrendingTopics(12);
         model.put("topics", topics);
+        System.out.println(topics);
 
         List<Post> posts = postService.getLatestPosts(12);
         model.put("posts", posts);
+
+        System.out.println("end in explore controller<<<<");
 
         return "explore";
     }

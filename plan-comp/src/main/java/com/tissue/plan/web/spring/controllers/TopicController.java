@@ -177,8 +177,13 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/posts")
     public String getPosts(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
+        System.out.println(">>>> in topic controller <<<<< ");
+        System.out.println(topic);
+
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
+
+        System.out.println(">>>>end in topic controller <<<<< ");
 
         model.put("selected", "all");
         model.put("topic", topic);
