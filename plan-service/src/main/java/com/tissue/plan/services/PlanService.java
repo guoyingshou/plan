@@ -38,9 +38,11 @@ public class PlanService {
         return planDao.create(plan);
     }
 
+    /**
     public Plan getPlan(String planId) {
         return planDao.getPlan(planId);
     }
+    */
 
     public void addMember(String planId, String accountId) {
         planDao.addMember(planId, accountId);
