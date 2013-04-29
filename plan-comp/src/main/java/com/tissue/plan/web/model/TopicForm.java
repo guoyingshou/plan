@@ -45,7 +45,7 @@ public class TopicForm implements TopicCommand {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title.trim();
     }
 
     public String getTitle() {
@@ -53,7 +53,7 @@ public class TopicForm implements TopicCommand {
     }
 
     public void setContent(String content) {
-        this.content = content;
+        this.content = content.trim();
     }
 
     public String getContent() {
