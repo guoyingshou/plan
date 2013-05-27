@@ -27,8 +27,10 @@ public class ArticleService extends PostService {
         return articleDao.getArticle(articleId);
     }
 
+    /**
     public Topic getTopic(String articleId) {
         return topicDao.getTopicByPost(articleId);
     }
+    */
 
 }

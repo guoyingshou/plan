@@ -55,7 +55,8 @@ public class TopicController {
 
     @ModelAttribute("viewerActivePlansCount")
     private int setupViewerActivePlansCount() {
-        return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
+        return 6;
+        //return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
     }
 
     @RequestMapping(value="/topics/_create")
@@ -177,13 +178,8 @@ public class TopicController {
     @RequestMapping(value="/topics/{topicId}/posts")
     public String getPosts(@PathVariable("topicId") Topic topic, @RequestParam(value="page", required=false) Integer page, @RequestParam(value="size", required=false) Integer size, Map model) {
 
-        System.out.println(">>>> in topic controller <<<<< ");
-        System.out.println(topic);
-
         Account viewerAccount = viewerService.getViewerAccount();
         model.put("viewerAccount", viewerAccount);
-
-        System.out.println(">>>>end in topic controller <<<<< ");
 
         model.put("selected", "all");
         model.put("topic", topic);
@@ -196,6 +192,10 @@ public class TopicController {
         model.put("pager", pager);
 
         List<Post> posts = topicService.getPagedPosts(topic.getId(), page, size);
+        System.out.println("+++++++++++");
+        System.out.println(posts.size());
+        System.out.println(size);
+        System.out.println("+++++++++++");
         model.put("posts", posts);
 
         return "posts";

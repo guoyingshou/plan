@@ -50,10 +50,10 @@ public class PlanService {
 
     /**
      * topic
-     */
     public Topic getTopic(String planId) {
         return topicDao.getTopicByPlan(planId);
     }
+     */
 
     /**
      * post
