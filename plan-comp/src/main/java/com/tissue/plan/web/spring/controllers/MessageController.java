@@ -68,7 +68,7 @@ public class MessageController {
 
         Topic topic = article.getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkMembership(topic, viewerAccount);
+        topicService.checkMembership(topic, viewerAccount);
 
         model.put("viewerAccount", viewerAccount);
 
@@ -76,7 +76,7 @@ public class MessageController {
             model.put("selected", article.getType());
             model.put("article", article);
             model.put("topic", topic);
-            model.put("isMember", viewerService.isMember(topic, viewerAccount));
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
 
             return "articleDetail";
         }

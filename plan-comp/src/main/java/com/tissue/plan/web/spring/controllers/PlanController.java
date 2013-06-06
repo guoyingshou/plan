@@ -60,7 +60,7 @@ public class PlanController {
 
         model.put("viewerAccount", viewerAccount);
         model.put("topic", topic);
-        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
         model.put("selected", "objective");
         model.put("planForm", new PlanForm());
 
@@ -106,7 +106,7 @@ public class PlanController {
 
         model.put("viewerAccount", viewerAccount);
         model.put("topic", topic);
-        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
         model.put("selected", "all");
 
         page = (page == null) ? 1 : page;

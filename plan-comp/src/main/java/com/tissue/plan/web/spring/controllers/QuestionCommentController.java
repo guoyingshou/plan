@@ -61,7 +61,7 @@ public class QuestionCommentController {
         }
 
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkMembership(question.getPlan().getTopic(), viewerAccount);
+        topicService.checkMembership(question.getPlan().getTopic(), viewerAccount);
 
         form.setQuestion(question);
         form.setAccount(viewerAccount);

@@ -17,7 +17,7 @@
                 <@spring.showErrors "<br>" />
             </div>
             <legend>
-                <@spring.message "topicForm" />
+                <@spring.message "Legend.topicForm" />
             </legend>
             <ul>
                 <li>
@@ -25,25 +25,25 @@
                 </li>
                 <li>
                     <label for="title">
-                        <@spring.message "title" />
+                        <@spring.message "Label.formInput.title" />
                     </label>
                     <@spring.formInput "topicForm.title"/>
                 </li>
                 <li>
                     <label for="content">
-                        <@spring.message "content" />
+                        <@spring.message "Label.formInput.content" />
                     </label>
                    <@spring.formTextarea "topicForm.content" />
                 </li>
                 <li>
                     <label for="tags">
-                        <@spring.message "tags" />
+                        <@spring.message "Label.formInput.tags" />
                      </label>
                     <@spring.formInput "topicForm.tags" />
                 </li>
 
                 <li>
-                    <input type="submit" value="<@spring.message 'Submit.button'/>" />
+                    <input type="submit" value="<@spring.message 'Text.formInput.submit'/>" />
                 </li>
             </ul>
         </form>

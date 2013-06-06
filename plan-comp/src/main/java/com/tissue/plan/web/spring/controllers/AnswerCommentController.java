@@ -60,7 +60,7 @@ public class AnswerCommentController {
 
         Topic topic = answer.getQuestion().getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkMembership(topic, viewerAccount);
+        topicService.checkMembership(topic, viewerAccount);
 
         if(result.hasErrors()) {
             throw new IllegalArgumentException(result.getAllErrors().toString());

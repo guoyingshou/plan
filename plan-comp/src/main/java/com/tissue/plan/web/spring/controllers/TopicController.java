@@ -131,7 +131,7 @@ public class TopicController {
             model.put("viewerAccount", viewerAccount);
             model.put("selected", "objective");
             model.put("topic", topic);
-            model.put("isMember", viewerService.isMember(topic, viewerAccount));
+            model.put("isMember", topicService.isMember(topic, viewerAccount));
             return "updateTopicFormView";
         }
  
@@ -167,7 +167,7 @@ public class TopicController {
 
         model.put("selected", "objective");
         model.put("topic", topic);
-        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         return "topic";
     }
@@ -183,7 +183,7 @@ public class TopicController {
 
         model.put("selected", "all");
         model.put("topic", topic);
-        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         page = ((page == null) || (page < 1)) ? 1 : page;
         size = (size == null) ? 12 : size;
@@ -212,7 +212,7 @@ public class TopicController {
 
         model.put("selected", "concept");
         model.put("topic", topic);
-        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 12 : size;
@@ -237,7 +237,7 @@ public class TopicController {
 
         model.put("selected", "note");
         model.put("topic", topic);
-        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 12 : size;
@@ -262,7 +262,7 @@ public class TopicController {
 
         model.put("selected", "tutorial");
         model.put("topic", topic);
-        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 12 : size;
@@ -287,7 +287,7 @@ public class TopicController {
 
         model.put("selected", "question");
         model.put("topic", topic);
-        model.put("isMember", viewerService.isMember(topic, viewerAccount));
+        model.put("isMember", topicService.isMember(topic, viewerAccount));
 
         page = (page == null) ? 1 : page;
         size = (size == null) ? 12 : size;

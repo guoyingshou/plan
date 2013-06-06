@@ -65,7 +65,7 @@ public class MessageReplyController {
 
         Topic topic = message.getArticle().getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkMembership(topic, viewerAccount);
+        topicService.checkMembership(topic, viewerAccount);
 
         form.setMessage(message);
         form.setAccount(viewerAccount);

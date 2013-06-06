@@ -52,18 +52,13 @@ public class ExploreController {
 
     @ModelAttribute("viewerActivePlansCount")
     private int setupViewerActivePlansCount() {
-        return 6;
-        //return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
+        return planService.getViewerActivePlansCount(SecurityUtil.getViewerAccountId());
     }
-    /**
 
     @ModelAttribute("users")
     private List<User> setupNewUsers() {
-        System.out.println("users");
-
         return exploreService.getNewUsers(SecurityUtil.getViewerAccountId(), 6);
     }
-    */
 
     @RequestMapping("/explore")
     public String exploreTrending(Map model) {

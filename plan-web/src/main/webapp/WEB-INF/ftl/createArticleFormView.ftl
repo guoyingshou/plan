@@ -20,43 +20,43 @@
 
                <fieldset class="post-type">
                    <legend>
-                       <@spring.message 'type' />
+                       <@spring.message 'Legend.articleForm.type' />
                    </legend>
 
                    <label>
-                      <@spring.message 'concept' />
+                      <@spring.message 'Label.formInput.concept' />
                       <input type="radio" name="type" value="concept" />
                    </label>
                    <label>
-                       <@spring.message 'note' />
+                       <@spring.message 'Label.formInput.note' />
                        <input type="radio" name="type" value="note" />
                    </label>
                    <label>
-                       <@spring.message 'tutorial' />
+                       <@spring.message 'Label.formInput.tutorial' />
                        <input type="radio" name="type" value="tutorial" />
                    </label>
                </fieldset>
 
                <fieldset>
                    <legend>
-                       <@spring.message "articleForm" />
+                       <@spring.message "Legend.articleForm" />
                    </legend>
 
                    <ul>
                        <li>
                            <label for="title">
-                               <@spring.message "title" />
+                               <@spring.message "Label.formInput.title" />
                            </label>
                            <@spring.formInput "articleForm.title" />
                        </li>
                        <li>
                            <label for="content">
-                               <@spring.message "content" />
+                               <@spring.message "Label.formInput.content" />
                            </label>
                            <@spring.formTextarea "articleForm.content" />
                        </li>
                        <li>
-                           <input type="submit" value="<@spring.message 'Publish.button'/>" />
+                           <input type="submit" value="<@spring.message 'PublishText.formInput.submit'/>" />
                        </li>
                    </ul>
                </fieldset>

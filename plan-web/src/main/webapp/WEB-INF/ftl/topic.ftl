@@ -28,10 +28,10 @@
                    <@site.confirmForm />
                    <span class="owner-action">
                        <a href="<@spring.url '/topics/${topic.id?replace("#", "")}/_update' />">
-                           <@spring.message 'Update' />
+                           <@spring.message 'UpdateText.link' />
                        </a>
                        <a class="pop" data-form-selector="#confirmForm" data-dialog-width="320" data-action="<@spring.url '/topics/${topic.id?replace("#", "")}/_delete' />" href="#">
-                           <@spring.message 'Delete' />
+                           <@spring.message 'DeleteText.link' />
                        </a>
                    </span>
                    </#if>

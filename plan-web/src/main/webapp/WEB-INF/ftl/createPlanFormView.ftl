@@ -12,30 +12,30 @@
     <div id="page-main-wrapper">
         <form id="planForm" action="<@spring.url '/topics/${topic.id?replace("#", "")}/plans/_create' />" method="post">
             <legend>
-                <@spring.message 'planForm' />
+                <@spring.message 'Legend.planForm' />
             </legend>
 
             <ul>
                 <li>
                     <label>
                         <input type="radio" name="duration" checked value="1" />
-                        <@spring.message 'duration1' />
+                        <@spring.message 'Label.formInput.duration1' />
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" name="duration" value="3" />
-                        <@spring.message 'duration2' />
+                        <@spring.message 'Label.formInput.duration2' />
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" name="duration" value="6" />
-                        <@spring.message 'duration3' />
+                        <@spring.message 'Label.formInput.duration3' />
                     </label>
                 </li>
                 <li>
-                    <input type="submit" value="<@spring.message 'Submit.button'/>" />
+                    <input type="submit" value="<@spring.message 'Text.formInput.submit'/>" />
                 </li>
             </ul>
         </form>

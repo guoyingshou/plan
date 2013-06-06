@@ -19,19 +19,19 @@
               </div>
               <fieldset>
                   <legend>
-                      <@spring.message "question" />
+                      <@spring.message "Legend.questionForm" />
                   </legend>
 
                   <ul>
                       <li>
                           <label for="title">
-                              <@spring.message "title" />
+                              <@spring.message "Label.formInput.title" />
                           </label>
                           <@spring.formInput "questionForm.title" />
                       </li>
                       <li>
                           <label for="content">
-                             <@spring.message "content" />
+                             <@spring.message "Label.formInput.content" />
                           </label>
                           <@spring.formTextarea "questionForm.content" />
                       </li>
@@ -39,7 +39,7 @@
                           <input type="hidden" name="type" value="question" />
                       </li>
                       <li>
-                          <input type="submit" value="<@spring.message 'Publish.button'/>" />
+                          <input type="submit" value="<@spring.message 'PublishText.formInput.submit'/>" />
                       </li>
                   </ul>
               </fieldset>

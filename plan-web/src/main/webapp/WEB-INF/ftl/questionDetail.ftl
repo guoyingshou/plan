@@ -29,7 +29,7 @@
                         <#if isMember>
                         <span class="member-action">
                             <a class="pop" data-form-selector="#questionCommentForm" data-editor-name="questionComment-editor" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/questionComments/_create' />" href="#">
-                                <@spring.message 'Comment' />
+                                <@spring.message 'CommentText.link' />
                            </a>
                         </span>
                         </#if>
@@ -37,12 +37,12 @@
                         <#if viewerAccount?? && question.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questions/${question.id?replace("#", "")}/_delete' />" href="#">
-                               <@spring.message 'Delete' />
+                               <@spring.message 'DeleteText.link' />
                             </a>
                         </span>
                         <span class="owner-action">
                             <a href="<@spring.url '/questions/${question.id?replace("#", "")}/_update' />">
-                                <@spring.message 'Update' />
+                                <@spring.message 'UpdateText.link' />
                             </a>
                         </span>
                         </#if>
@@ -70,7 +70,7 @@
                                    <#if !topic.deleted && !question.deleted && viewerAccount?? && questionComment.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                                    <div class="owner-action">
                                        <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/questionComments/${questionComment.id?replace("#", "")}/_delete' />" href="#">
-                                           <@spring.message 'Delete' />
+                                           <@spring.message 'DeleteText.link' />
                                        </a>
                                    </div>
                                    </#if>
@@ -105,7 +105,7 @@
                                  <#if isMember>
                                  <span class="member-action">
                                      <a class="pop" data-form-selector="#answerCommentForm" data-editor-name="answerComment-editor" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/comments/_create' />" href="#">
-                                         <@spring.message 'Comment' />
+                                         <@spring.message 'CommentText.link' />
                                      </a>
                                  </span>
                                  </#if>
@@ -113,7 +113,7 @@
                                  <#if viewerAccount?? && answer.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                                  <span class="owner-action">
                                      <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answers/${answer.id?replace("#", "")}/_delete' />" href="#">
-                                         <@spring.message 'Delete' />
+                                         <@spring.message 'DeleteText.link' />
                                      </a>
                                  </span>
                                  </#if>
@@ -142,7 +142,7 @@
                                          <#if !topic.deleted && !question.deleted && viewerAccount?? && comment.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                                          <span class="owner-action">
                                              <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/answerComments/${comment.id?replace("#","")}/_delete' />" href="#">
-                                                 <@spring.message 'Delete' />
+                                                 <@spring.message 'DeleteText.link' />
                                              </a>
                                          </span>
                                          </#if>
@@ -171,7 +171,7 @@
 
                    <form id="answerForm" method="post" action="<@spring.url '/questions/${question.id?replace("#", "")}/answers/_create' />">
                        <legend>
-                           <@spring.message "answer" />
+                           <@spring.message "Legend.answerForm" />
                        </legend>
                        <ul>
                            <li>

@@ -31,12 +31,12 @@
                         <#if !topic.deleted && !article.deleted && viewerAccount?? && article.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                         <span class="owner-action">
                             <a href="<@spring.url '/articles/${article.id?replace("#","")}/_update' />">
-                                <@spring.message 'Update' />
+                                <@spring.message 'UpdateText.link' />
                             </a>
                         </span>
                         <span class="owner-action">
                             <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/articles/${article.id?replace("#", "")}/_delete' />" href="#">
-                                <@spring.message 'Delete' />
+                                <@spring.message 'DeleteText.link' />
                             </a>
                         </span>
 
@@ -66,7 +66,7 @@
                                <#if isMember>
                                <span class="member-action">
                                    <a class="pop" data-editor-name="reply-editor" data-form-selector="#replyForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#", "")}/messageReplies/_create' />" href="#">
-                                       <@spring.message 'Reply' />
+                                       <@spring.message 'ReplyText.link' />
                                    </a>
                                </span>
                                </#if>
@@ -74,7 +74,7 @@
                                <#if viewerAccount?? && msg.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                                <span class="owner-action">
                                    <a class="pop" data-form-selector="#confirmForm" data-dialog-width="650" data-action="<@spring.url '/messages/${msg.id?replace("#","")}/_delete' />" href="#">
-                                       <@spring.message 'Delete' />
+                                       <@spring.message 'DeleteText.link' />
                                    </a>
                                </span>
                                </#if>
@@ -103,7 +103,7 @@
                                        <#if !topic.deleted && !article.deleted && viewerAccount?? && reply.isAllowed(viewerAccount, 'ROLE_ADMIN')>
                                        <span class="owner-action">
                                            <a class="pop" data-form-selector="#confirmForm" data-action="<@spring.url '/messageReplies/${reply.id?replace("#", "")}/_delete' />" href="#">
-                                               <@spring.message 'Delete' />
+                                               <@spring.message 'DeleteText.link' />
                                            </a>
                                        </span>
                                        </#if>
@@ -132,14 +132,14 @@
 
                     <form method="post" action="<@spring.url '/articles/${article.id?replace("#","")}/messages/_create' />">
                         <legend>
-                            <@spring.message "message" />
+                            <@spring.message "Legend.messageForm" />
                         </legend>
                         <ul>
                             <li>
                                 <@spring.formTextarea "messageForm.content" />
                             </li>
                             <li>
-                                <input type="submit" value='<@spring.message "Submit.button"/>' />
+                                <input type="submit" value='<@spring.message "Text.formInput.submit"/>' />
                             </li>
                         </ul>
                    </form>

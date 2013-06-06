@@ -22,9 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
+import java.security.AccessControlException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class TopicService extends ContentService {
+
+    private static Logger logger = LoggerFactory.getLogger(TopicService.class);
 
     @Autowired
     private TopicDao topicDao;
@@ -103,4 +109,34 @@ public class TopicService extends ContentService {
         return postDao.getPagedPostsByType(topicId, type, page, size);
     }
 
+    /**
+     * membership
+     */
+    public boolean isMember(Topic topic, Account account) {
+
+        if(account == null || topic == null) {
+            logger.debug("Null account");
+            return false;
+        }
+
+        if(!account.hasRole("ROLE_USER") || account.hasRole("ROLE_EVIL")) {
+            logger.debug("ROLE_EVIL or No role of name: 'ROLE_USER'");
+            return false;
+        }
+
+        Plan plan = topic.getActivePlan();
+        if(plan == null) {
+            logger.debug("Null plan");
+            return false;
+        }
+
+        return planDao.isMember(plan.getId(), account.getId());
+    }
+
+    public void checkMembership(Topic topic, Account account) {
+        if(!isMember(topic, account)) {
+            throw new AccessControlException(account + " is not memeber of the active plan in " + topic);
+        }
+    }
+ 
 }

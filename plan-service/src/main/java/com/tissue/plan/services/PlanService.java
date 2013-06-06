@@ -1,6 +1,7 @@
 package com.tissue.plan.services;
 
 import com.tissue.core.Account;
+import com.tissue.commons.util.SecurityUtil;
 import com.tissue.plan.command.PlanCommand;
 import com.tissue.plan.Topic;
 import com.tissue.plan.Plan;
@@ -49,13 +50,6 @@ public class PlanService {
     }
 
     /**
-     * topic
-    public Topic getTopic(String planId) {
-        return topicDao.getTopicByPlan(planId);
-    }
-     */
-
-    /**
      * post
      */
     public long getPostsCount(String planId) {
@@ -81,4 +75,8 @@ public class PlanService {
         return count;
     }
 
+    public List<Plan> getViewerPlans() {
+        return planDao.getPlansByAccount(SecurityUtil.getViewerAccountId());
+    }
+ 
 }

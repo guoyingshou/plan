@@ -71,7 +71,7 @@ public class AnswerController {
 
         Topic topic = question.getPlan().getTopic();
         Account viewerAccount = viewerService.getViewerAccount();
-        viewerService.checkMembership(topic, viewerAccount);
+        topicService.checkMembership(topic, viewerAccount);
 
         model.put("viewerAccount", viewerAccount);
         model.put("selected", "question");
