@@ -21,25 +21,25 @@
             <ul>
                 <li>
                     <label for="title">
-                        <@spring.message "Label.formInput.title" />
+                        <@spring.message "Label.title" />
                     </label>
                     <@spring.formInput "topicForm.title" />
                 </li>
                 <li>
                     <label for="content">
-                        <@spring.message "Label.formInput.objective" />
+                        <@spring.message "Label.objective" />
                     </label>
                    <@spring.formTextarea "topicForm.content" />
                 </li>
                 <li>
                     <label for="tags">
-                        <@spring.message "Label.formInput.tags" />
+                        <@spring.message "Label.tags" />
                      </label>
                     <@spring.formInput "topicForm.tags" />
                 </li>
 
                 <li>
-                    <input type="submit" value="<@spring.message 'Text.formInput.submit'/>" />
+                    <input type="submit" value="<@spring.message 'Text.submit'/>" />
                 </li>
             </ul>
         </form>

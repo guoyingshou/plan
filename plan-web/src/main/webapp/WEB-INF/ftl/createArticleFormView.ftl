@@ -24,15 +24,15 @@
                    </legend>
 
                    <label>
-                      <@spring.message 'Label.formInput.concept' />
+                      <@spring.message 'Label.concept' />
                       <input type="radio" name="type" value="concept" />
                    </label>
                    <label>
-                       <@spring.message 'Label.formInput.note' />
+                       <@spring.message 'Label.note' />
                        <input type="radio" name="type" value="note" />
                    </label>
                    <label>
-                       <@spring.message 'Label.formInput.tutorial' />
+                       <@spring.message 'Label.tutorial' />
                        <input type="radio" name="type" value="tutorial" />
                    </label>
                </fieldset>
@@ -45,18 +45,18 @@
                    <ul>
                        <li>
                            <label for="title">
-                               <@spring.message "Label.formInput.title" />
+                               <@spring.message "Label.title" />
                            </label>
                            <@spring.formInput "articleForm.title" />
                        </li>
                        <li>
                            <label for="content">
-                               <@spring.message "Label.formInput.content" />
+                               <@spring.message "Label.content" />
                            </label>
                            <@spring.formTextarea "articleForm.content" />
                        </li>
                        <li>
-                           <input type="submit" value="<@spring.message 'PublishText.formInput.submit'/>" />
+                           <input type="submit" value="<@spring.message 'PublishText.submit'/>" />
                        </li>
                    </ul>
                </fieldset>

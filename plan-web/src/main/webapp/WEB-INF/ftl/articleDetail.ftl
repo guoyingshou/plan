@@ -139,7 +139,7 @@
                                 <@spring.formTextarea "messageForm.content" />
                             </li>
                             <li>
-                                <input type="submit" value='<@spring.message "Text.formInput.submit"/>' />
+                                <input type="submit" value='<@spring.message "Text.submit"/>' />
                             </li>
                         </ul>
                    </form>

@@ -19,23 +19,23 @@
                 <li>
                     <label>
                         <input type="radio" name="duration" checked value="1" />
-                        <@spring.message 'Label.formInput.duration1' />
+                        <@spring.message 'Label.duration1' />
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" name="duration" value="3" />
-                        <@spring.message 'Label.formInput.duration2' />
+                        <@spring.message 'Label.duration2' />
                     </label>
                 </li>
                 <li>
                     <label>
                         <input type="radio" name="duration" value="6" />
-                        <@spring.message 'Label.formInput.duration3' />
+                        <@spring.message 'Label.duration3' />
                     </label>
                 </li>
                 <li>
-                    <input type="submit" value="<@spring.message 'Text.formInput.submit'/>" />
+                    <input type="submit" value="<@spring.message 'Text.submit'/>" />
                 </li>
             </ul>
         </form>

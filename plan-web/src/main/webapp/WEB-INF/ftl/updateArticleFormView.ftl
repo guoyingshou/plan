@@ -28,13 +28,13 @@
                        </li>
                        <li>
                            <label for="title">
-                               <@spring.message "Label.formInput.title" />
+                               <@spring.message "Label.title" />
                            </label>
                            <@spring.formInput "articleForm.title" />
                        </li>
                        <li>
                            <label for="content">
-                               <@spring.message "Label.formInput.content" />
+                               <@spring.message "Label.content" />
                            </label>
                            <@spring.formTextarea "articleForm.content" />
                        </li>
@@ -42,7 +42,7 @@
                            <@spring.formHiddenInput "articleForm.type" />
                        </li>
                        <li>
-                           <input type="submit" value="<@spring.message 'PublishText.formInput.submit'/>" />
+                           <input type="submit" value="<@spring.message 'PublishText.submit'/>" />
                        </li>
                    </ul>
                </fieldset>
