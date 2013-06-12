@@ -34,7 +34,7 @@
                       </li>
                       <li>
                           <label for="content">
-                             <@spring.message "Label.formInut.content" />
+                             <@spring.message "Label.content" />
                           </label>
                           <@spring.formTextarea "questionForm.content" />
                       </li>

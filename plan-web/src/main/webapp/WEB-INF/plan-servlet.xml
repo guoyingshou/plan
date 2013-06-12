@@ -16,7 +16,7 @@
 
     <bean id="messageSource" 
         class="org.springframework.context.support.ResourceBundleMessageSource" 
-        p:basenames="common, topic" 
+        p:basenames="common, topic, user" 
         p:defaultEncoding="utf-8"/>
  
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
