@@ -17,9 +17,6 @@
            <div id="main-content">
                <div class="meta">
                    <span class="owner">
-		   <#--
-                      <a class="username" href="<@spring.url '/users/${topic.account.user.id?replace("#", "")}/posts' />">
-		      -->
                       <a class="username" href="/social/users/${topic.account.user.id?replace("#", "")}/posts">
                           ${topic.account.user.displayName}
                       </a>
