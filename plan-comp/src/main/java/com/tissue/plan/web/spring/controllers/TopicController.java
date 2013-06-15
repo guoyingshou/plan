@@ -192,10 +192,6 @@ public class TopicController {
         model.put("pager", pager);
 
         List<Post> posts = topicService.getPagedPosts(topic.getId(), page, size);
-        System.out.println("+++++++++++");
-        System.out.println(posts.size());
-        System.out.println(size);
-        System.out.println("+++++++++++");
         model.put("posts", posts);
 
         return "posts";
