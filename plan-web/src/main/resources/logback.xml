@@ -5,13 +5,13 @@
     </encoder>
   </appender>
 
-  <!--
   <logger name="org.springframework.security" level="DEBUG"/>
-  -->
+  <!--
   <logger name="com.tissue" level="DEBUG"/>
   <logger name="org.springframework.web" level="DEBUG"/>
   <logger name="org.springframework.core.convert" level="DEBUG"/>
   <logger name="org.springframework.format" level="DEBUG"/>
+  -->
 
   <root level="INFO">
     <appender-ref ref="STDOUT" />
