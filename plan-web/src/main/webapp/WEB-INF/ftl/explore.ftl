@@ -24,7 +24,9 @@
             </div>
 
             <div id="main-sidebar">
+            <#--
                 <@userGadgets.showUsers />
+                -->
             </div>
 
         </div>
